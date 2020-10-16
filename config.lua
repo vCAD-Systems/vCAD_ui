@@ -1,6 +1,23 @@
 Config = {}
 
 --[[
+Welchen job braucht man für..?
+Falls Feature nicht erwünscht:
+Nein = nil
+]]
+-- Für CopNet:
+Config.CopNetJob = {'police'}
+-- Für MedicNet:
+Config.MedicNetJob = {'ambulance'}
+
+--[[
+Welchen Item braucht man um das Tablet öffnen zu können..?
+Falls Feature nicht erwünscht:
+Nein = nil
+]]
+Config.NeededItem = 'tablet'
+
+--[[
 Animation beim öffnen des Tablets?
 Ja = true
 Nein = false
@@ -98,6 +115,7 @@ Config.Zones = {
         Marker = { type = 1, x = 2.0, y = 2.0, z = 0.5, r = 102, g = 0, b = 102, a = 100, rotate = false },
         Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
         System = 'cop',
-        OpenType = 'pc'
+        OpenType = 'pc',
+        Job = 'police'
     }
 }

@@ -10,7 +10,32 @@ local Keys = {
 	["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
 }
 
+ESX = nil
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'cop', 'tab'
+local PlayerData = {}
+
+Citizen.CreateThread(function()
+	while ESX == nil do
+		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+		Citizen.Wait(0)
+	end
+
+	while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(10)
+	end
+
+	PlayerData = ESX.GetPlayerData()
+end)
+
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded', function(xPlayer)
+	PlayerData = xPlayer
+end)
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+	PlayerData.job = job
+end)
 
 function ShowNotification(msg)
 	SetNotificationTextEntry('STRING')
@@ -90,7 +115,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-function canOpenTablet()
+function canOpenTablet(system, type)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	
@@ -111,6 +136,45 @@ function canOpenTablet()
 			end
 		end
 	end
+
+	if type == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
+		PlayerData = ESX.GetPlayerData()
+
+		for k,v in pairs(PlayerData.inventory) do
+			if v.name == Config.NeededItem and v.count > 0 then
+				canOpen = true
+				break
+			end
+		end
+	end
+
+	if system == 'cop' and Config.CopNetJob ~= nil and Config.CopNetJob ~= 'nil' and PlayerData.job ~= nil then
+		local found = false
+
+		for k,v in pairs(Config.CopNetJob) do
+			if PlayerData.job.name == v then
+				found = true
+				break
+			end
+		end
+
+		if found == false then
+			return false
+		end
+	elseif system == 'medic' and Config.MedicNetJob ~= nil and Config.MedicNetJob ~= 'nil' and PlayerData.job ~= nil then
+		local found = false
+		
+		for k,v in pairs(Config.MedicNetJob) do
+			if PlayerData.job.name == v then
+				found = true
+				break
+			end
+		end
+
+		if found == false then
+			return false
+		end
+	end
 	
 	return canOpen
 end
@@ -118,7 +182,7 @@ end
 RegisterNetEvent('wgc:openUI')
 AddEventHandler('wgc:openUI', function(system, newSite) 
 	if not isDead then
-		if canOpenTablet() == true then
+		if canOpenTablet(system, newSite) == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				site = system
 				subSite = newSite
@@ -150,9 +214,7 @@ Citizen.CreateThread(function()
 
 		if Config.Hotkey ~= nil and Config.Hotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.Hotkey]) and not isDead then
 			TriggerEvent('wgc:openUI', 'cop', Config.HotkeyOpenType)
-		end
-
-		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
+		elseif Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
 			TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
 		end
 	end
@@ -165,18 +227,21 @@ Citizen.CreateThread(function()
 		local letSleep = true
 
 		for k,v in ipairs(Config.Zones) do
-			local distance = GetDistanceBetweenCoords(playerCoords, v.Coords, true)
-		
-			if distance < 50.0 then
-				DrawMarker(v.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.Marker.x, v.Marker.y, v.Marker.z, v.Marker.r, v.Marker.g, v.Marker.b, v.Marker.a, false, false, 2, v.Marker.rotate, nil, nil, false)
-				letSleep = false
-			end
-		
-			if distance <= v.Marker.x then
-				ShowHelpNotification(v.Prompt)
+			if (PlayerData.job ~= nil and PlayerData.job.name == v.Job) or not v.Job then
+				local distance = GetDistanceBetweenCoords(playerCoords, v.Coords, true)
+			
+				if distance < 50.0 then
+					DrawMarker(v.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.Marker.x, v.Marker.y, v.Marker.z, v.Marker.r, v.Marker.g, v.Marker.b, v.Marker.a, false, false, 2, v.Marker.rotate, nil, nil, false)
+					letSleep = false
+				end
+			
+				if distance <= v.Marker.x then
+					letSleep = false
+					ShowHelpNotification(v.Prompt)
 
-				if IsControlJustReleased(0, Keys['E']) then
-					TriggerEvent('wgc:openUI', v.System, v.OpenType)
+					if IsControlJustReleased(0, Keys['E']) then
+						TriggerEvent('wgc:openUI', v.System, v.OpenType)
+					end
 				end
 			end
 		end

@@ -1,7 +1,7 @@
 fx_version 'bodacious'
 game 'gta5'
 
-name 'WGC UI'
+name 'WGC UI - ESX Version'
 author 'Ffrankys'
 version '1.1.0'
 
