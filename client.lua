@@ -44,9 +44,6 @@ function REQUEST_NUI_FOCUS(bool)
 		if IsPedInAnyVehicle(PlayerPed, false) and Config.OnlyInVehicle == true and Config.VehicleOpenType == 'pc' then
 			openSite = 'https://pc.'..site..'net.li/'
 		elseif Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
-			TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
-			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true) 
-			
 			if not HasAnimDictLoaded('anim_heist@arcade_combined@') then
 				RequestAnimDict('anim_heist@arcade_combined@')
 
@@ -54,6 +51,9 @@ function REQUEST_NUI_FOCUS(bool)
 					Citizen.Wait(1)
 				end
 			end
+
+                        TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
+			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
 		end
 		
 		SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
