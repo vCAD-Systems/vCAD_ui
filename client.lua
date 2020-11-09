@@ -58,8 +58,6 @@ function REQUEST_NUI_FOCUS(bool)
 		return
 	end
 
-    SetNuiFocus(bool, bool)
-	
 	if bool == true then
 		local openSite = 'https://pc.'..site..'net.li/tablet.php'
 		if subSite == 'pc' then
@@ -82,6 +80,7 @@ function REQUEST_NUI_FOCUS(bool)
 		end
 		
 		SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+		SetNuiFocus(bool, bool)
     else
         SendNUIMessage({hidetab = true})
         SetNuiFocus(false, false)
