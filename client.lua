@@ -32,8 +32,6 @@ function REQUEST_NUI_FOCUS(bool)
 		ShowNotification('~r~Fehler beim einrichten des WGC UIs!')
 		return
 	end
-
-    SetNuiFocus(bool, bool)
 	
 	if bool == true then
 		local openSite = 'https://pc.'..site..'net.li/tablet.php'
@@ -52,11 +50,12 @@ function REQUEST_NUI_FOCUS(bool)
 				end
 			end
 
-                        TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
+            TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
 			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
 		end
 		
 		SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+		SetNuiFocus(bool, bool)
     else
         SendNUIMessage({hidetab = true})
         SetNuiFocus(false, false)
