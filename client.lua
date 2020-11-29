@@ -225,21 +225,22 @@ Citizen.CreateThread(function()
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		local letSleep = true
 
-		for k,v in ipairs(Config.Zones) do
-			if (PlayerData.job ~= nil and PlayerData.job.name == v.Job) or not v.Job then
-				local distance = GetDistanceBetweenCoords(playerCoords, v.Coords, true)
+		for k,v in pairs(Config.Zones) do
+			if (v.Job ~= nil and PlayerData.job ~= nil and PlayerData.job.name == v.Job) or not v.Job then
+				local distance = #(playerCoords - v.Coords)
 			
 				if distance < 50.0 then
 					DrawMarker(v.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.Marker.x, v.Marker.y, v.Marker.z, v.Marker.r, v.Marker.g, v.Marker.b, v.Marker.a, false, false, 2, v.Marker.rotate, nil, nil, false)
 					letSleep = false
-				end
+						
 			
-				if distance <= v.Marker.x then
-					letSleep = false
-					ShowHelpNotification(v.Prompt)
+					if distance <= v.Marker.x then
+						letSleep = false
+						ShowHelpNotification(v.Prompt)
 
-					if IsControlJustReleased(0, Keys['E']) then
-						TriggerEvent('wgc:openUI', v.System, v.OpenType)
+						if IsControlJustReleased(0, Keys['E']) then
+							TriggerEvent('wgc:openUI', v.System, v.OpenType)
+						end
 					end
 				end
 			end
