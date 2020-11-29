@@ -35,34 +35,37 @@ function REQUEST_NUI_FOCUS(bool)
 	
 	if bool == true then
 		local openSite = 'https://pc.'..site..'net.li/tablet.php'
+		
 		if subSite == 'pc' then
 			openSite = 'https://pc.'..site..'net.li/'
 		end
 
 		if IsPedInAnyVehicle(PlayerPed, false) and Config.OnlyInVehicle == true and Config.VehicleOpenType == 'pc' then
 			openSite = 'https://pc.'..site..'net.li/'
+			
+			SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+			SetNuiFocus(bool, bool)
 		elseif Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
-			if not HasAnimDictLoaded('anim_heist@arcade_combined@') then
-				RequestAnimDict('anim_heist@arcade_combined@')
+			SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+			SetNuiFocus(bool, bool)
+			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
+			
+			RequestAnimDict('anim_heist@arcade_combined@')
 
-				while not HasAnimDictLoaded('anim_heist@arcade_combined@') do
-					Citizen.Wait(1)
-				end
+			while not HasAnimDictLoaded('anim_heist@arcade_combined@') do
+				Citizen.Wait(1)
 			end
 
-            TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
-			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
+            		TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
 		end
+	else
+		SendNUIMessage({hidetab = true})
+		SetNuiFocus(false, false)
 		
-		SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
-		SetNuiFocus(bool, bool)
-    else
-        SendNUIMessage({hidetab = true})
-        SetNuiFocus(false, false)
 		if Config.Animation == true then
 			ClearPedTasks(PlayerPed)
 		end
-    end
+	end
 end
 
 RegisterNUICallback("tablet-bus", function(data)
@@ -72,7 +75,7 @@ RegisterNUICallback("tablet-bus", function(data)
 		tabEnabled = false
 		REQUEST_NUI_FOCUS(false)
 	elseif data.click then
-        lastOpend = GetGameTimer()
+        	lastOpend = GetGameTimer()
 	end
 end)
 
@@ -195,22 +198,3 @@ if Config.Commands == true then
 		TriggerEvent('wgc:openUI', 'medic', Config.CommandOpenType)
 	end, false)
 end
-
-Citizen.CreateThread(function()
-	local timeout, l = false, 0
-	
-	while not tabLoaded do
-		Citizen.Wait(0)
-		l = l + 1
-		if l > 500 then
-			tabLoaded = true
-			timeout = true
-		end
-    end
-	
-    if timeout == true then        
-        return
-    end
-	
-    REQUEST_NUI_FOCUS(false)
-end)
