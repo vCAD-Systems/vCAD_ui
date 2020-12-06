@@ -5,14 +5,17 @@ let tabletBrowser = null;
 let lastInteract = 0;
 let tabletReady = false;
 let tablet = null;
-let openSite = 'https://pc.' + site + 'net.li/tablet.php'
+let openSite = 'https://pc.copnet.li/tablet.php'
+
+function canInteract() { return lastInteract + 1000 < Date.now() }
 
 alt.on('keyup', (key) => {
     if (!canInteract) return;
 	
-	lastInteract = Date.now();
-	
-    if (key == 'N'.charCodeAt(0)) {
+    lastInteract = Date.now();
+    
+    //Keycodes: http://keycode.info/?ref=stuyk
+    if (key == 121) { //F10
         if (tabletBrowser == null) {
             createCEF('cop', 'pc');
         } else {
@@ -30,7 +33,11 @@ alt.on('WGC:Client:Tablet:close', () => {
 });
 
 function createCEF(site, system) {
-	if (!site) return;
+	if (!site || site != 'cop' && site != 'medic' && site != 'car') {
+        alt.log('Site wurde nicht oder falsch angegeben!');
+        return;
+    }
+    
     openTabletCEF(site, system);
     let coords = game.getEntityCoords(alt.Player.local.scriptID, true);
     let bone = game.getPedBoneIndex(alt.Player.local.scriptID, 28422);
@@ -58,22 +65,22 @@ function openTabletCEF(site, system) {
         tabletBrowser = new alt.WebView("http://resource/html/index.html");
         tabletBrowser.focus();
         tabletBrowser.on("WGC:Client:Tablet:isReady", () => {
-			tabletReady = true;
-
-			if (tabletBrowser != null) {
-				let interval = alt.setInterval(() => {
-					if (tabletReady) {
-						alt.clearInterval(interval);
-						if (system == 'pc') {
-							openSite = 'https://pc.' + site + 'net.li/';
-						} else {
-							openSite = 'https://pc.' + site + 'net.li/tablet.php';
-						}
-
-						tabletBrowser.emit("WGC:CEF:Tablet:open", openSite);
-					}
-				}, 0);
-			}
+            tabletReady = true;
+        
+            if (tabletBrowser != null) {
+                let interval = alt.setInterval(() => {
+                    if (tabletReady) {
+                        alt.clearInterval(interval);
+                        if (system == 'pc') {
+                            openSite = 'https://pc.' + site + 'net.li/';
+                        } else {
+                            openSite = 'https://pc.' + site + 'net.li/tablet.php';
+                        }
+        
+                        tabletBrowser.emit("WGC:CEF:Tablet:open", openSite);
+                    }
+                }, 0);
+            }
         });
     }
 }

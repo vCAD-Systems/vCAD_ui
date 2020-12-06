@@ -11,32 +11,32 @@
     <body>
         <div id="tab-container">
             <div class="tab-wrap">
-                <span class="dot"></span>
+                <span class="dot" id="dot"></span>
                 <div class="tab">
                     <iframe id="iframe" src="https://pc.copnet.li"></iframe>
                 </div>
             </div>
         </div>
         <script>
-            var iframe = $("#iframe")[0];
-
             $(document).ready(function () {
                 alt.emit("WGC:Client:Tablet:isReady");
-                
-                alt.on("WGC:CEF:Tablet:open", () => {
-                    var $tabContainer = $("#tab-container");
+            });
 
-                    $tabContainer.hide();
-                    $tabContainer.fadeIn(1000);
-                });
-                
-                $('.tab-wrap .dot').click(function () {
-                    alt.emit("WGC:Client:Tablet:close");
-                });
+            $('#dot').click(function () {
+                alt.emit("WGC:Client:Tablet:close");
+            });
+
+            alt.on("WGC:CEF:Tablet:open", () => {
+                var $tabContainer = $("#tab-container");
+
+                $tabContainer.show();
+                $tabContainer.fadeIn(1000);
             });
 
             /*
             $('a.nav-myframe').click(function (event) {
+                var iframe = $("#iframe")[0];
+
                 event.preventDefault();
                 event.stopPropagation();
                 var self = this;
