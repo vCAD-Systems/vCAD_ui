@@ -11,6 +11,7 @@ local Keys = {
 }
 
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'cop', 'tab'
+local tab
 
 function ShowNotification(msg)
 	SetNotificationTextEntry('STRING')
@@ -56,7 +57,8 @@ function REQUEST_NUI_FOCUS(bool)
 				Citizen.Wait(1)
 			end
 
-            		TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
+			attachObject()
+			TaskPlayAnim(PlayerPed, "amb@world_human_seat_wall_tablet@female@base", "base" ,8.0, -8.0, -1, 50, 0, false, false, false)
 		end
 	else
 		SendNUIMessage({hidetab = true})
@@ -64,8 +66,14 @@ function REQUEST_NUI_FOCUS(bool)
 		
 		if Config.Animation == true then
 			ClearPedTasks(PlayerPed)
+			DeleteObject(tab)
 		end
 	end
+end
+
+function attachObject()
+	tab = CreateObject(GetHashKey("prop_cs_tablet"), 0, 0, 0, true, true, true)
+	AttachEntityToEntity(tab, GetPlayerPed(-1), GetPedBoneIndex(GetPlayerPed(-1), 57005), 0.17, 0.10, -0.13, 20.0, 180.0, 180.0, true, true, false, true, 1, true)
 end
 
 RegisterNUICallback("tablet-bus", function(data)
@@ -87,6 +95,7 @@ AddEventHandler('onResourceStop', function(resource)
 			
 			if Config.Animation == true then
 				ClearPedTasks(PlayerPedId())
+				DeleteObject(tab)
 			end
 		end
 	end
