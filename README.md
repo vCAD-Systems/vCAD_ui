@@ -7,6 +7,7 @@ TriggerEvent('wgc:openUI', [SYSTEM],  [TYPE])
 ```
 
 `[SYSTEM]` You can choose between Copnet ( **cop**), Medicnet (**medic**) and soon Carnet (**car**).
+
 `[TYPE]` You can choose between a Tablet (**tab**) and PC (**pc**) design.
 
 *If you make mistakes, the system will report to you automatically.*
