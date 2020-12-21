@@ -37,28 +37,23 @@ function REQUEST_NUI_FOCUS(bool)
 	if bool == true then
 		local openSite = 'https://pc.'..site..'net.li/tablet.php'
 		
-		if subSite == 'pc' then
+		if subSite == 'pc' or (IsPedInAnyVehicle(PlayerPed, false) and Config.OnlyInVehicle == true and Config.VehicleOpenType == 'pc') then
 			openSite = 'https://pc.'..site..'net.li/'
 		end
-
-		if IsPedInAnyVehicle(PlayerPed, false) and Config.OnlyInVehicle == true and Config.VehicleOpenType == 'pc' then
-			openSite = 'https://pc.'..site..'net.li/'
+		
+		SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+		SetNuiFocus(bool, bool)
 			
-			SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
-			SetNuiFocus(bool, bool)
-		elseif Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
-			SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
-			SetNuiFocus(bool, bool)
+		if Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
 			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
-			
 			RequestAnimDict('anim_heist@arcade_combined@')
 
 			while not HasAnimDictLoaded('anim_heist@arcade_combined@') do
 				Citizen.Wait(1)
 			end
 
-			attachObject()
 			TaskPlayAnim(PlayerPed, "amb@world_human_seat_wall_tablet@female@base", "base" ,8.0, -8.0, -1, 50, 0, false, false, false)
+			attachObject()
 		end
 	else
 		SendNUIMessage({hidetab = true})
@@ -83,7 +78,7 @@ RegisterNUICallback("tablet-bus", function(data)
 		tabEnabled = false
 		REQUEST_NUI_FOCUS(false)
 	elseif data.click then
-        	lastOpend = GetGameTimer()
+        lastOpend = GetGameTimer()
 	end
 end)
 
