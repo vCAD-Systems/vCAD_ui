@@ -3,7 +3,7 @@ game 'gta5'
 
 name 'WGC UI'
 author 'Ffrankys'
-version '1.2.0'
+version '1.2.1'
 
 client_scripts {
 	'config.lua',
