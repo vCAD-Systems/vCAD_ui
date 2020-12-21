@@ -13,6 +13,7 @@ local Keys = {
 ESX = nil
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'cop', 'tab'
 local PlayerData = {}
+local tab
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -66,28 +67,37 @@ function REQUEST_NUI_FOCUS(bool)
 
 		if IsPedInAnyVehicle(PlayerPed, false) and Config.OnlyInVehicle == true and Config.VehicleOpenType == 'pc' then
 			openSite = 'https://pc.'..site..'net.li/'
-		elseif Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
-			if not HasAnimDictLoaded('anim_heist@arcade_combined@') then
-				RequestAnimDict('anim_heist@arcade_combined@')
-
-				while not HasAnimDictLoaded('anim_heist@arcade_combined@') do
-					Citizen.Wait(1)
-				end
-			end
-
-            TaskPlayAnim(PlayerPed, 'anim_heist@arcade_combined@', 'world_human_stand_mobile@_male@_text@_idle_a', 8.0, -8.0, -1, 16, 0, false, false, false)
-			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
 		end
 		
 		SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
 		SetNuiFocus(bool, bool)
+
+		if Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
+			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
+
+			RequestAnimDict("amb@world_human_seat_wall_tablet@female@base")
+
+			while not HasAnimDictLoaded("amb@world_human_seat_wall_tablet@female@base") do
+				Citizen.Wait(1)
+			end
+
+			TaskPlayAnim(PlayerPed, "amb@world_human_seat_wall_tablet@female@base", "base" ,8.0, -8.0, -1, 50, 0, false, false, false)
+			attachObject()
+		end
     else
         SendNUIMessage({hidetab = true})
-        SetNuiFocus(false, false)
+		SetNuiFocus(false, false)
+		
 		if Config.Animation == true then
 			ClearPedTasks(PlayerPed)
+			DeleteObject(tab)
 		end
     end
+end
+
+function attachObject()
+	tab = CreateObject(GetHashKey("prop_cs_tablet"), 0, 0, 0, true, true, true)
+	AttachEntityToEntity(tab, GetPlayerPed(-1), GetPedBoneIndex(GetPlayerPed(-1), 57005), 0.17, 0.10, -0.13, 20.0, 180.0, 180.0, true, true, false, true, 1, true)
 end
 
 RegisterNUICallback("tablet-bus", function(data)
@@ -109,6 +119,7 @@ AddEventHandler('onResourceStop', function(resource)
 			
 			if Config.Animation == true then
 				ClearPedTasks(PlayerPedId())
+				DeleteObject(tab)
 			end
 		end
 	end
@@ -260,22 +271,3 @@ if Config.Commands == true then
 		TriggerEvent('wgc:openUI', 'medic', Config.CommandOpenType)
 	end, false)
 end
-
-Citizen.CreateThread(function()
-	local timeout, l = false, 0
-	
-	while not tabLoaded do
-		Citizen.Wait(0)
-		l = l + 1
-		if l > 500 then
-			tabLoaded = true
-			timeout = true
-		end
-    end
-	
-    if timeout == true then        
-        return
-    end
-	
-    REQUEST_NUI_FOCUS(false)
-end)
