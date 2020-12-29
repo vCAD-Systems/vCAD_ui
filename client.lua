@@ -221,7 +221,9 @@ Citizen.CreateThread(function()
 
 		if Config.Hotkey ~= nil and Config.Hotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.Hotkey]) and not isDead then
 			TriggerEvent('wgc:openUI', 'cop', Config.HotkeyOpenType)
-		elseif Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
+		end
+			
+		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
 			TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
 		end
 	end
