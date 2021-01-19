@@ -62,7 +62,7 @@ function REQUEST_NUI_FOCUS(bool, reload)
 	if bool == true then
 		local openSite = 'https://pc.'..site..'net.li/tablet.php'
 
-		if subSite == 'pc' or (IsPedInAnyVehicle(PlayerPed, false) and Config.OnlyInVehicle == true and Config.VehicleOpenType == 'pc') then
+		if subSite == 'pc' or (IsPedInAnyVehicle(PlayerPed, false) and Config.VehicleOpenType == 'pc') then
 			openSite = 'https://pc.'..site..'net.li/'
 		end
 		
@@ -126,7 +126,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-function canOpenTablet(system, type)
+function canOpenTablet(system, type, pos)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	
@@ -139,6 +139,7 @@ function canOpenTablet(system, type)
 
 		if #Config.Vehicles > 0 then
 			local vehHash = GetEntityModel(GetVehiclePedIsIn(PlayerPed, false))
+
 			for k,v in pairs(Config.Vehicles) do
 				if (tonumber(v) and v == vehHash) or (tostring(v) and GetHashKey(v) == vehHash) then
 					canOpen = true
@@ -148,14 +149,23 @@ function canOpenTablet(system, type)
 		end
 	end
 
+	if pos then
+		canOpen = true
+	end
+
 	if type == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
+		local found = false
 		PlayerData = ESX.GetPlayerData()
 
 		for k,v in pairs(PlayerData.inventory) do
 			if v.name == Config.NeededItem and v.count > 0 then
-				canOpen = true
+				found = true
 				break
 			end
+		end
+
+		if found == false then
+			return false
 		end
 	end
 
@@ -191,11 +201,11 @@ function canOpenTablet(system, type)
 end
 
 RegisterNetEvent('wgc:openUI')
-AddEventHandler('wgc:openUI', function(system, newSite)
+AddEventHandler('wgc:openUI', function(system, newSite, pos)
 	local reloadTab = false
 
 	if not isDead then
-		if canOpenTablet(system, newSite) == true then
+		if canOpenTablet(system, newSite, pos) == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				if site ~= system then
 					site = system
@@ -263,7 +273,7 @@ Citizen.CreateThread(function()
 					ShowHelpNotification(v.Prompt)
 
 					if IsControlJustReleased(0, Keys['E']) then
-						TriggerEvent('wgc:openUI', v.System, v.OpenType)
+						TriggerEvent('wgc:openUI', v.System, v.OpenType, true)
 					end
 				end
 			end
