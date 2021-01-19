@@ -37,7 +37,7 @@ function REQUEST_NUI_FOCUS(bool, reload)
 	if bool == true then
 		local openSite = 'https://pc.'..site..'net.li/tablet.php'
 		
-		if subSite == 'pc' or (IsPedInAnyVehicle(PlayerPed, false) and Config.OnlyInVehicle == true and Config.VehicleOpenType == 'pc') then
+		if subSite == 'pc' or (IsPedInAnyVehicle(PlayerPed, false) and Config.VehicleOpenType == 'pc') then
 			openSite = 'https://pc.'..site..'net.li/'
 		end
 		
