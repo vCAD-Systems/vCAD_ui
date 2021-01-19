@@ -100,7 +100,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-function canOpenTablet()
+function canOpenTablet(pos)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	
@@ -121,16 +121,20 @@ function canOpenTablet()
 			end
 		end
 	end
+
+	if pos then
+		canOpen = true
+	end
 	
 	return canOpen
 end
 
 RegisterNetEvent('wgc:openUI')
-AddEventHandler('wgc:openUI', function(system, newSite)
+AddEventHandler('wgc:openUI', function(system, newSite, pos)
 	local reloadTab = false
 
 	if not isDead then
-		if canOpenTablet() == true then
+		if canOpenTablet(pos) == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				if site ~= system then
 					site = system
@@ -196,7 +200,7 @@ Citizen.CreateThread(function()
 				ShowHelpNotification(v.Prompt)
 
 				if IsControlJustReleased(0, Keys['E']) then
-					TriggerEvent('wgc:openUI', v.System, v.OpenType)
+					TriggerEvent('wgc:openUI', v.System, v.OpenType, true)
 				end
 			end
 		end
