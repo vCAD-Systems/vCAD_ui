@@ -16,23 +16,26 @@ $(document).ready(function () {
     window.addEventListener('message', function (event) {
         var item = event.data;
         if (item.showtab) {
-            iframe.src = item.site;
-            if (item.autoscale == true) {
-                $tabWrap.css("width", "65%")
-                $tabWrap.css("max-width", "65%")
-                $tabWrap.css("max-height", "70%")
-                $tabWrap.css("min-height", "70%")
-            } else {
-                $tabWrap.css("width", "100%")
-                $tabWrap.css("max-width", "100%")
-                $tabWrap.css("max-height", "95%")
-                $tabWrap.css("min-height", "95%")
+            if (item.site) {
+                iframe.src = item.site;
+                
+                if (item.autoscale == true) {
+                    $tabWrap.css("width", "65%")
+                    $tabWrap.css("max-width", "65%")
+                    $tabWrap.css("max-height", "70%")
+                    $tabWrap.css("min-height", "70%")
+                } else {
+                    $tabWrap.css("width", "100%")
+                    $tabWrap.css("max-width", "100%")
+                    $tabWrap.css("max-height", "95%")
+                    $tabWrap.css("min-height", "95%")
+                }
             }
+
             SHOW_HIDE(true)
-        } // lua requested show
-        else if (item.hidetab) {
+        }  else if (item.hidetab) {
             SHOW_HIDE()
-        } // lua requested hide
+        } 
     });
     // When pressed ESC dispatch escape request
     document.addEventListener('keyup', function (data) {

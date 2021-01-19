@@ -50,7 +50,7 @@ function ShowHelpNotification(msg)
 	EndTextCommandDisplayHelp(0, false, true, -1)
 end
 
-function REQUEST_NUI_FOCUS(bool)
+function REQUEST_NUI_FOCUS(bool, reload)
 	local PlayerPed = PlayerPedId()
 
 	if (site ~= 'cop' and site ~= 'medic') or (subSite ~= 'tab' and subSite ~= 'pc') then
@@ -66,7 +66,11 @@ function REQUEST_NUI_FOCUS(bool)
 			openSite = 'https://pc.'..site..'net.li/'
 		end
 		
-		SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+		if reload then
+			SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+		else
+			SendNUIMessage({showtab = true})
+		end
 		SetNuiFocus(bool, bool)
 
 		if Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
@@ -187,15 +191,25 @@ function canOpenTablet(system, type)
 end
 
 RegisterNetEvent('wgc:openUI')
-AddEventHandler('wgc:openUI', function(system, newSite) 
+AddEventHandler('wgc:openUI', function(system, newSite)
+	local reloadTab = false
+
 	if not isDead then
 		if canOpenTablet(system, newSite) == true then
 			if (GetGameTimer() - lastOpend) > 250 then
-				site = system
-				subSite = newSite
+				if site ~= system then
+					site = system
+					reloadTab = true
+				end
+
+				if subSite ~= newSite then
+					subSite = newSite
+					reloadTab = true
+				end
+
 				lastOpend = GetGameTimer()
 				tabEnabled = true
-				REQUEST_NUI_FOCUS(true)
+				REQUEST_NUI_FOCUS(true, reloadTab)
 			end
 		end
 	end
