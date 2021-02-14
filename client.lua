@@ -11,7 +11,7 @@ local Keys = {
 }
 
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'cop', 'tab'
-local tab
+local katalogID,tab = nil
 
 function ShowNotification(msg)
 	SetNotificationTextEntry('STRING')
@@ -28,17 +28,17 @@ end
 function REQUEST_NUI_FOCUS(bool, reload)
 	local PlayerPed = PlayerPedId()
 
-	if (site ~= 'cop' and site ~= 'medic') or (subSite ~= 'tab' and subSite ~= 'pc') then
+	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog') then
 		ShowNotification('~r~Fehler beim einrichten des WGC UIs.')
 		ShowNotification('~r~Fehler beim einrichten des WGC UIs!')
 		return
 	end
 	
 	if bool == true then
-		local openSite = 'https://pc.'..site..'net.li/tablet.php'
+		local openSite = 'https://pc.'..site..'net.li'
 		
-		if subSite == 'pc' or (IsPedInAnyVehicle(PlayerPed, false) and Config.VehicleOpenType == 'pc') then
-			openSite = 'https://pc.'..site..'net.li/'
+		if katalogID ~= nil and site == 'car' and subSite == 'katalog' then
+			openSite = 'https://pc.carnet.li/shop.php?sp='..katalogID
 		end
 		
 		if reload then
@@ -46,6 +46,7 @@ function REQUEST_NUI_FOCUS(bool, reload)
 		else
 			SendNUIMessage({showtab = true})
 		end
+		
 		SetNuiFocus(bool, bool)
 			
 		if Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
@@ -100,7 +101,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-function canOpenTablet(pos)
+function canOpenTablet(pos, newSite)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	
@@ -111,9 +112,9 @@ function canOpenTablet(pos)
 			end
 		end
 
-		if #Config.Vehicles > 0 then
+		if #Config.Vehicles[newSite] > 0 then
 			local vehHash = GetEntityModel(GetVehiclePedIsIn(PlayerPed, false))
-			for k,v in pairs(Config.Vehicles) do
+			for k,v in pairs(Config.Vehicles[newSite]) do
 				if (tonumber(v) and v == vehHash) or (tostring(v) and GetHashKey(v) == vehHash) then
 					canOpen = true
 					break
@@ -122,7 +123,7 @@ function canOpenTablet(pos)
 		end
 	end
 
-	if pos then
+	if pos ~= false then
 		canOpen = true
 	end
 	
@@ -134,7 +135,7 @@ AddEventHandler('wgc:openUI', function(system, newSite, pos)
 	local reloadTab = false
 
 	if not isDead then
-		if canOpenTablet(pos) == true then
+		if canOpenTablet(pos, newSite) == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				if site ~= system then
 					site = system
@@ -143,6 +144,11 @@ AddEventHandler('wgc:openUI', function(system, newSite, pos)
 
 				if subSite ~= newSite then
 					subSite = newSite
+					reloadTab = true
+				end
+
+				if pos ~= true and pos ~= false and katalogID ~= pos then
+					katalogID = pos
 					reloadTab = true
 				end
 				
@@ -179,6 +185,10 @@ Citizen.CreateThread(function()
 		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
 			TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
 		end
+
+		if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.CarHotkey]) and not isDead then
+			TriggerEvent('wgc:openUI', 'car',  Config.HotkeyOpenType)
+		end
 	end
 end)
 
@@ -200,7 +210,7 @@ Citizen.CreateThread(function()
 				ShowHelpNotification(v.Prompt)
 
 				if IsControlJustReleased(0, Keys['E']) then
-					TriggerEvent('wgc:openUI', v.System, v.OpenType, true)
+					TriggerEvent('wgc:openUI', v.System, v.OpenType, v.PublicID or true)
 				end
 			end
 		end
@@ -218,5 +228,9 @@ if Config.Commands == true then
 
 	RegisterCommand('medicnet',function(source, args)
 		TriggerEvent('wgc:openUI', 'medic', Config.CommandOpenType)
+	end, false)
+
+	RegisterCommand('carnet',function(source, args)
+		TriggerEvent('wgc:openUI', 'car', Config.CommandOpenType)
 	end, false)
 end
