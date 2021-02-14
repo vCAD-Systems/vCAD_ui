@@ -9,6 +9,8 @@ Nein = nil
 Config.CopNetJob = {'police'}
 -- Für MedicNet:
 Config.MedicNetJob = {'ambulance'}
+-- Für CarNet:
+Config.CarNetJob = {'cardealer'}
 
 --[[
 Welchen Item braucht man um das Tablet öffnen zu können..?
@@ -47,6 +49,8 @@ Nein = nil
 Config.Hotkey = 'F10' 
 -- Für MedicNet:
 Config.MedicHotkey = 'F9'
+-- Für CarNet:
+Config.MedicHotkey = 'F7'
 
 --[[
 Entscheidet was beim nutzen des Hotkeys geöffnet wird:
@@ -97,8 +101,16 @@ Wenn die Tabelle leer ist, ist die Funktion deaktiviert. Fahrzeug Spawnname oder
 Diese Funktion funktioniert nur, wenn Config.OnlyInVehicle "true" ist.
 ]]
 Config.Vehicles = {
-    'police',
-    -1627000575
+    ['cop'] = {
+        'police',
+        -1627000575
+    },
+
+    ['medic'] = {
+    },
+
+    ['car'] = {
+    }
 }
 
 --[[
@@ -107,6 +119,7 @@ Wenn die Tabelle leer ist, ist die Funktion deaktiviert.
 
 System = 'cop' für CopNet
 System = 'medic' für MedicNet
+ystem = 'car' für CarNet
 ]]
 Config.Zones = {
     -- Misson Row PD
@@ -117,5 +130,26 @@ Config.Zones = {
         System = 'cop',
         OpenType = 'pc',
         Job = 'police'
+    },
+
+    -- Pillbox Hill KH
+    {
+        Coords = vector3(312.29, -597.218, 43.2821),
+        Marker = { type = 1, x = 2.0, y = 2.0, z = 0.5, r = 102, g = 0, b = 102, a = 100, rotate = false },
+        Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
+        System = 'medic',
+        OpenType = 'pc'
+    },
+
+    --[[
+    --Carnet Katalog BEISPIEL!!
+    {
+        Coords = vector3(441.94, -978.87, 29.69),
+        Marker = { type = 1, x = 2.0, y = 2.0, z = 0.5, r = 102, g = 0, b = 102, a = 100, rotate = false },
+        Prompt = 'Drücke ~INPUT_CONTEXT~ um den Katalog anzuschauen.',
+        System = 'car',
+        OpenType = 'katalog',
+        PublicID = '' --  <- PublicID HIER EINFÜGEN!!
     }
+    ]]
 }
