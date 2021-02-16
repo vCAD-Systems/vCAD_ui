@@ -50,7 +50,7 @@ Config.Hotkey = 'F10'
 -- Für MedicNet:
 Config.MedicHotkey = 'F9'
 -- Für CarNet:
-Config.MedicHotkey = 'F7'
+Config.CarHotkey = 'F7'
 
 --[[
 Entscheidet was beim nutzen des Hotkeys geöffnet wird:
