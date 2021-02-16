@@ -6,7 +6,7 @@ FiveM ESX Ingame UI for VPC/Copnet/Medicnet/Carnet.
 TriggerEvent('wgc:openUI', [SYSTEM],  [TYPE])
 ```
 
-`[SYSTEM]` You can choose between Copnet ( **cop**), Medicnet (**medic**) and soon Carnet (**car**).
+`[SYSTEM]` You can choose between Copnet ( **cop**), Medicnet (**medic**) and Carnet (**car**).
 
 `[TYPE]` You can choose between a Tablet (**tab**) and PC (**pc**) design.
 
