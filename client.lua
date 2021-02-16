@@ -196,7 +196,7 @@ function canOpenTablet(system, type, pos)
 		if found == false then
 			return false
 		end
-	elseif system == 'car' and type ~= 'katalog' and Config.CarNetJob ~= nil and Config.CarNetJob ~= 'nil' and Coand PlayerData.job ~= nil then
+	elseif system == 'car' and type ~= 'katalog' and Config.CarNetJob ~= nil and Config.CarNetJob ~= 'nil' and PlayerData.job ~= nil then
 		local found = false
 		
 		for k,v in pairs(Config.CarNetJob) do
