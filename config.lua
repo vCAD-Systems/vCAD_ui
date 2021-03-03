@@ -12,7 +12,7 @@ Befehl "/copnet"?
 Ja = true
 Nein = false
 ]]
-Config.Commands = false
+Config.Commands = true
 
 --[[
 Entscheidet was beim nutzen des Befehls geöffnet wird:
