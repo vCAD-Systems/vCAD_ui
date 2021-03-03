@@ -17,7 +17,7 @@ Welchen Item braucht man um das Tablet öffnen zu können..?
 Falls Feature nicht erwünscht:
 Nein = nil
 ]]
-Config.NeededItem = 'tablet'
+Config.NeededItem = nil
 
 --[[
 Animation beim öffnen des Tablets?
@@ -31,7 +31,7 @@ Befehl "/copnet"?
 Ja = true
 Nein = false
 ]]
-Config.Commands = false
+Config.Commands = true
 
 --[[
 Entscheidet was beim nutzen des Befehls geöffnet wird:
