@@ -44,8 +44,8 @@ alt.on('keyup', (key) => {
     }
 });
 
-alt.on('WGC:Client:Tablet:open', (site, system) => {
-	createCEF(site, system);
+alt.on('WGC:Client:Tablet:open', (site, system, publicID) => {
+	createCEF(site, system, publicID);
 });
 
 alt.on('WGC:Client:Tablet:close', () => {
