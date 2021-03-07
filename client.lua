@@ -234,3 +234,7 @@ if Config.Commands == true then
 		TriggerEvent('wgc:openUI', 'car', Config.CommandOpenType)
 	end, false)
 end
+
+if Keys[Config.Hotkey] == nil or Keys[Config.MedicHotkey] == nil or Keys[Config.CarHotkey] == nil then
+	error("Ein angegebener Hotkey ist invalid!")
+end
