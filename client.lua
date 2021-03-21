@@ -88,12 +88,12 @@ function REQUEST_NUI_FOCUS(bool, reload)
 		end
     else
         SendNUIMessage({hidetab = true})
-		SetNuiFocus(false, false)
+	SetNuiFocus(false, false)
 		
-		if Config.Animation == true then
-			ClearPedTasks(PlayerPed)
-			DeleteObject(tab)
-		end
+	if Config.Animation == true then
+		ClearPedTasks(PlayerPed)
+		DeleteObject(tab)
+	end
     end
 end
 
@@ -109,7 +109,7 @@ RegisterNUICallback("tablet-bus", function(data)
 		tabEnabled = false
 		REQUEST_NUI_FOCUS(false)
 	elseif data.click then
-        lastOpend = GetGameTimer()
+        	lastOpend = GetGameTimer()
 	end
 end)
 
@@ -253,6 +253,7 @@ Citizen.CreateThread(function()
 
 			if IsPedFatallyInjured(PlayerPed) and not isDead then
 				isDead = true
+					
 				if tabEnabled then
 					tabEnabled = false
 					REQUEST_NUI_FOCUS(false)
