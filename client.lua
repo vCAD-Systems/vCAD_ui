@@ -13,7 +13,7 @@ local Keys = {
 ESX = nil
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'cop', 'tab'
 local PlayerData = {}
-local katalogID,tab = nil
+local katalogID, tab = nil, nil
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -90,14 +90,19 @@ function REQUEST_NUI_FOCUS(bool, reload)
         SendNUIMessage({hidetab = true})
 	SetNuiFocus(false, false)
 		
-	if Config.Animation == true then
+	if Config.Animation == true or tab ~= nil then
 		ClearPedTasks(PlayerPed)
 		DeleteObject(tab)
+		tab = nil
 	end
     end
 end
 
 function attachObject()
+	if tab ~= nil then
+		DeleteObject(tab)
+	end
+		
 	tab = CreateObject(GetHashKey("prop_cs_tablet"), 0, 0, 0, true, true, true)
 	AttachEntityToEntity(tab, GetPlayerPed(-1), GetPedBoneIndex(GetPlayerPed(-1), 57005), 0.17, 0.10, -0.13, 20.0, 180.0, 180.0, true, true, false, true, 1, true)
 end
@@ -119,9 +124,10 @@ AddEventHandler('onResourceStop', function(resource)
 			SendNUIMessage({hidetab = true})
 			SetNuiFocus(false, false)
 			
-			if Config.Animation == true then
+			if Config.Animation == true or tab ~= nil then
 				ClearPedTasks(PlayerPedId())
 				DeleteObject(tab)
+				tab = nil
 			end
 		end
 	end
