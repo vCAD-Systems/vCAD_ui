@@ -83,7 +83,7 @@ RegisterNUICallback("tablet-bus", function(data)
 		tabEnabled = false
 		REQUEST_NUI_FOCUS(false)
 	elseif data.click then
-        lastOpend = GetGameTimer()
+       		lastOpend = GetGameTimer()
 	end
 end)
 
@@ -169,6 +169,7 @@ Citizen.CreateThread(function()
 
 			if IsPedFatallyInjured(PlayerPed) and not isDead then
 				isDead = true
+					
 				if tabEnabled then
 					tabEnabled = false
 					REQUEST_NUI_FOCUS(false)
