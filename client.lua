@@ -101,6 +101,7 @@ AddEventHandler('onResourceStop', function(resource)
 			if Config.Animation == true or tab ~= nil then
 				ClearPedTasks(PlayerPedId())
 				DeleteObject(tab)
+				tab = nil
 			end
 		end
 	end
