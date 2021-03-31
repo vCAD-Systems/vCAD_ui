@@ -12,6 +12,23 @@ let openSite = 'https://pc.copnet.li/'
 
 function canInteract() { return lastInteract + 1000 < Date.now() }
 
+//Only open Tablet when in Vehicle with Emergency Class
+function OpenInVehicle(site, system) {
+    const player = alt.Player.local;
+    let vehicle = player.vehicle;
+
+    if (tabletBrowser != null) {
+        closeTabletCEF();
+        return;
+    }
+
+    if (!vehicle || vehicle && game.getVehicleClass(vehicle.scriptID) != 18) {
+        return;
+    }
+
+    createCEF(site, system);
+}
+
 alt.on('keyup', (key) => {
     if (!canInteract) return;
     lastInteract = Date.now();
@@ -26,18 +43,24 @@ alt.on('keyup', (key) => {
     } else if (key == 121) { //F10
         if (tabletBrowser == null) {
             createCEF('cop', 'pc');
+
+            //OpenInVehicle('cop', 'pc'); 
         } else {
             closeTabletCEF();
         }
     } else if (key == 120) { //F9
         if (tabletBrowser == null) {
             createCEF('medic', 'pc');
+
+            //OpenInVehicle('medic', 'pc'); 
         } else {
             closeTabletCEF();
         }
     } else if (key == 118) { //F7
         if (tabletBrowser == null) {
             createCEF('car', 'pc');
+
+            //OpenInVehicle('car', 'pc'); 
         } else {
             closeTabletCEF();
         }
