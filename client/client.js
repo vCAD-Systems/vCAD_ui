@@ -26,7 +26,7 @@ function OpenInVehicle(site, system) {
         return;
     }
 
-    createCEF(site, system);
+    openTabletCEF(site, system);
 }
 
 alt.on('keyup', (key) => {
@@ -36,13 +36,13 @@ alt.on('keyup', (key) => {
     //Keycodes: http://keycode.info/?ref=stuyk
     if (key == 69 && nearPos) { //E
         if (tabletBrowser == null) {
-            createCEF(currentPos.System, currentPos.OpenType, currentPos.PublicID || null);
+            openTabletCEF(currentPos.System, currentPos.OpenType, currentPos.PublicID || null);
         } else {
             closeTabletCEF();
         }
     } else if (key == 121) { //F10
         if (tabletBrowser == null) {
-            createCEF('cop', 'pc');
+            openTabletCEF('cop', 'pc');
 
             //OpenInVehicle('cop', 'pc'); 
         } else {
@@ -50,7 +50,7 @@ alt.on('keyup', (key) => {
         }
     } else if (key == 120) { //F9
         if (tabletBrowser == null) {
-            createCEF('medic', 'pc');
+            openTabletCEF('medic', 'pc');
 
             //OpenInVehicle('medic', 'pc'); 
         } else {
@@ -58,7 +58,7 @@ alt.on('keyup', (key) => {
         }
     } else if (key == 118) { //F7
         if (tabletBrowser == null) {
-            createCEF('car', 'pc');
+            openTabletCEF('car', 'pc');
 
             //OpenInVehicle('car', 'pc'); 
         } else {
@@ -68,20 +68,20 @@ alt.on('keyup', (key) => {
 });
 
 alt.on('WGC:Client:Tablet:open', (site, system, publicID) => {
-	createCEF(site, system, publicID);
+	openTabletCEF(site, system, publicID);
 });
 
 alt.on('WGC:Client:Tablet:close', () => {
 	closeTabletCEF();
 });
 
-function createCEF(site, system, publicID) {
+function openTabletCEF(site, system, publicID) {
 	if (!site || site != 'cop' && site != 'medic' && site != 'car' || publicID != null && site != 'car') {
         alt.log('[WGC_UI] Site wurde nicht oder falsch angegeben!');
         return;
     }
     
-    openTabletCEF(site, system, publicID);
+    createCEF(site, system, publicID);
     let playerPos = alt.Player.local.pos;
     let bone = game.getPedBoneIndex(alt.Player.local.scriptID, 28422);
     if (tablet) return;
@@ -103,7 +103,7 @@ function createCEF(site, system, publicID) {
     }, 0);
 }
 
-function openTabletCEF(site, system, publicID) {
+function createCEF(site, system, publicID) {
     if (tabletBrowser == null) {
         tabletBrowser = new alt.WebView("http://resource/html/index.html");
 
