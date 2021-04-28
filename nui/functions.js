@@ -13,7 +13,7 @@ $(document).ready(function() {
             window.blur() // unfocus the window
         }
     }
-    //SHOW_HIDE(false); // hide the tablet initial
+    SHOW_HIDE(false); // hide the tablet initial
     // Listens for NUI messages from Lua 
     window.addEventListener('message', function(event) {
         var item = event.data;
