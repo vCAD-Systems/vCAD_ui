@@ -1,5 +1,7 @@
-$(document).ready(function () {
-    var iframe = $("#iframe")[0];
+var lastSite = "https://pc.copnet.li";
+
+$(document).ready(function() {
+    var $iframe = $("#iframe")[0];
     var $tabContainer = $("#tab-container");
     var $tabWrap = $(".tab-wrap");
     // Show or hide the page
@@ -11,14 +13,15 @@ $(document).ready(function () {
             window.blur() // unfocus the window
         }
     }
-    SHOW_HIDE(false); // hide the tablet initial
+    //SHOW_HIDE(false); // hide the tablet initial
     // Listens for NUI messages from Lua 
-    window.addEventListener('message', function (event) {
+    window.addEventListener('message', function(event) {
         var item = event.data;
         if (item.showtab) {
             if (item.site) {
-                iframe.src = item.site;
-                
+                lastSite = item.site;
+                $iframe.src = item.site;
+
                 if (item.autoscale == true) {
                     $tabWrap.css("width", "65%")
                     $tabWrap.css("max-width", "65%")
@@ -33,9 +36,9 @@ $(document).ready(function () {
             }
 
             SHOW_HIDE(true)
-        }  else if (item.hidetab) {
+        } else if (item.hidetab) {
             SHOW_HIDE()
-        } 
+        }
     });
     // When pressed ESC dispatch escape request
     document.addEventListener('keyup', function (data) {
@@ -47,25 +50,14 @@ $(document).ready(function () {
         }
     });
     // When clicked the dot
-    $('.tab-wrap .dot').click(function () {
-            SHOW_HIDE(); // hide ui
-            $.post(`http://${GetParentResourceName()}/tablet-bus`, JSON.stringify({
-                hide: true
-            })) // tell lua to unfocus
+    $('.dot#off').click(function() {
+        SHOW_HIDE(); // hide ui
+        $.post(`http://${GetParentResourceName()}/tablet-bus`, JSON.stringify({
+            hide: true
+        })) // tell lua to unfocus
     });
-    // Handle icon click
-    $('a.nav-myframe').click(function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        var self = this;
-        var icon = $(self).find("img, .myicon");
-        icon.addClass("jump")
-        // bounce dat ass
-        setTimeout(function () {
-            iframe.src = self.href || "about:blank"; // trigger HandleLocationChange
-            icon.removeClass("jump");    
-        }, 600)
-        return false;
+    $('.dot#reset').click(function() {
+        $iframe.src = lastSite;
     });
     // Tell lua the nui loaded
     $.post(`http://${GetParentResourceName()}/tablet-bus`, JSON.stringify({
