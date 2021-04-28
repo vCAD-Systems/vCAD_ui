@@ -8,29 +8,35 @@
     <body>
         <div id="tab-container">
             <div class="tab-wrap">
-                <span class="dot" id="dot"></span>
+                <span id="off" class="dot"><i class="fa fa-power-off"></i></span>
+                <span id="reset" class="dot"><i class="fa fa-home"></i></span>
                 <div class="tab">
                     <iframe id="iframe" src="https://pc.copnet.li"></iframe>
                 </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+        <script src="functions.js"></script>
     </body>
 
     <script>
-        var tabContainer = $("#tab-container");
+        var lastSite = "https://pc.copnet.li",
+            tabContainer = $("#tab-container");
 
         $(document).ready(function () {
             alt.emit("WGC:Client:Tablet:isReady");
         });
 
-        $('#dot').click(function () {
+        $('.dot#off').click(function () {
             alt.emit("WGC:Client:Tablet:close");
+        });
+        
+        $('.dot#reset').click(function () {
+            document.getElementById('iframe').src = lastSite;
         });
 
         alt.on("WGC:CEF:Tablet:open", (site) => {
-            document.getElementById('iframe').src = site;
+            lastSite = site;
+            document.getElementById('iframe').src = lastSite;
             tabContainer.css("display", "flex");
             tabContainer.fadeIn(1000);
         });
