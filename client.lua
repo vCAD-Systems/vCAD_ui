@@ -12,8 +12,8 @@ local Keys = {
 
 ESX = nil
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'cop', 'tab'
-local PlayerData = {}
 local katalogID, tab = nil, nil
+local PlayerData = {}
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -157,7 +157,7 @@ function canOpenTablet(system, type, pos)
 	end
 
 	if pos or type == 'katalog' then
-		canOpen = true
+		return true
 	end
 
 	if type == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
@@ -223,6 +223,16 @@ end
 RegisterNetEvent('wgc:openUI')
 AddEventHandler('wgc:openUI', function(system, newSite, pos)
 	local reloadTab = false
+
+	if not system then
+		print('[WGC_UI] Error: `SYSTEM` Argument ist ungültig oder nicht angegeben.')
+		return
+	end
+
+	if not newSite then
+		print('[WGC_UI] Error: `TYPE` Argument ist ungültig oder nicht angegeben.')
+		return
+	end
 
 	if not isDead then
 		if canOpenTablet(system, newSite, pos) == true then
@@ -332,19 +342,18 @@ end
 -- Hotkey Check
 if not Config.Hotkey == nil and not Config.Hotkey == "nil" then
 	if Keys[Config.Hotkey] == nil then
-		print("[ERROR] WGC_UI: config.lua")
-		print("[ERROR] Ein angegebener Hotkey ist invalid! (Config.Hotkey)")
+		print("[WGC_UI] Der angegebene Config.Hotkey ist ungültig!")
 	end
 end
+
 if not Config.MedicHotkey == nil and not Config.MedicHotkey == "nil" then
 	if Keys[Config.MedicHotkey] == nil then
-		print("[ERROR] WGC_UI: config.lua")
-		print("[ERROR] Ein angegebener Hotkey ist invalid! (Config.MedicHotkey)")
+		print("[WGC_UI] Der angegebene Config.MedicHotkey ist ungültig!")
 	end
 end
+
 if not Config.CarHotkey == nil and not Config.CarHotkey == "nil" then
 	if Keys[Config.CarHotkey] == nil then
-		print("[ERROR] WGC_UI: config.lua")
-		print("[ERROR] Ein angegebener Hotkey ist invalid! (Config.CarHotkey)")
+		print("[WGC_UI] Der angegebene Config.CarHotkey ist ungültig!")
 	end
 end
