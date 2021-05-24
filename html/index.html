@@ -30,7 +30,6 @@
         });
 
         $('.dot#off').click(function () {
-            tabContainer.fadeOut(1000);
             alt.emit("WGC:Client:Tablet:close");
         });
         
@@ -43,10 +42,6 @@
             document.getElementById('iframe').src = lastSite;
             tabContainer.css("display", "flex");
             tabContainer.fadeIn(1000);
-        });
-
-        alt.on("WGC:CEF:Tablet:close", () => {
-            tabContainer.fadeOut(1000);
         });
     </script>
 </html>

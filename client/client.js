@@ -4,7 +4,6 @@ import {nearPos, currentPos} from './posmanager.js';
 
 let cursor = false,
     tabletBrowser = null,
-    tabletBrowserVisible = false,
     lastInteract = 0,
     tabletReady = false,
     tablet = null;
@@ -18,7 +17,7 @@ function OpenInVehicle(site, system) {
     const player = alt.Player.local;
     let vehicle = player.vehicle;
 
-    if (tabletBrowserVisible) {
+    if (tabletBrowser != null) {
         closeTabletCEF();
         return;
     }
@@ -36,13 +35,13 @@ alt.on('keyup', (key) => {
     
     //Keycodes: http://keycode.info/?ref=stuyk
     if (key == 69 && nearPos) { //E
-        if (!tabletBrowserVisible) {
+        if (tabletBrowser == null) {
             openTabletCEF(currentPos.System, currentPos.OpenType, currentPos.PublicID || null);
         } else {
             closeTabletCEF();
         }
     } else if (key == 121) { //F10
-        if (!tabletBrowserVisible) {
+        if (tabletBrowser == null) {
             openTabletCEF('cop', 'pc');
 
             //OpenInVehicle('cop', 'pc'); 
@@ -50,7 +49,7 @@ alt.on('keyup', (key) => {
             closeTabletCEF();
         }
     } else if (key == 120) { //F9
-        if (!tabletBrowserVisible) {
+        if (tabletBrowser == null) {
             openTabletCEF('medic', 'pc');
 
             //OpenInVehicle('medic', 'pc'); 
@@ -58,7 +57,7 @@ alt.on('keyup', (key) => {
             closeTabletCEF();
         }
     } else if (key == 118) { //F7
-        if (!tabletBrowserVisible) {
+        if (tabletBrowser == null) {
             openTabletCEF('car', 'pc');
 
             //OpenInVehicle('car', 'pc'); 
@@ -107,51 +106,47 @@ function openTabletCEF(site, system, publicID) {
 function createCEF(site, system, publicID) {
     if (tabletBrowser == null) {
         tabletBrowser = new alt.WebView("http://resource/html/index.html");
-        tabletBrowserVisible = true;
-    }
 
-    if (tabletBrowser == null) return;
-    tabletBrowser.on("WGC:Client:Tablet:isReady", () => {
-        tabletReady = true;
-    });
+        tabletBrowser.on("WGC:Client:Tablet:isReady", () => {
+            tabletReady = true;
+        });
 
-    tabletBrowser.on("WGC:Client:Tablet:close", closeTabletCEF);
+        tabletBrowser.on("WGC:Client:Tablet:close", closeTabletCEF);
 
-    alt.setTimeout(() => {
-        if (tabletBrowser == null) return;
-        showCursor(true);
-        alt.toggleGameControls(false);
-        tabletBrowser.focus();
+        alt.setTimeout(() => {
+            if (tabletBrowser == null) return;
+            showCursor(true);
+            alt.toggleGameControls(false);
+            tabletBrowser.focus();
 
-        let interval = alt.setInterval(() => {
-            if (tabletReady) {
-                alt.clearInterval(interval);
-                openSite = 'https://pc.' + site + 'net.li/';
+            let interval = alt.setInterval(() => {
+                if (tabletReady) {
+                    alt.clearInterval(interval);
+                    openSite = 'https://pc.' + site + 'net.li/';
 
-                if (publicID != null) {
-                    if (publicID == "HIER MUSS PUBLIC ID REIN!!") {
-                        alt.log('[WGC_UI] Ungültige PublicID!');
-                        closeTabletCEF();
-                        return;
+                    if (publicID != null) {
+                        if (publicID == "HIER MUSS PUBLIC ID REIN!!") {
+                            alt.log('[WGC_UI] Ungültige PublicID!');
+                            closeTabletCEF();
+                            return;
+                        }
+
+                        openSite = 'https://pc.carnet.li/shop.php?sp=' + publicID;
                     }
 
-                    openSite = 'https://pc.carnet.li/shop.php?sp=' + publicID;
+                    tabletBrowser.emit("WGC:CEF:Tablet:open", openSite);
                 }
-
-                tabletBrowser.emit("WGC:CEF:Tablet:open", openSite);
-            }
-        }, 0);
-    }, 1500);
+            }, 0);
+        }, 1500);
+    }
 }
 
 function closeTabletCEF() {
     if (tabletBrowser != null) {
-        tabletBrowser.emit("WGC:CEF:Tablet:close");
         tabletBrowser.off("WGC:Client:Tablet:close", closeTabletCEF);
         tabletBrowser.unfocus();
-        tabletBrowserVisible = false;
-        //tabletBrowser.destroy();
-        //tabletBrowser = null;
+        tabletBrowser.destroy();
+        tabletBrowser = null;
         showCursor(false);
         alt.toggleGameControls(true);
     }
