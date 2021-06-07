@@ -196,15 +196,30 @@ Citizen.CreateThread(function()
 		end
 
 		if Config.Hotkey ~= nil and Config.Hotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.Hotkey]) and not isDead then
-			TriggerEvent('wgc:openUI', 'cop', Config.HotkeyOpenType)
+			if Keys[Config.Hotkey] then
+				TriggerEvent('wgc:openUI', 'cop', Config.HotkeyOpenType)
+			else
+				ShowNotification('~r~Fehler beim einrichten des WGC UIs!')
+				ShowNotification('~r~Der angegebene Config.Hotkey ist ungültig!')
+			end
 		end
 
 		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
-			TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
+			if Keys[Config.MedicHotkey] then
+				TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
+			else
+				ShowNotification('~r~Fehler beim einrichten des WGC UIs!')
+				ShowNotification('~r~Der angegebene Config.MedicHotkey ist ungültig!')
+			end
 		end
 
 		if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.CarHotkey]) and not isDead then
-			TriggerEvent('wgc:openUI', 'car',  Config.HotkeyOpenType)
+			if Keys[Config.CarHotkey] then
+				TriggerEvent('wgc:openUI', 'car',  Config.HotkeyOpenType)
+			else
+				ShowNotification('~r~Fehler beim einrichten des WGC UIs!')
+				ShowNotification('~r~Der angegebene Config.CarHotkey ist ungültig!')
+			end
 		end
 	end
 end)
@@ -250,23 +265,4 @@ if Config.Commands == true then
 	RegisterCommand('carnet',function(source, args)
 		TriggerEvent('wgc:openUI', 'car', Config.CommandOpenType)
 	end, false)
-end
-
--- Hotkey Check
-if not Config.Hotkey == nil and not Config.Hotkey == "nil" then
-	if Keys[Config.Hotkey] == nil then
-		print("[WGC_UI] Der angegebene Config.Hotkey ist ungültig!")
-	end
-end
-
-if not Config.MedicHotkey == nil and not Config.MedicHotkey == "nil" then
-	if Keys[Config.MedicHotkey] == nil then
-		print("[WGC_UI] Der angegebene Config.MedicHotkey ist ungültig!")
-	end
-end
-
-if not Config.CarHotkey == nil and not Config.CarHotkey == "nil" then
-	if Keys[Config.CarHotkey] == nil then
-		print("[WGC_UI] Der angegebene Config.CarHotkey ist ungültig!")
-	end
 end
