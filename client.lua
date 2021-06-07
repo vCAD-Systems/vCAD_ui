@@ -353,22 +353,3 @@ if Config.Commands == true then
 		TriggerEvent('wgc:openUI', 'car', Config.CommandOpenType)
 	end, false)
 end
-
--- Hotkey Check
-if not Config.Hotkey == nil and not Config.Hotkey == "nil" then
-	if Keys[Config.Hotkey] == nil then
-		print("[WGC_UI] Der angegebene Config.Hotkey ist ungültig!")
-	end
-end
-
-if not Config.MedicHotkey == nil and not Config.MedicHotkey == "nil" then
-	if Keys[Config.MedicHotkey] == nil then
-		print("[WGC_UI] Der angegebene Config.MedicHotkey ist ungültig!")
-	end
-end
-
-if not Config.CarHotkey == nil and not Config.CarHotkey == "nil" then
-	if Keys[Config.CarHotkey] == nil then
-		print("[WGC_UI] Der angegebene Config.CarHotkey ist ungültig!")
-	end
-end

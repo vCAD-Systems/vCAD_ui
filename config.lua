@@ -13,6 +13,13 @@ Config.MedicNetJob = {'ambulance'}
 Config.CarNetJob = {'cardealer'}
 
 --[[
+Animation beim öffnen des Tablets?
+Ja = true
+Nein = false
+]]
+Config.Animation = false
+
+--[[
 Welchen Item braucht man um das Tablet öffnen zu können..?
 Falls Feature nicht erwünscht:
 Nein = nil
@@ -20,11 +27,20 @@ Nein = nil
 Config.NeededItem = nil
 
 --[[
-Animation beim öffnen des Tablets?
+Soll man das Tablet auch beim *Benutzen* des Items öffnen können? 
+Diese Funktion funktioniert nur, wenn Config.NeededItem NICHT "nil" ist.
 Ja = true
 Nein = false
 ]]
-Config.Animation = false
+Config.CanUseItem = false
+
+--[[
+Entscheidet welche Form beim *Benutzen* des Items geöffnet wird:
+Diese Funktion funktioniert nur, wenn Config.CanUseItem "true" ist.
+'tab' für das Tablet
+'pc' für den PC
+]]
+Config.ItemOpenType = 'tab'
 
 --[[
 Befehl "/copnet"?
@@ -34,7 +50,7 @@ Nein = false
 Config.Commands = true
 
 --[[
-Entscheidet was beim nutzen des Befehls geöffnet wird:
+Entscheidet welche Form beim Nutzen des Befehls geöffnet wird:
 'tab' für das Tablet
 'pc' für den PC
 ]]
@@ -53,7 +69,7 @@ Config.MedicHotkey = 'F9'
 Config.CarHotkey = 'F7'
 
 --[[
-Entscheidet was beim nutzen des Hotkeys geöffnet wird:
+Entscheidet welche Form beim Nutzen des Hotkeys geöffnet wird:
 'tab' für das Tablet
 'pc' für den PC
 ]]
@@ -75,7 +91,7 @@ Nein = false
 Config.InEmergencyVehicle = false
 
 --[[
-Entscheidet was beim nutzen des Tablets im Auto geöffnet wird:
+Entscheidet welche Form beim Nutzen des Tablets im Auto geöffnet wird:
 Diese Funktion funktioniert nur, wenn Config.OnlyInVehicle "true" ist.
 'tab' für das Tablet
 'pc' für den PC
