@@ -165,7 +165,16 @@ function canOpenTablet(system, type, pos)
 		PlayerData = ESX.GetPlayerData()
 
 		for k,v in pairs(PlayerData.inventory) do
-			if v.name == Config.NeededItem and v.count > 0 then
+			if found == true then
+				break
+			elseif type(Config.NeededItem) == 'table' then
+				for key,value in pairs(Config.NeededItem) do
+					if v.name == value and v.count > 0 then
+						found = true
+						break
+					end
+				end
+			elseif v.name == Config.NeededItem and v.count > 0 then
 				found = true
 				break
 			end

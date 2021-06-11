@@ -20,11 +20,11 @@ Nein = false
 Config.Animation = false
 
 --[[
-Welchen Item braucht man um das Tablet öffnen zu können..?
+Welche Items braucht man um das Tablet öffnen zu können..?
 Falls Feature nicht erwünscht:
 Nein = nil
 ]]
-Config.NeededItem = nil
+Config.NeededItem = {'tablet'}
 
 --[[
 Soll man das Tablet auch beim *Benutzen* des Items öffnen können? 
