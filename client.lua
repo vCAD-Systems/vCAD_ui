@@ -133,7 +133,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-function canOpenTablet(system, type, pos)
+function canOpenTablet(system, Ttype, pos)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	
@@ -144,10 +144,10 @@ function canOpenTablet(system, type, pos)
 			end
 		end
 
-		if #Config.Vehicles[type] > 0 then
+		if #Config.Vehicles[Ttype] > 0 then
 			local vehHash = GetEntityModel(GetVehiclePedIsIn(PlayerPed, false))
 
-			for k,v in pairs(Config.Vehicles[type]) do
+			for k,v in pairs(Config.Vehicles[Ttype]) do
 				if (tonumber(v) and v == vehHash) or (tostring(v) and GetHashKey(v) == vehHash) then
 					canOpen = true
 					break
@@ -156,11 +156,11 @@ function canOpenTablet(system, type, pos)
 		end
 	end
 
-	if pos or type == 'katalog' then
+	if pos or Ttype == 'katalog' then
 		return true
 	end
 
-	if type == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
+	if Ttype == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
 		local found = false
 		PlayerData = ESX.GetPlayerData()
 
@@ -211,7 +211,7 @@ function canOpenTablet(system, type, pos)
 		if found == false then
 			return false
 		end
-	elseif system == 'car' and type ~= 'katalog' and Config.CarNetJob ~= nil and Config.CarNetJob ~= 'nil' and PlayerData.job ~= nil then
+	elseif system == 'car' and Ttype ~= 'katalog' and Config.CarNetJob ~= nil and Config.CarNetJob ~= 'nil' and PlayerData.job ~= nil then
 		local found = false
 		
 		for k,v in pairs(Config.CarNetJob) do

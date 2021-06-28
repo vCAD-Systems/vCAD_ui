@@ -2,8 +2,8 @@ ESX = nil
 
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
-if Config.CanUseItem and Config.NeededItem and Config.NeededItem ~= '' then
-    ESX.RegisterUsableItem(Config.NeededItem, function(source)
+function makeItemUseable(name)
+    ESX.RegisterUsableItem(name, function(source)
         if Config.ItemOpenType == 'tab' or Config.ItemOpenType == 'pc' then
             local src = source
             local xPlayer = ESX.GetPlayerFromId(src)
@@ -32,4 +32,18 @@ if Config.CanUseItem and Config.NeededItem and Config.NeededItem ~= '' then
             print('[WGC_UI] Config.ItemOpenType ungültig!')
         end
     end)
+end
+
+if Config.CanUseItem and Config.CanUseItem ~= 'nil' and Config.CanUseItem ~= '' then
+    if Config.CanUseItem == 'all' then
+        if type(Config.NeededItem) == 'table' then
+            for k,v in pairs(Config.NeededItem) do
+                makeItemUseable(v)
+            end
+        else
+            makeItemUseable(Config.NeededItem)
+        end
+    else
+        makeItemUseable(Config.CanUseItem)
+    end
 end

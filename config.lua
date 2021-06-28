@@ -29,10 +29,11 @@ Config.NeededItem = {'tablet'}
 --[[
 Soll man das Tablet auch beim *Benutzen* des Items öffnen können? 
 Diese Funktion funktioniert nur, wenn Config.NeededItem NICHT "nil" ist.
-Ja = true
-Nein = false
+Alle Items aus Config.NeededItem nutzbar = 'all'
+bestimmtes Item nutzbar = 'itemname'
+Nein = nil
 ]]
-Config.CanUseItem = false
+Config.CanUseItem = nil
 
 --[[
 Entscheidet welche Form beim *Benutzen* des Items geöffnet wird:
