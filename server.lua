@@ -34,7 +34,7 @@ function makeItemUseable(name)
     end)
 end
 
-if Config.CanUseItem and Config.CanUseItem ~= 'nil' and Config.CanUseItem ~= '' then
+if Config.CanUseItem and Config.CanUseItem ~= 'nil' and Config.CanUseItem ~= '' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
     if Config.CanUseItem == 'all' then
         if type(Config.NeededItem) == 'table' then
             for k,v in pairs(Config.NeededItem) do
