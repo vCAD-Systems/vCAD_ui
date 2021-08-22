@@ -1,5 +1,5 @@
 #tab-container-flixxx {
-    display: flex;
+    display: none;
     flex: 1;
     top: 20px;
     bottom: 20px;
