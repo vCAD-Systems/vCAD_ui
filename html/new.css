@@ -1,0 +1,79 @@
+#tab-container-flixxx {
+    display: flex;
+    flex: 1;
+    top: 20px;
+    bottom: 20px;
+    
+}
+
+#tab-container-flixxx #iframe {
+    position: relative;
+    width: 1472px;
+    flex: 0.92;
+    /*height: 937px;*/
+    margin-top: 48px;
+    margin-left: 191px;
+    padding: 0;
+    border-radius: 6px;
+    overflow: scroll;
+    border: none;
+    user-select: none;
+}
+
+#tab-container-flixxx .tab-wrap {
+    background: url('tablet.png');
+    /*position: relative;
+    background: black;*/
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 95%;
+    margin: 0 auto 0;
+    padding: 30px;
+    border-radius: 30px;
+    transition: transform 0.75s ease, box-shadow 0.75s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+#tab-container-flixxx .tab-wrap .span#off {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 100px;
+    bottom: 999px;
+    left: 900px;
+    border: 1px solid rgb(255, 255, 255);
+    transition: all 0.5s ease;
+}
+
+#tab-container-flixxx .tab-wrap .dot { /* Button */
+    position: absolute;
+    width: 75px;
+    height: 10px;
+    border-radius: 100px;
+    bottom: 1055px;
+    left: -495px;
+    /*border: 1px solid rgb(255, 0, 0);*/
+    transition: all 0.5s ease;
+}
+
+#tab-container-flixxx .tab-wrap .dot i { /* Button Icons */
+    margin-left: 20%;
+    margin-top: 3.5px;
+    color: white;
+    transition: color 0.5s ease;
+}
+
+#tab-container-flixxx .tab-wrap .dot:hover {
+    background: rgb(51, 51, 51);
+}
+
+#tab-container-flixxx .tab-wrap .dot:hover i {
+    color: rgb(51, 51, 51);
+}
+
+#tab-container-flixxx .tab-wrap .dot#reset { /* Home Button */
+    margin-left: 57.4%;
+    width: 140px;
+}

@@ -6,18 +6,17 @@ export let nearPos = false;
 export var currentPos = [];
 
 let player = alt.Player.local;
-var posArray = [], posJSON;
+var posArray = [];
 
 if (File.exists('./positions.json')) {
-    posJSON = File.read('./positions.json');
+    var posJSON = File.read('./positions.json');
+    posArray = JSON.parse(posJSON);
     alt.setInterval(checkPos, 500);
 } else {
     alt.log('[WGC_UI] Es existiert keine positions.json oder sie wurde verschoben!');
 }
 
 function checkPos() {
-    posArray = JSON.parse(posJSON);
-
     for (var i in posArray) {
         let dist = native.getDistanceBetweenCoords(posArray[i].Coords.x, posArray[i].Coords.y, posArray[i].Coords.z, player.pos.x, player.pos.y, player.pos.z, true);
         

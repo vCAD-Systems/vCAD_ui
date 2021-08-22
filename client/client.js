@@ -2,6 +2,10 @@ import * as alt from 'alt';
 import * as game from 'natives';
 import {nearPos, currentPos} from './posmanager.js';
 
+//CONFIG
+const UseNewDesign = false;
+//END OF CONFIG
+
 let cursor = false,
     tabletBrowser = null,
     lastInteract = 0,
@@ -134,7 +138,7 @@ function createCEF(site, system, publicID) {
                         openSite = 'https://pc.carnet.li/shop.php?sp=' + publicID;
                     }
 
-                    tabletBrowser.emit("WGC:CEF:Tablet:open", openSite);
+                    tabletBrowser.emit("WGC:CEF:Tablet:open", openSite, UseNewDesign);
                 }
             }, 0);
         }, 1500);
