@@ -1,6 +1,13 @@
 Config = {}
 
 --[[
+Welches Design (das Tablet selbst, nicht COPNET ODER MEDICNET ODER CARNET) soll genutzt werden?
+Standard / HTML = false
+Neues, moderneres (von Flixxx) = true
+]]
+Config.Design = false
+
+--[[
 Animation beim öffnen des Tablets?
 Ja = true
 Nein = false
