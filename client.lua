@@ -67,7 +67,7 @@ function REQUEST_NUI_FOCUS(bool, reload)
 		end
 		
 		if reload then
-			SendNUIMessage({showtab = true, site = openSite, autoscale = Config.AutoScale and subSite == 'tab'})
+			SendNUIMessage({showtab = true, site = openSite, design = Config.Design, autoscale = Config.AutoScale and subSite == 'tab'})
 		else
 			SendNUIMessage({showtab = true})
 		end

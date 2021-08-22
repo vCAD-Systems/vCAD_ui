@@ -10,32 +10,39 @@ $(document).ready(function() {
             $tabContainer.show();
         } else {
             $tabContainer.hide();
-            window.blur() // unfocus the window
+            window.blur(); // unfocus the window
         }
     }
     SHOW_HIDE(false); // hide the tablet initial
     // Listens for NUI messages from Lua 
     window.addEventListener('message', function(event) {
         var item = event.data;
+
         if (item.showtab) {
             if (item.site) {
                 lastSite = item.site;
                 $iframe.src = item.site;
 
-                if (item.autoscale == true) {
-                    $tabWrap.css("width", "65%")
-                    $tabWrap.css("max-width", "65%")
-                    $tabWrap.css("max-height", "70%")
-                    $tabWrap.css("min-height", "70%")
+                if (item.design == true) {
+                    tabContainer = $("#tab-container-flixxx");
                 } else {
-                    $tabWrap.css("width", "100%")
-                    $tabWrap.css("max-width", "100%")
-                    $tabWrap.css("max-height", "95%")
-                    $tabWrap.css("min-height", "95%")
-                }
-            }
+                    tabContainer = $("#tab-container");
 
-            SHOW_HIDE(true)
+                    if (item.autoscale == true) {
+                        $tabWrap.css("width", "65%");
+                        $tabWrap.css("max-width", "65%");
+                        $tabWrap.css("max-height", "70%");
+                        $tabWrap.css("min-height", "70%");
+                    } else {
+                        $tabWrap.css("width", "100%");
+                        $tabWrap.css("max-width", "100%");
+                        $tabWrap.css("max-height", "95%");
+                        $tabWrap.css("min-height", "95%");
+                    }
+                }
+
+                SHOW_HIDE(true)
+            }
         } else if (item.hidetab) {
             SHOW_HIDE()
         }

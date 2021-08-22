@@ -9,9 +9,10 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    user-select: none;
 }
 
-#iframe {
+#tab-container #iframe {
     width: 100%;
     flex: 1;
     background:ghostwhite; /* Tablet - hide background */
@@ -25,32 +26,22 @@ body {
     display: none;
 }
 
-#iframe:not(.empty) ~ .tab-content {
-    display:none;
-}
-
-#iframe:not(.empty) + .placeholder {
-    display:none;
-}     
-
-
 #tab-container {
     display: flex;
     flex: 1;
     top: 20px;
     bottom: 20px;
+    display: none;
 }
 
 .tab {
-    background: url('loadscreen.jpg');
-    background-size: 100% 100%;
     position: relative;
     min-height:100%;
     display: flex;
     flex-direction: column;
 }
 
-.tab-wrap {
+#tab-container .tab-wrap {
     position: relative;
     background: black;
     width: 100%;
@@ -65,7 +56,7 @@ body {
     flex-direction: column;
 }
 
-.tab-wrap .dot {
+#tab-container .tab-wrap .dot {
     position: absolute;
     width: 35px;
     height: 20px;
@@ -75,21 +66,21 @@ body {
     transition: all 0.5s ease;
 }
 
-.tab-wrap .dot i {
+#tab-container .tab-wrap .dot i {
     margin-left: 30%;
     color: white;
     transition: color 0.5s ease;
 }
 
-.tab-wrap .dot:hover {
+#tab-container .tab-wrap .dot:hover {
     background: whitesmoke;
 }
 
-.tab-wrap .dot:hover i {
+#tab-container .tab-wrap .dot:hover i {
     color: black;
 }
 
-.tab-wrap .dot#reset {
+#tab-container .tab-wrap .dot#reset {
     margin-left: 45%;
 }
 
@@ -100,17 +91,4 @@ body {
 .tab-wrap .tab {
     padding: 0;
     overflow: hidden;
-}
-
-@-webkit-keyframes JUMP {
-    0% {
-        bottom: 0;
-    }
-    50% {
-        bottom: 20px;
-        padding-bottom: 20px;
-    }
-    100% {
-        bottom: 0;
-    }
 }
