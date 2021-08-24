@@ -12,22 +12,22 @@ body {
     user-select: none;
 }
 
-#tab-container #iframe {
+#tab-container .iframe {
     width: 100%;
     flex: 1;
-    background:ghostwhite; /* Tablet - hide background */
+    background:black; /* Tablet - hide background */
     overflow: scroll;
     border: none;
     margin: 0;
     padding: 0;
 }
 
-#iframe.empty {
+.iframe.empty {
     display: none;
 }
 
 #tab-container {
-    display: flex;
+    display: none;
     flex: 1;
     top: 20px;
     bottom: 20px;

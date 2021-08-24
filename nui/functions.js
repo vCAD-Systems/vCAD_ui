@@ -1,74 +1,68 @@
 var lastSite = "https://pc.copnet.li";
 
 $(document).ready(function() {
-    var $iframe = $("#iframe")[0];
-    var $tabContainer = $("#tab-container");
-    var $tabWrap = $(".tab-wrap");
+    var tabWrap = $(".tab-wrap");
+    let tabContainer = "#tab-container";
     // Show or hide the page
-    function SHOW_HIDE(bool) {
+    function HIDE_TAB() {        
         $("#tab-container").css("display", "none");
         $("#tab-container-flixxx").css("display", "none");
-
-        if (bool) {
-            $tabContainer.css("display", "flex");
-        } else {
-            $tabContainer.css("display", "none");
-            window.blur(); // unfocus the window
-        }
+        window.blur(); // unfocus the window
     }
-    SHOW_HIDE(false); // hide the tablet initial
+    HIDE_TAB(); // hide the tablet initial
     // Listens for NUI messages from Lua 
     window.addEventListener('message', function(event) {
-        var item = event.data;
+        if (event.data.showtab) {
+            if (event.data.design) {
+                tabContainer = "#tab-container-flixxx";
+            } else {
+                tabContainer = "#tab-container";
 
-        if (item.showtab) {
-            if (item.site) {
-                lastSite = item.site;
-                $iframe.src = item.site;
-
-                if (item.design == true) {
-                    tabContainer = $("#tab-container-flixxx");
+                if (event.data.autoscale == true) {
+                    tabWrap
+                        .css("width", "65%")
+                        .css("max-width", "65%")
+                        .css("max-height", "70%")
+                        .css("min-height", "70%");
                 } else {
-                    tabContainer = $("#tab-container");
-
-                    if (item.autoscale == true) {
-                        $tabWrap.css("width", "65%");
-                        $tabWrap.css("max-width", "65%");
-                        $tabWrap.css("max-height", "70%");
-                        $tabWrap.css("min-height", "70%");
-                    } else {
-                        $tabWrap.css("width", "100%");
-                        $tabWrap.css("max-width", "100%");
-                        $tabWrap.css("max-height", "95%");
-                        $tabWrap.css("min-height", "95%");
-                    }
+                    tabWrap
+                        .css("width", "100%")
+                        .css("max-width", "100%")
+                        .css("max-height", "95%")
+                        .css("min-height", "95%");
                 }
-
-                SHOW_HIDE(true)
             }
-        } else if (item.hidetab) {
-            SHOW_HIDE()
+            if (event.data.site) {
+                $(tabContainer + " iframe").src = event.data.site;
+                lastSite = event.data.site;
+            }
+
+            $(tabContainer).css("display", "flex");
+        } else if (event.data.hidetab) {
+            HIDE_TAB()
         }
     });
     // When pressed ESC dispatch escape request
     document.addEventListener('keyup', function (data) {
         if (data.which == 27) {
-            SHOW_HIDE(); // hide ui
+            HIDE_TAB(); // hide ui
             $.post(`http://${GetParentResourceName()}/tablet-bus`, JSON.stringify({
                 hide: true
             })) // tell lua to unfocus
         }
     });
     // When clicked the dot
-    $('.dot#off').click(function() {
-        SHOW_HIDE(); // hide ui
-        $.post(`http://${GetParentResourceName()}/tablet-bus`, JSON.stringify({
-            hide: true
-        })) // tell lua to unfocus
+    $('.dot').click(function() {
+        if (this.id == 'off') {
+            HIDE_TAB(); // hide ui
+            $.post(`http://${GetParentResourceName()}/tablet-bus`, JSON.stringify({
+                hide: true
+            })) // tell lua to unfocus
+        } else if (this.id == 'reset') {
+            $(tabContainer + " iframe").src = lastSite;
+        }
     });
-    $('.dot#reset').click(function() {
-        $iframe.src = lastSite;
-    });
+    
     // Tell lua the nui loaded
     $.post(`http://${GetParentResourceName()}/tablet-bus`, JSON.stringify({
         load: true
