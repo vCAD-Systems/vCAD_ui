@@ -5,7 +5,7 @@ Welches Design (das Tablet selbst, nicht COPNET ODER MEDICNET ODER CARNET) soll 
 Standard / HTML = false
 Neues, moderneres (von Flixxx) = true
 ]]
-Config.Design = true
+Config.Design = false
 
 --[[
 Welchen job braucht man für..?
