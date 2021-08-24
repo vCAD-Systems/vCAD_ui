@@ -6,6 +6,9 @@ $(document).ready(function() {
     var $tabWrap = $(".tab-wrap");
     // Show or hide the page
     function SHOW_HIDE(bool) {
+        $("#tab-container").css("display", "none");
+        $("#tab-container-flixxx").css("display", "none");
+        
         if (bool) {
             $tabContainer.show();
         } else {
