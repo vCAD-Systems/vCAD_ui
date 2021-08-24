@@ -3,11 +3,12 @@ game 'gta5'
 
 name 'WGC UI - ESX Version'
 author 'Ffrankys'
-version '1.3.1'
+version '1.4.0'
 
 client_scripts {
 	'config.lua',
-	'client.lua'
+	'client.lua',
+	'server.lua'
 }
 
 ui_page "nui/index.html"
@@ -16,4 +17,6 @@ files {
     "nui/index.html",
     "nui/functions.js",
     "nui/main.css",
+    "nui/new.css",
+    "nui/tablet.jpg"
 }

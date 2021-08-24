@@ -5,11 +5,12 @@
     bottom: 20px;
 }
 
-#tab-container-flixxx #iframe {
+#tab-container-flixxx .iframe {
     position: relative;
     width: 1472px;
     flex: 0.92;
     /*height: 937px;*/
+    background:black; /* Tablet - hide background */
     margin-top: 48px;
     margin-left: 191px;
     padding: 0;
@@ -19,8 +20,9 @@
     user-select: none;
 }
 
-#tab-container-flixxx .tab-wrap {
-    background: url('tablet.png');
+#tab-wrap-flixxx {
+    background: url('tablet.jpg');
+    background-repeat: no-repeat;
     /*position: relative;
     background: black;*/
     width: 100%;
@@ -35,18 +37,7 @@
     flex-direction: column;
 }
 
-#tab-container-flixxx .tab-wrap .span#off {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    border-radius: 100px;
-    bottom: 999px;
-    left: 900px;
-    border: 1px solid rgb(255, 255, 255);
-    transition: all 0.5s ease;
-}
-
-#tab-container-flixxx .tab-wrap .dot { /* Button */
+#tab-container-flixxx #tab-wrap-flixxx .dot { 
     position: absolute;
     width: 75px;
     height: 10px;
@@ -57,22 +48,16 @@
     transition: all 0.5s ease;
 }
 
-#tab-container-flixxx .tab-wrap .dot i { /* Button Icons */
-    margin-left: 20%;
-    margin-top: 3.5px;
-    color: white;
-    transition: color 0.5s ease;
-}
-
-#tab-container-flixxx .tab-wrap .dot:hover {
+#tab-container-flixxx #tab-wrap-flixxx .dot:hover {
     background: rgb(51, 51, 51);
 }
 
-#tab-container-flixxx .tab-wrap .dot:hover i {
-    color: rgb(51, 51, 51);
+#tab-container-flixxx #tab-wrap-flixxx .dot#off { /* Button */
+    margin-left: 50%;
+    width: 75px;
 }
 
-#tab-container-flixxx .tab-wrap .dot#reset { /* Home Button */
+#tab-container-flixxx #tab-wrap-flixxx .dot#reset { /* Home Button */
     margin-left: 57.4%;
     width: 140px;
 }

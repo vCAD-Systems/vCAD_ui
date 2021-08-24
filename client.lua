@@ -11,7 +11,7 @@ local Keys = {
 }
 
 ESX = nil
-local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'cop', 'tab'
+local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, nil, 'tab'
 local katalogID, tab = nil, nil
 local PlayerData = {}
 
@@ -67,9 +67,9 @@ function REQUEST_NUI_FOCUS(bool, reload)
 		end
 		
 		if reload then
-			SendNUIMessage({showtab = true, site = openSite, design = Config.Design, autoscale = Config.AutoScale and subSite == 'tab'})
+			SendNUIMessage({showtab = true, design = Config.Design, autoscale = Config.AutoScale and subSite == 'tab', site = openSite})
 		else
-			SendNUIMessage({showtab = true})
+			SendNUIMessage({showtab = true, design = Config.Design, autoscale = Config.AutoScale and subSite == 'tab'})
 		end
 
 		SetNuiFocus(bool, bool)
@@ -114,7 +114,7 @@ RegisterNUICallback("tablet-bus", function(data)
 		tabEnabled = false
 		REQUEST_NUI_FOCUS(false)
 	elseif data.click then
-        	lastOpend = GetGameTimer()
+		lastOpend = GetGameTimer()
 	end
 end)
 
