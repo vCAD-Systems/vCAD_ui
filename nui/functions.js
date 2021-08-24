@@ -6,10 +6,13 @@ $(document).ready(function() {
     var $tabWrap = $(".tab-wrap");
     // Show or hide the page
     function SHOW_HIDE(bool) {
+        $("#tab-container").css("display", "none");
+        $("#tab-container-flixxx").css("display", "none");
+
         if (bool) {
-            $tabContainer.show();
+            $tabContainer.css("display", "flex");
         } else {
-            $tabContainer.hide();
+            $tabContainer.css("display", "none");
             window.blur(); // unfocus the window
         }
     }
