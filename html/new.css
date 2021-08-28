@@ -8,11 +8,11 @@
 
 #tab-container-flixxx #iframe {
     position: relative;
-    width: 1472px;
+    width: 1471px;
     flex: 0.92;
     /*height: 937px;*/
     margin-top: 48px;
-    margin-left: 191px;
+    margin-left: 192px;
     padding: 0;
     border-radius: 6px;
     overflow: scroll;
@@ -20,8 +20,51 @@
     user-select: none;
 }
 
+@media only screen and (max-device-width: 1280px) and (max-device-height: 720px) {
+    #tab-container-flixxx #iframe {
+        flex: 0.67;
+    }
+}
+
+@media only screen and (min-device-width: 1920px) and (min-device-height: 1080px) {
+    #tab-container-flixxx #iframe {
+        flex: 0.92;
+    }
+}
+
+@media only screen and (min-device-width: 2560px) and (min-device-height: 1440px) {
+    #tab-container-flixxx #iframe {
+        flex: 0.67;
+    }
+
+    #tab-container-flixxx .tab-wrap .dot {
+        bottom: 1415px !important;
+        left: -860px !important;
+    }
+
+    #tab-container-flixxx .tab-wrap .dot#off {
+        margin-left: 51.75% !important;
+    }
+}
+
+@media only screen and (min-device-width: 3840px) and (min-device-height: 2160px) {
+    #tab-container-flixxx #iframe {
+        flex: 0.435;
+    }
+
+    #tab-container-flixxx .tab-wrap .dot {
+        bottom: 2135px !important;
+        left: -1600px !important;
+    }
+
+    #tab-container-flixxx .tab-wrap .dot#off {
+        margin-left: 53.75% !important;
+    }
+}
+
 #tab-container-flixxx .tab-wrap {
     background: url('tablet.png');
+    background-repeat: no-repeat;
     /*position: relative;
     background: black;*/
     width: 100%;
