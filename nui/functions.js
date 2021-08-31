@@ -32,8 +32,9 @@ $(document).ready(function() {
                         .css("min-height", "95%");
                 }
             }
-            if (event.data.site) {
-                $(tabContainer + " iframe").src = event.data.site;
+            
+            if (event.data.site != null) {
+                $(tabContainer).find("iframe").attr('src', event.data.site);
                 lastSite = event.data.site;
             }
 
@@ -59,7 +60,7 @@ $(document).ready(function() {
                 hide: true
             })) // tell lua to unfocus
         } else if (this.id == 'reset') {
-            $(tabContainer + " iframe").src = lastSite;
+            $(tabContainer).find("iframe").attr('src', lastSite);
         }
     });
     
