@@ -46,7 +46,7 @@
         });
         
         $('.dot#reset').click(function () {
-            document.getElementById('iframe').src = lastSite;
+            $(tabContainer).find("iframe").attr('src', lastSite);
         });
 
         alt.on("WGC:CEF:Tablet:open", (site, newDesign) => {
@@ -56,7 +56,7 @@
             $("#tab-container-flixxx").css("display", "none");
             newDesign == true ? tabContainer = $("#tab-container-flixxx") : $("#tab-container");
 
-            document.getElementById('iframe').src = lastSite;
+            tabContainer.find("iframe").attr('src', lastSite);
             tabContainer.css("display", "flex");
             tabContainer.fadeIn(1000);
         });
