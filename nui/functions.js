@@ -22,8 +22,8 @@ $(document).ready(function() {
                     tabWrap
                         .css("width", "65%")
                         .css("max-width", "65%")
-                        .css("max-height", "70%")
-                        .css("min-height", "70%");
+                        .css("max-height", "75%")
+                        .css("min-height", "75%");
                 } else {
                     tabWrap
                         .css("width", "100%")
