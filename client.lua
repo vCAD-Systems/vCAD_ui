@@ -231,7 +231,7 @@ Citizen.CreateThread(function()
 		local letSleep = true
 
 		for k,v in ipairs(Config.Zones) do
-			local distance = GetDistanceBetweenCoords(playerCoords, v.Coords, true)
+			local distance = #(playerCoords - v.Coords)
 		
 			if distance < 50.0 then
 				DrawMarker(v.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.Marker.x, v.Marker.y, v.Marker.z, v.Marker.r, v.Marker.g, v.Marker.b, v.Marker.a, false, false, 2, v.Marker.rotate, nil, nil, false)
