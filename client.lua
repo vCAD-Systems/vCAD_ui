@@ -169,7 +169,7 @@ function canOpenTablet(system, Ttype, pos)
 				break
 			elseif type(Config.NeededItem) == 'table' then
 				for key,value in pairs(Config.NeededItem) do
-					if v.name ~= 'nil' and  v.name == value and v.count > 0 then
+					if v.name ~= nil and v.name ~= 'nil' and v.name == value and v.count > 0 then
 						found = true
 						break
 					end

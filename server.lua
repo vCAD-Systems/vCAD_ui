@@ -3,6 +3,8 @@ ESX = nil
 TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 
 function makeItemUseable(name)
+    if name == nil or name == 'nil' then return end
+    
     ESX.RegisterUsableItem(name, function(source)
         if Config.ItemOpenType == 'tab' or Config.ItemOpenType == 'pc' then
             local src = source
