@@ -7,26 +7,25 @@ function makeItemUseable(name)
     
     ESX.RegisterUsableItem(name, function(source)
         if Config.ItemOpenType == 'tab' or Config.ItemOpenType == 'pc' then
-            local src = source
-            local xPlayer = ESX.GetPlayerFromId(src)
+            local xPlayer = ESX.GetPlayerFromId(source)
 
             for k,v in pairs(Config.CopNetJob) do
                 if xPlayer.job.name == v then
-                    TriggerClientEvent('wgc:openUI', src, 'cop',  Config.ItemOpenType)
+                    TriggerClientEvent('wgc:openUI', source, 'cop',  Config.ItemOpenType)
                     return
                 end
             end
 
             for k,v in pairs(Config.MedicNetJob) do
                 if xPlayer.job.name == v then
-                    TriggerClientEvent('wgc:openUI', src, 'medic',  Config.ItemOpenType)
+                    TriggerClientEvent('wgc:openUI', source, 'medic',  Config.ItemOpenType)
                     return
                 end
             end
             
             for k,v in pairs(Config.CarNetJob) do
                 if xPlayer.job.name == v then
-                    TriggerClientEvent('wgc:openUI', src, 'car',  Config.ItemOpenType)
+                    TriggerClientEvent('wgc:openUI', source, 'car',  Config.ItemOpenType)
                     return
                 end
             end
