@@ -107,7 +107,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-function canOpenTablet(pos, newSite)
+function canOpenTablet(pos, newSite, system)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	
@@ -118,9 +118,9 @@ function canOpenTablet(pos, newSite)
 			end
 		end
 
-		if #Config.Vehicles[newSite] > 0 then
+		if #Config.Vehicles[system] > 0 then
 			local vehHash = GetEntityModel(GetVehiclePedIsIn(PlayerPed, false))
-			for k,v in pairs(Config.Vehicles[newSite]) do
+			for k,v in pairs(Config.Vehicles[system]) do
 				if (tonumber(v) and v == vehHash) or (tostring(v) and GetHashKey(v) == vehHash) then
 					canOpen = true
 					break
@@ -151,7 +151,7 @@ AddEventHandler('wgc:openUI', function(system, newSite, pos)
 	end
 
 	if not isDead then
-		if canOpenTablet(pos, newSite) == true then
+		if canOpenTablet(pos, newSite, system) == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				if site ~= system then
 					site = system
