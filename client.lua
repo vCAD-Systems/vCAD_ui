@@ -144,10 +144,10 @@ function canOpenTablet(system, Ttype, pos)
 			end
 		end
 
-		if #Config.Vehicles[Ttype] > 0 then
+		if #Config.Vehicles[system] > 0 then
 			local vehHash = GetEntityModel(GetVehiclePedIsIn(PlayerPed, false))
 
-			for k,v in pairs(Config.Vehicles[Ttype]) do
+			for k,v in pairs(Config.Vehicles[system]) do
 				if (tonumber(v) and v == vehHash) or (tostring(v) and GetHashKey(v) == vehHash) then
 					canOpen = true
 					break
