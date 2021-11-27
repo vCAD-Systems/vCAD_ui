@@ -18,5 +18,5 @@ files {
     "nui/functions.js",
     "nui/main.css",
     "nui/new.css",
-    "nui/tablet.jpg"
+    "nui/tablet.png"
 }
