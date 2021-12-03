@@ -20,10 +20,10 @@
     {
         "Name": "Carnet Beispiel",
         "Coords": { "x": 441.94, "y": -978.87, "z": 29.69 },
-        "Marker": { "type": 1, "x": 2.0, "y": 2.0, "z": 0.5, "r": 102, "g": 0, "b": 102, "a": 100, "rotate": false },
+        "Marker": { "type": 1, "x": 2, "y": 2, "z": 2, "r": 102, "g": 0, "b": 102, "a": 100, "rotate": false },
         "Prompt": "Drücke `E` um den Katalog zu öffnen",
         "System": "car",
         "OpenType": "katalog",
-        "PublicID": "HIER MUSS PUBLIC ID REIN!!"
+        "PublicID": "HIER PUBLIC ID!"
     }
 ]

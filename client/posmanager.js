@@ -34,7 +34,7 @@ function checkPos() {
 alt.everyTick(() => {
     if (posArray.length >= 1) {
         for (var i = 0; i < posArray.length; i++) {
-            native.drawRect(0, 0, 0, 0, 0, 0, 0, 0);
+            native.drawRect(0, 0, 0, 0, 0, 0, 0, 0, true);
             native.drawMarker(posArray[i].Marker.type, posArray[i].Coords.x, posArray[i].Coords.y, posArray[i].Coords.z, 0, 0, 0, 0, 0, 0, posArray[i].Marker.x, posArray[i].Marker.y, posArray[i].Marker.z, posArray[i].Marker.r, posArray[i].Marker.g, posArray[i].Marker.b, posArray[i].Marker.a, posArray[i].Marker.rotate, false, 2, false, undefined, undefined, false);
         }
     }
@@ -49,3 +49,4 @@ function helpNotify(text) {
     native.addTextComponentSubstringPlayerName(text);
     native.endTextCommandDisplayHelp(0, false, true, 0);
 }
+
