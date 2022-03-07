@@ -60,7 +60,7 @@ function REQUEST_NUI_FOCUS(bool, reload)
 	end
 
 	if bool == true then
-		local openSite = 'https://pc.'..site..'net.li/'
+		local openSite = getsite(site)
 
 		if katalogID ~= nil and site == 'car' and subSite == 'katalog' then
 			openSite = 'https://pc.carnet.li/shop.php?sp='..katalogID
@@ -96,6 +96,16 @@ function REQUEST_NUI_FOCUS(bool, reload)
 		tab = nil
 	end
     end
+end
+
+function getsite(system)
+	if system == "cop" then
+		return "https://copnet.ch/"
+	elseif system == "medic" then
+		return "https://medicnet.ch/"
+	elseif system == "car" then
+		return "https://carnet.vcad.li/"
+	end
 end
 
 function attachObject()
