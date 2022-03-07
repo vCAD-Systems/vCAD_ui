@@ -1,4 +1,4 @@
-var lastSite = "https://pc.copnet.li";
+var lastSite = "https://copnet.ch";
 
 $(document).ready(function() {
     var tabWrap = $(".tab-wrap");

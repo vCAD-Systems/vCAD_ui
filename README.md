@@ -1,5 +1,5 @@
 # wgc_ui_esx
-FiveM ESX Ingame UI for VPC/Copnet/Medicnet/Carnet.
+FiveM ESX Ingame UI for VCAD/Copnet/Medicnet/Carnet.
 
 # How to use:
 ```
