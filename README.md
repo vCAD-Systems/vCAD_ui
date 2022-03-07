@@ -1,5 +1,5 @@
 # wgc_ui
-FiveM Standalone Ingame UI for VPC/Copnet/Medicnet/Carnet.
+FiveM Standalone Ingame UI for VCAD/Copnet/Medicnet/Carnet.
 
 # How to use:
 ```
