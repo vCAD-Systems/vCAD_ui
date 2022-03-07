@@ -12,7 +12,7 @@ let cursor = false,
     tabletReady = false,
     tablet = null;
 
-let openSite = 'https://pc.copnet.li/'
+let openSite = 'https://copnet.ch/'
 
 function canInteract() { return lastInteract + 1000 < Date.now() }
 
@@ -106,6 +106,17 @@ function openTabletCEF(site, system, publicID) {
         alt.clearInterval(interval);
     }, 0);
 }
+function getsite(system) {
+    if (system == "cop") {
+        return "https://copnet.ch/"
+    } else if (system == "medic") {
+		return "https://medicnet.ch/"
+	} else if (system == "car") {
+        return "https://carnet.vcad.li/"
+    }
+}
+	
+    
 
 function createCEF(site, system, publicID) {
     if (tabletBrowser == null) {
@@ -126,16 +137,16 @@ function createCEF(site, system, publicID) {
             let interval = alt.setInterval(() => {
                 if (tabletReady) {
                     alt.clearInterval(interval);
-                    openSite = 'https://pc.' + site + 'net.li/';
+                    openSite = getsite(site);
 
                     if (publicID != null) {
                         if (publicID == "HIER MUSS PUBLIC ID REIN!!") {
-                            alt.log('[WGC_UI] Ungültige PublicID!');
+                            alt.log('[VCAD_UI] Ungültige PublicID!');
                             closeTabletCEF();
                             return;
                         }
 
-                        openSite = 'https://pc.carnet.li/shop.php?sp=' + publicID;
+                        openSite = 'https://carnet.vcad.li/shop.php?sp=' + publicID;
                     }
 
                     tabletBrowser.emit("WGC:CEF:Tablet:open", openSite, UseNewDesign);

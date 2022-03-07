@@ -1,5 +1,5 @@
 # wgc_ui
-Alt:V Standalone Ingame UI for VPC/Copnet/Medicnet/Carnet.
+Alt:V Standalone Ingame UI for VCAD/Copnet/Medicnet/Carnet.
 
 # How to use:
 ```
