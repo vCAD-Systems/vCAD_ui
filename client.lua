@@ -54,8 +54,8 @@ function REQUEST_NUI_FOCUS(bool, reload)
 	local PlayerPed = PlayerPedId()
 
 	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog') then
-		ShowNotification('~r~Fehler beim einrichten des VCAD UIs.')
-		ShowNotification('~r~Fehler beim einrichten des VCAD UIs!')
+		ShowNotification('~r~Fehler beim einrichten des vCAD UIs.')
+		ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 		return
 	end
 
@@ -302,7 +302,7 @@ Citizen.CreateThread(function()
 			if Keys[Config.Hotkey] then
 				TriggerEvent('wgc:openUI', 'cop', Config.HotkeyOpenType)
 			else
-				ShowNotification('~r~Fehler beim einrichten des VCAD UIs!')
+				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.Hotkey ist ungültig!')
 			end
 		end
@@ -311,7 +311,7 @@ Citizen.CreateThread(function()
 			if Keys[Config.MedicHotkey] then
 				TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
 			else
-				ShowNotification('~r~Fehler beim einrichten des VCAD UIs!')
+				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.MedicHotkey ist ungültig!')
 			end
 		end
@@ -320,7 +320,7 @@ Citizen.CreateThread(function()
 			if Keys[Config.CarHotkey] then
 				TriggerEvent('wgc:openUI', 'car',  Config.HotkeyOpenType)
 			else
-				ShowNotification('~r~Fehler beim einrichten des VCAD UIs!')
+				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.CarHotkey ist ungültig!')
 			end
 		end

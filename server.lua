@@ -30,7 +30,7 @@ function makeItemUseable(name)
                 end
             end
         else
-            print('[WGC_UI] Config.ItemOpenType ungültig!')
+            print('[vCAD_UI] Config.ItemOpenType ungültig!')
         end
     end)
 end
