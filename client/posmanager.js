@@ -13,7 +13,7 @@ if (File.exists('./positions.json')) {
     posArray = JSON.parse(posJSON);
     alt.setInterval(checkPos, 500);
 } else {
-    alt.log('[VCAD_UI] Es existiert keine positions.json oder sie wurde verschoben!');
+    alt.log('[vCAD_UI] Es existiert keine positions.json oder sie wurde verschoben!');
 }
 
 function checkPos() {

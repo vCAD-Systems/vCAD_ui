@@ -2,9 +2,10 @@ import * as alt from 'alt';
 import * as game from 'natives';
 import {nearPos, currentPos} from './posmanager.js';
 
-//CONFIG
+//"CONFIG"
 const UseNewDesign = false;
-//END OF CONFIG
+//END OF "CONFIG"
+
 
 let cursor = false,
     tabletBrowser = null,
@@ -16,7 +17,6 @@ let openSite = 'https://copnet.ch/'
 
 function canInteract() { return lastInteract + 1000 < Date.now() }
 
-//Only open Tablet when in Vehicle with Emergency Class
 function OpenInVehicle(site, system) {
     const player = alt.Player.local;
     let vehicle = player.vehicle;
@@ -26,6 +26,7 @@ function OpenInVehicle(site, system) {
         return;
     }
 
+    //Only open Tablet when in Vehicle with Emergency Class
     if (!vehicle || vehicle && game.getVehicleClass(vehicle.scriptID) != 18) {
         return;
     }
@@ -81,7 +82,7 @@ alt.on('WGC:Client:Tablet:close', () => {
 
 function openTabletCEF(site, system, publicID) {
 	if (!site || site != 'cop' && site != 'medic' && site != 'car' || publicID != null && site != 'car') {
-        alt.log('[WGC_UI] Site wurde nicht oder falsch angegeben!');
+        alt.log('[vCAD_UI] Site wurde nicht oder falsch angegeben!');
         return;
     }
     
@@ -141,7 +142,7 @@ function createCEF(site, system, publicID) {
 
                     if (publicID != null) {
                         if (publicID == "HIER MUSS PUBLIC ID REIN!!") {
-                            alt.log('[VCAD_UI] Ungültige PublicID!');
+                            alt.log('[vCAD_UI] Ungültige PublicID!');
                             closeTabletCEF();
                             return;
                         }
