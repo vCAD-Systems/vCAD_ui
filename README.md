@@ -1,4 +1,4 @@
-# wgc_ui
+# vCAD_ui
 FiveM Standalone Ingame UI for VCAD/Copnet/Medicnet/Carnet.
 
 # How to use:

@@ -1,9 +1,9 @@
 fx_version 'bodacious'
 game 'gta5'
 
-name 'WGC UI'
-author 'Ffrankys'
-version '1.4.0'
+name 'vCAD UI'
+author 'Ffrankys, Flixxx, Tallerik & Mîhó'
+version '1.4.1'
 
 client_scripts {
 	'config.lua',
