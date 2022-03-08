@@ -38,18 +38,18 @@
             tabContainer = $("#tab-container");
 
         $(document).ready(function () {
-            alt.emit("WGC:Client:Tablet:isReady");
+            alt.emit("vCAD:Client:Tablet:isReady");
         });
 
         $('.dot#off').click(function () {
-            alt.emit("WGC:Client:Tablet:close");
+            alt.emit("vCAD:Client:Tablet:close");
         });
         
         $('.dot#reset').click(function () {
             $(tabContainer).find("iframe").attr('src', lastSite);
         });
 
-        alt.on("WGC:CEF:Tablet:open", (site, newDesign) => {
+        alt.on("vCAD:CEF:Tablet:open", (site, newDesign) => {
             lastSite = site;
             
             $("#tab-container").css("display", "none");

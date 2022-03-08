@@ -72,11 +72,11 @@ alt.on('keyup', (key) => {
     }
 });
 
-alt.on('WGC:Client:Tablet:open', (site, system, publicID) => {
+alt.on('vCAD:Client:Tablet:open', (site, system, publicID) => {
 	openTabletCEF(site, system, publicID);
 });
 
-alt.on('WGC:Client:Tablet:close', () => {
+alt.on('vCAD:Client:Tablet:close', () => {
 	closeTabletCEF();
 });
 
@@ -123,11 +123,11 @@ function createCEF(site, system, publicID) {
     if (tabletBrowser == null) {
         tabletBrowser = new alt.WebView("http://resource/html/index.html");
 
-        tabletBrowser.on("WGC:Client:Tablet:isReady", () => {
+        tabletBrowser.on("vCAD:Client:Tablet:isReady", () => {
             tabletReady = true;
         });
 
-        tabletBrowser.on("WGC:Client:Tablet:close", closeTabletCEF);
+        tabletBrowser.on("vCAD:Client:Tablet:close", closeTabletCEF);
 
         alt.setTimeout(() => {
             if (tabletBrowser == null) return;
@@ -150,7 +150,7 @@ function createCEF(site, system, publicID) {
                         openSite = 'https://carnet.vcad.li/shop.php?sp=' + publicID;
                     }
 
-                    tabletBrowser.emit("WGC:CEF:Tablet:open", openSite, UseNewDesign);
+                    tabletBrowser.emit("vCAD:CEF:Tablet:open", openSite, UseNewDesign);
                 }
             }, 0);
         }, 1500);
@@ -159,7 +159,7 @@ function createCEF(site, system, publicID) {
 
 function closeTabletCEF() {
     if (tabletBrowser != null) {
-        tabletBrowser.off("WGC:Client:Tablet:close", closeTabletCEF);
+        tabletBrowser.off("vCAD:Client:Tablet:close", closeTabletCEF);
         tabletBrowser.unfocus();
         tabletBrowser.destroy();
         tabletBrowser = null;
