@@ -244,12 +244,12 @@ AddEventHandler('wgc:openUI', function(system, newSite, pos)
 	local reloadTab = false
 
 	if not system then
-		print('[VCAD_UI] Error: `SYSTEM` Argument ist ungültig oder nicht angegeben.')
+		print('[vCAD_UI] Error: `SYSTEM` Argument ist ungültig oder nicht angegeben.')
 		return
 	end
 
 	if not newSite then
-		print('[VCAD_UI] Error: `TYPE` Argument ist ungültig oder nicht angegeben.')
+		print('[vCAD_UI] Error: `TYPE` Argument ist ungültig oder nicht angegeben.')
 		return
 	end
 
