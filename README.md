@@ -3,7 +3,7 @@ FiveM Standalone Ingame UI for vCAD/Copnet/Medicnet/Carnet.
 
 # How to use:
 ```
-TriggerEvent('wgc:openUI', [SYSTEM],  [TYPE])
+TriggerEvent('vCAD:openUI', [SYSTEM],  [TYPE])
 ```
 
 `[SYSTEM]` You can choose between Copnet ( **cop**), Medicnet (**medic**) and Carnet (**car**).

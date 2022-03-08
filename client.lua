@@ -146,8 +146,8 @@ function canOpenTablet(pos, newSite, system)
 	return canOpen
 end
 
-RegisterNetEvent('wgc:openUI')
-AddEventHandler('wgc:openUI', function(system, newSite, pos)
+RegisterNetEvent('vCAD:openUI')
+AddEventHandler('vCAD:openUI', function(system, newSite, pos)
 	local reloadTab = false
 
 	if not system then
@@ -207,7 +207,7 @@ Citizen.CreateThread(function()
 
 		if Config.Hotkey ~= nil and Config.Hotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.Hotkey]) and not isDead then
 			if Keys[Config.Hotkey] then
-				TriggerEvent('wgc:openUI', 'cop', Config.HotkeyOpenType)
+				TriggerEvent('vCAD:openUI', 'cop', Config.HotkeyOpenType)
 			else
 				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.Hotkey ist ungültig!')
@@ -216,7 +216,7 @@ Citizen.CreateThread(function()
 
 		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
 			if Keys[Config.MedicHotkey] then
-				TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
+				TriggerEvent('vCAD:openUI', 'medic',  Config.HotkeyOpenType)
 			else
 				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.MedicHotkey ist ungültig!')
@@ -225,7 +225,7 @@ Citizen.CreateThread(function()
 
 		if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.CarHotkey]) and not isDead then
 			if Keys[Config.CarHotkey] then
-				TriggerEvent('wgc:openUI', 'car',  Config.HotkeyOpenType)
+				TriggerEvent('vCAD:openUI', 'car',  Config.HotkeyOpenType)
 			else
 				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.CarHotkey ist ungültig!')
@@ -252,7 +252,7 @@ Citizen.CreateThread(function()
 				ShowHelpNotification(v.Prompt)
 
 				if IsControlJustReleased(0, Keys['E']) then
-					TriggerEvent('wgc:openUI', v.System, v.OpenType, v.PublicID or true)
+					TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
 				end
 			end
 		end
@@ -265,14 +265,14 @@ end)
 
 if Config.Commands == true then
 	RegisterCommand('copnet',function(source, args)
-		TriggerEvent('wgc:openUI', 'cop', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'cop', Config.CommandOpenType)
 	end, false)
 
 	RegisterCommand('medicnet',function(source, args)
-		TriggerEvent('wgc:openUI', 'medic', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'medic', Config.CommandOpenType)
 	end, false)
 
 	RegisterCommand('carnet',function(source, args)
-		TriggerEvent('wgc:openUI', 'car', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'car', Config.CommandOpenType)
 	end, false)
 end
