@@ -239,8 +239,8 @@ function canOpenTablet(system, Ttype, pos)
 	return canOpen
 end
 
-RegisterNetEvent('wgc:openUI')
-AddEventHandler('wgc:openUI', function(system, newSite, pos)
+RegisterNetEvent('vCAD:openUI')
+AddEventHandler('vCAD:openUI', function(system, newSite, pos)
 	local reloadTab = false
 
 	if not system then
@@ -300,7 +300,7 @@ Citizen.CreateThread(function()
 		
 		if Config.Hotkey ~= nil and Config.Hotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.Hotkey]) and not isDead then
 			if Keys[Config.Hotkey] then
-				TriggerEvent('wgc:openUI', 'cop', Config.HotkeyOpenType)
+				TriggerEvent('vCAD:openUI', 'cop', Config.HotkeyOpenType)
 			else
 				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.Hotkey ist ungültig!')
@@ -309,7 +309,7 @@ Citizen.CreateThread(function()
 
 		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
 			if Keys[Config.MedicHotkey] then
-				TriggerEvent('wgc:openUI', 'medic',  Config.HotkeyOpenType)
+				TriggerEvent('vCAD:openUI', 'medic',  Config.HotkeyOpenType)
 			else
 				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.MedicHotkey ist ungültig!')
@@ -318,7 +318,7 @@ Citizen.CreateThread(function()
 
 		if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.CarHotkey]) and not isDead then
 			if Keys[Config.CarHotkey] then
-				TriggerEvent('wgc:openUI', 'car',  Config.HotkeyOpenType)
+				TriggerEvent('vCAD:openUI', 'car',  Config.HotkeyOpenType)
 			else
 				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 				ShowNotification('~r~Der angegebene Config.CarHotkey ist ungültig!')
@@ -328,7 +328,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	while true do
+	while Config.EnabledZones do
 		Citizen.Wait(1)
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		local letSleep = true
@@ -338,17 +338,47 @@ Citizen.CreateThread(function()
 				local distance = #(playerCoords - v.Coords)
 			
 				if distance < 50.0 then
-					DrawMarker(v.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.Marker.x, v.Marker.y, v.Marker.z, v.Marker.r, v.Marker.g, v.Marker.b, v.Marker.a, false, false, 2, v.Marker.rotate, nil, nil, false)
+					DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 					letSleep = false
 				end
 			
-				if distance <= v.Marker.x then
+				if distance <= Config.Marker.x then
 					letSleep = false
 					ShowHelpNotification(v.Prompt)
 
 					if IsControlJustReleased(0, Keys['E']) then
-						TriggerEvent('wgc:openUI', v.System, v.OpenType, v.PublicID or true)
+						TriggerEvent('vCAD:openUI', v.System, v.OpenType, true)
 					end
+				end
+			end
+		end
+
+		if letSleep then
+			Citizen.Wait(2500)
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while Config.EnabledKatalog do
+		Citizen.Wait(1)
+		local playerCoords = GetEntityCoords(PlayerPedId())
+		local letSleep = true
+
+		for k,v in ipairs(Config.Katalog) do
+			local distance = #(playerCoords - v.Coords)
+			
+			if distance < 50.0 then
+				DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
+				letSleep = false
+			end
+		
+			if distance <= Config.Marker.x then
+				letSleep = false
+				ShowHelpNotification(v.Prompt)
+
+				if IsControlJustReleased(0, Keys['E']) then
+					TriggerEvent('vCAD:openUI', v.System, v.OpenType, Config.PublicID or true)
 				end
 			end
 		end
@@ -361,14 +391,89 @@ end)
 
 if Config.Commands == true then
 	RegisterCommand('copnet',function(source, args)
-		TriggerEvent('wgc:openUI', 'cop', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'cop', Config.CommandOpenType)
 	end, false)
 
 	RegisterCommand('medicnet',function(source, args)
-		TriggerEvent('wgc:openUI', 'medic', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'medic', Config.CommandOpenType)
 	end, false)
 
 	RegisterCommand('carnet',function(source, args)
-		TriggerEvent('wgc:openUI', 'car', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'car', Config.CommandOpenType)
 	end, false)
 end
+
+
+RegisterCommand("vcadadd", function(source, args, rawCommand)
+    if args[4] ~= nil then
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+
+		local location = vector3(coords.x, coords.y, coords.z - 1.0)
+		local result = false
+
+		for k, v in pairs(Config.CopNetJob) do
+			if args[4] == v then
+				result = true
+			end
+		end
+
+		for k, v in pairs(Config.MedicNetJob) do
+			if args[4] == v then
+				result = true
+			end
+		end
+
+		for k, v in pairs(Config.CarNetJob) do
+			if args[4] == v then
+				result = true
+			end
+		end
+
+		if result then
+
+			table.insert(Config.Zones, {
+				Coords = location,
+				Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
+				System = args[2],
+				OpenType = args[3],
+				Job = args[4]
+			})
+
+			TriggerServerEvent('vCAD:SaveZoneConfig', args[1], location, args[2], args[3], args[4])
+		else
+			ESX.ShowNotification('~r~Es gibt keinen Job der je auf eines dieser PC´s zugreifen darf.')
+		end
+	else
+		ESX.ShowNotification('~r~Nicht alle Daten angegeben.')
+	end
+end)
+
+RegisterCommand("vcadkatalog", function(source, args, rawCommand)
+	local ped = PlayerPedId()
+	local coords = GetEntityCoords(ped)
+
+	local location = vector3(coords.x, coords.y, coords.z - 1.0)
+
+	table.insert(Config.Katalog, {
+		Coords = location,
+        Prompt = 'Drücke ~INPUT_CONTEXT~ um den Katalog anzuschauen.',
+        System = 'car',
+        OpenType = 'katalog',
+	})
+
+	TriggerServerEvent('vCAD:SaveKatalogConfig', args[1], location)
+end)
+
+Citizen.CreateThread(function()
+	TriggerEvent("chat:addSuggestion", "/vcadadd", "Generiert ein PC zugang",{ 
+        {name = "Beschreibung", help = "1 Wort Beschreibung um es in der Config wieder zu finden"},
+		{name = "System", help = "'car' = CarNet, 'cop' = CopNet, 'medic' = MedicNet"},
+		{name = "type", help = "Ansicht: 'pc', 'tab'"},
+		{name = "job", help = "Job name der auf den PC zugreifen kann."}
+	})
+
+	TriggerEvent("chat:addSuggestion", "/katalogadd", "Generiert ein Katalog",{ 
+        {name = "Beschreibung", help = "1 Wort Beschreibung um es in der Config wieder zu finden"},
+	})
+end)
