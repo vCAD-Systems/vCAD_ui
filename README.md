@@ -1,5 +1,5 @@
 # vCAD_ui
-FiveM Standalone Ingame UI for VCAD/Copnet/Medicnet/Carnet.
+FiveM Standalone Ingame UI for vCAD/Copnet/Medicnet/Carnet.
 
 # How to use:
 ```
