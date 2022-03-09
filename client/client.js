@@ -113,7 +113,7 @@ function getsite(system) {
     } else if (system == "medic") {
 		return "https://medicnet.ch/"
 	} else if (system == "car") {
-        return "https://carnet.vcad.li/"
+        return "https://mechnet.ch/"
     }
 }
 	
