@@ -6,7 +6,7 @@ author 'Ffrankys, Flixxx, Tallerik & Mîhó'
 version '1.5.0'
 
 client_scripts {
-	'config.lua',
+	'config/config.lua',
     'config/config_zones.lua',
     'config/config_katalog.lua',
 
