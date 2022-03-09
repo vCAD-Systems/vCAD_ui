@@ -63,7 +63,7 @@ function REQUEST_NUI_FOCUS(bool, reload)
 		local openSite = getsite(site)
 
 		if katalogID ~= nil and site == 'car' and subSite == 'katalog' then
-			openSite = 'https://carnet.vcad.li/shop.php?sp='..katalogID
+			openSite = 'https://mechnet.ch/shop.php?sp='..katalogID
 		end
 		
 		if reload then
