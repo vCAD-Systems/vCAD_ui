@@ -78,7 +78,7 @@ function getsite(system)
 	elseif system == "medic" then
 		return "https://medicnet.ch/"
 	elseif system == "car" then
-		return "https://carnet.vcad.li/"
+		return "https://mechnet.ch/"
 	end
 end
 
