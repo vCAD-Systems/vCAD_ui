@@ -147,7 +147,7 @@ function createCEF(site, system, publicID) {
                             return;
                         }
 
-                        openSite = 'https://carnet.vcad.li/shop.php?sp=' + publicID;
+                        openSite = 'https://mechnet.ch/shop.php?sp=' + publicID;
                     }
 
                     tabletBrowser.emit("vCAD:CEF:Tablet:open", openSite, UseNewDesign);
