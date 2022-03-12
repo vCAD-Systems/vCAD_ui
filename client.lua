@@ -49,7 +49,7 @@ function REQUEST_NUI_FOCUS(bool, reload)
 		
 		SetNuiFocus(bool, bool)
 			
-		if Config.Animation == true and not IsPedInAnyVehicle(PlayerPed, false) then
+		if Config.Animation == true and subSite == 'tab' and not IsPedInAnyVehicle(PlayerPed, false) then
 			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
 			RequestAnimDict('anim_heist@arcade_combined@')
 
