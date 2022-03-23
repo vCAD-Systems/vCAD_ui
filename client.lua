@@ -12,6 +12,7 @@ local Keys = {
 
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'nil', 'tab'
 local katalogID, tab = nil, nil
+local hasAlreadyEnteredMarker = false
 
 function ShowNotification(msg)
 	SetNotificationTextEntry('STRING')
@@ -28,7 +29,7 @@ end
 function REQUEST_NUI_FOCUS(bool, reload)
 	local PlayerPed = PlayerPedId()
 
-	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog') then
+	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben') then
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs.')
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 		return
@@ -36,6 +37,14 @@ function REQUEST_NUI_FOCUS(bool, reload)
 	
 	if bool == true then
 		local openSite = getsite(site)
+
+		if katalogID ~= nil and site == 'cop' and subSite == 'strafen' then
+			openSite = 'https://copnet.ch/strafen?c='..katalogID
+		end
+
+		if katalogID ~= nil and site == 'cop' and subSite == 'bewerben' then
+			openSite = 'https://copnet.ch/bewerben?c='..katalogID
+		end
 		
 		if katalogID ~= nil and site == 'car' and subSite == 'katalog' then
 			openSite = 'https://mechnet.ch/shop.php?sp='..katalogID
@@ -276,3 +285,143 @@ if Config.Commands == true then
 		TriggerEvent('vCAD:openUI', 'car', Config.CommandOpenType)
 	end, false)
 end
+
+RegisterCommand("vcadadd", function(source, args, rawCommand)
+    if args[1] == 'pc' then
+		if args[5] ~= nil then
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+	
+			local location = vector3(coords.x, coords.y, coords.z - 1.0)
+				table.insert(Config.Zones, {
+					Coords = location,
+					Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
+					System = args[3],
+					OpenType = args[4],
+					Job = args[5]
+				})
+	
+				TriggerServerEvent('vCAD:SaveZoneConfig', args[2], location, args[3], args[4])
+		else
+			ESX.ShowNotification('~r~Nicht alle Daten angegeben.')
+		end
+	elseif args[1] == 'katalog' then
+		local pid = Config.PublicID.Katalog
+		if args[2] == nil then
+			ESX.ShowNotification("Gib eine Beschreibung an um die Position in der Config wieder zu finden.")
+			return
+		end
+		if args[3] == nil then
+			ESX.ShowNotification("Du hast keine PublicID eingegeben, es wird die aus der Config genommen.")
+			if Config.PublicID.Katalog == nil or Config.PublicID.Katalog == '' then
+				ESX.ShowNotification("Keine PublicID gefunden. Vorgang abgebrochen...")
+				return
+			end
+		else
+			pid = args[3]
+		end
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+
+		local location = vector3(coords.x, coords.y, coords.z - 1.0)
+
+		table.insert(Config.Katalog, {
+			Coords = location,
+			Prompt = 'Drücke ~INPUT_CONTEXT~ um den Katalog anzuschauen.',
+			System = 'car',
+			OpenType = 'katalog',
+			PublicID = "'"..pid.."'"
+		})
+
+		TriggerServerEvent('vCAD:SaveKatalogConfig', args[2], location, pid)
+	elseif args[1] == 'strafen' then
+		local pid = nil
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+		local Prompt = 'Drücke ~INPUT_CONTEXT~ um dir die Strafen anzuschauen.'
+
+		if args[2] ~= nil then
+			pid = args[2]
+
+			local location = vector3(coords.x, coords.y, coords.z - 1.0)
+
+			table.insert(Config.SonderZonen, {
+				Coords = location,
+				Prompt = Prompt,
+				System = 'cop',
+				OpenType = args[1],
+				PublicID = "'"..pid.."'"
+			})
+
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+		else
+			if Config.PublicID.Strafen ~= nil or Config.PublicID.Strafen ~= '' then
+				pid = Config.PublicID.Strafen
+			end
+
+			if pid ~= nil then
+				local location = vector3(coords.x, coords.y, coords.z - 1.0)
+
+				table.insert(Config.SonderZonen, {
+					Coords = location,
+					Prompt = Prompt,
+					System = 'cop',
+					OpenType = args[1],
+					PublicID = "'"..pid.."'"
+				})
+
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+			else
+				ESX.ShowNotification("Keine ID angegeben")
+			end
+		end
+	elseif args[1] == 'bewerben' then
+		local pid = nil
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+		local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Bewerben.'
+
+		if args[2] ~= nil then
+			pid = args[2]
+
+			local location = vector3(coords.x, coords.y, coords.z - 1.0)
+
+			table.insert(Config.SonderZonen, {
+				Coords = location,
+				Prompt = Prompt,
+				System = 'cop',
+				OpenType = args[1],
+				PublicID = "'"..pid.."'"
+			})
+
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+		else
+			if Config.PublicID.Bewerbung ~= nil or Config.PublicID.Bewerbung ~= '' then
+				pid = Config.PublicID.Bewerbung
+			end
+
+			if pid ~= nil then
+				local location = vector3(coords.x, coords.y, coords.z - 1.0)
+
+				table.insert(Config.SonderZonen, {
+					Coords = location,
+					Prompt = Prompt,
+					System = 'cop',
+					OpenType = args[1],
+					PublicID = "'"..pid.."'"
+				})
+
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+			else
+				ESX.ShowNotification("Keine ID angegeben")
+			end
+		end
+	end
+end)
+
+
+Citizen.CreateThread(function()
+	TriggerEvent("chat:addSuggestion", "/vcadadd", "Generiert ein punkt mit dem zugang für ein PC, Strafen, Bewerber oder den Katalog",{ 
+        {name = "möglichkeiten:", help = "pc, strafen, bewerben, katalog"},
+	})
+end)
