@@ -8,5 +8,4 @@
     },
 ]]
 Config.Katalog = {
-
 }

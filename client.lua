@@ -20,6 +20,11 @@ function ShowNotification(msg)
 	DrawNotification(false, true)
 end
 
+RegisterNetEvent('vCAD:ShowNotification')
+AddEventHandler('vCAD:ShowNotification', function(msg)
+	ShowNotification(msg)
+end)
+
 function ShowHelpNotification(msg)
 	BeginTextCommandDisplayHelp('STRING')
 	AddTextComponentSubstringPlayerName(msg)
@@ -28,7 +33,6 @@ end
 
 function REQUEST_NUI_FOCUS(bool, reload)
 	local PlayerPed = PlayerPedId()
-
 	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben') then
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs.')
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
@@ -253,11 +257,11 @@ Citizen.CreateThread(function()
 			local distance = #(playerCoords - v.Coords)
 		
 			if distance < 50.0 then
-				DrawMarker(v.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, v.Marker.x, v.Marker.y, v.Marker.z, v.Marker.r, v.Marker.g, v.Marker.b, v.Marker.a, false, false, 2, v.Marker.rotate, nil, nil, false)
+				DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 				letSleep = false
 			end
 		
-			if distance <= v.Marker.x then
+			if distance <= Config.Marker.x then
 				ShowHelpNotification(v.Prompt)
 
 				if IsControlJustReleased(0, Keys['E']) then
@@ -265,9 +269,55 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
+	end
+end)
 
-		if letSleep then
-			Citizen.Wait(2500)
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1)
+		local playerCoords = GetEntityCoords(PlayerPedId())
+		local letSleep = true
+
+		for k,v in ipairs(Config.Katalog) do
+			local distance = #(playerCoords - v.Coords)
+		
+			if distance < 50.0 then
+				DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
+				letSleep = false
+			end
+		
+			if distance <= Config.Marker.x then
+				ShowHelpNotification(v.Prompt)
+
+				if IsControlJustReleased(0, Keys['E']) then
+					TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+				end
+			end
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1)
+		local playerCoords = GetEntityCoords(PlayerPedId())
+		local letSleep = true
+
+		for k,v in ipairs(Config.SonderZonen) do
+			local distance = #(playerCoords - v.Coords)
+		
+			if distance < 50.0 then
+				DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
+				letSleep = false
+			end
+		
+			if distance <= Config.Marker.x then
+				ShowHelpNotification(v.Prompt)
+
+				if IsControlJustReleased(0, Keys['E']) then
+					TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+				end
+			end
 		end
 	end
 end)
@@ -286,54 +336,45 @@ if Config.Commands == true then
 	end, false)
 end
 
+RegisterNetEvent('vCAD:AddPunkt')
+AddEventHandler('vCAD:AddPunkt', function(data, value)
+	if data == 'Zones' then
+		table.insert(Config.Zones, value)
+	elseif data == 'Katalog' then
+		table.insert(Config.Katalog, value)
+	else
+		table.insert(Config.SonderZonen, value)
+		ShowNotification("!!!Damit dies Funktioniert, restarte bitte das Tablet!!!")
+	end
+end)
+
 RegisterCommand("vcadadd", function(source, args, rawCommand)
     if args[1] == 'pc' then
-		if args[5] ~= nil then
+		if args[3] ~= nil then
 			local ped = PlayerPedId()
 			local coords = GetEntityCoords(ped)
-	
 			local location = vector3(coords.x, coords.y, coords.z - 1.0)
-				table.insert(Config.Zones, {
-					Coords = location,
-					Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
-					System = args[3],
-					OpenType = args[4],
-					Job = args[5]
-				})
-	
-				TriggerServerEvent('vCAD:SaveZoneConfig', args[2], location, args[3], args[4])
+
+			TriggerServerEvent('vCAD:SaveZoneConfig', location, args[2], args[3], args[4] or nil)
 		else
-			ESX.ShowNotification('~r~Nicht alle Daten angegeben.')
+			ShowNotification('~r~Nicht alle Daten angegeben.')
 		end
 	elseif args[1] == 'katalog' then
 		local pid = Config.PublicID.Katalog
 		if args[2] == nil then
-			ESX.ShowNotification("Gib eine Beschreibung an um die Position in der Config wieder zu finden.")
-			return
-		end
-		if args[3] == nil then
-			ESX.ShowNotification("Du hast keine PublicID eingegeben, es wird die aus der Config genommen.")
+			ShowNotification("Du hast keine PublicID eingegeben, es wird die aus der Config genommen.")
 			if Config.PublicID.Katalog == nil or Config.PublicID.Katalog == '' then
-				ESX.ShowNotification("Keine PublicID gefunden. Vorgang abgebrochen...")
+				ShowNotification("Keine PublicID gefunden. Vorgang abgebrochen...")
 				return
 			end
 		else
-			pid = args[3]
+			pid = args[2]
 		end
 		local ped = PlayerPedId()
 		local coords = GetEntityCoords(ped)
-
 		local location = vector3(coords.x, coords.y, coords.z - 1.0)
 
-		table.insert(Config.Katalog, {
-			Coords = location,
-			Prompt = 'Drücke ~INPUT_CONTEXT~ um den Katalog anzuschauen.',
-			System = 'car',
-			OpenType = 'katalog',
-			PublicID = "'"..pid.."'"
-		})
-
-		TriggerServerEvent('vCAD:SaveKatalogConfig', args[2], location, pid)
+		TriggerServerEvent('vCAD:SaveKatalogConfig', location, pid, args[3] or nil)
 	elseif args[1] == 'strafen' then
 		local pid = nil
 		local ped = PlayerPedId()
@@ -342,18 +383,9 @@ RegisterCommand("vcadadd", function(source, args, rawCommand)
 
 		if args[2] ~= nil then
 			pid = args[2]
-
 			local location = vector3(coords.x, coords.y, coords.z - 1.0)
 
-			table.insert(Config.SonderZonen, {
-				Coords = location,
-				Prompt = Prompt,
-				System = 'cop',
-				OpenType = args[1],
-				PublicID = "'"..pid.."'"
-			})
-
-			TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt, args[3] or nil)
 		else
 			if Config.PublicID.Strafen ~= nil or Config.PublicID.Strafen ~= '' then
 				pid = Config.PublicID.Strafen
@@ -362,17 +394,9 @@ RegisterCommand("vcadadd", function(source, args, rawCommand)
 			if pid ~= nil then
 				local location = vector3(coords.x, coords.y, coords.z - 1.0)
 
-				table.insert(Config.SonderZonen, {
-					Coords = location,
-					Prompt = Prompt,
-					System = 'cop',
-					OpenType = args[1],
-					PublicID = "'"..pid.."'"
-				})
-
-				TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt, args[3] or nil)
 			else
-				ESX.ShowNotification("Keine ID angegeben")
+				ShowNotification("Keine ID angegeben")
 			end
 		end
 	elseif args[1] == 'bewerben' then
@@ -386,15 +410,7 @@ RegisterCommand("vcadadd", function(source, args, rawCommand)
 
 			local location = vector3(coords.x, coords.y, coords.z - 1.0)
 
-			table.insert(Config.SonderZonen, {
-				Coords = location,
-				Prompt = Prompt,
-				System = 'cop',
-				OpenType = args[1],
-				PublicID = "'"..pid.."'"
-			})
-
-			TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt, args[3] or nil)
 		else
 			if Config.PublicID.Bewerbung ~= nil or Config.PublicID.Bewerbung ~= '' then
 				pid = Config.PublicID.Bewerbung
@@ -403,17 +419,9 @@ RegisterCommand("vcadadd", function(source, args, rawCommand)
 			if pid ~= nil then
 				local location = vector3(coords.x, coords.y, coords.z - 1.0)
 
-				table.insert(Config.SonderZonen, {
-					Coords = location,
-					Prompt = Prompt,
-					System = 'cop',
-					OpenType = args[1],
-					PublicID = "'"..pid.."'"
-				})
-
-				TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt)
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt, args[3] or nil)
 			else
-				ESX.ShowNotification("Keine ID angegeben")
+				ShowNotification("Keine ID angegeben")
 			end
 		end
 	end

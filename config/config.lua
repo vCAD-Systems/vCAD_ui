@@ -22,15 +22,45 @@ Nein = false
 Config.Commands = true
 
 --[[
-    Befehl "/vcadadd"
-    Hiermit kannst du Punkte, für Copnet/MedicNet/CarNet und den Katalogen sowie Bewerber und Strafen setzen.
-    Ist es Deaktiviert, müsst Ihr die Zonen selbstständig in die Entsprechende Config einbinden.
+    Trage hier die Identifier ein die PC´s erstellen dürfen.
+    Funktionierende Identifier sind steam: und license:
 ]]
-
-Config.AddCommand = true
-
 Config.EnabledIdentifier = {
-    
+    'steam:110000101e019f7'
+    --'steam:110000101e019f8'
+}
+
+--[[
+Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
+]]
+Config.EnabledZones = false
+--[[
+Wollt Ihr euren CarnNet Katalog ingame an einem Punkt anzeigen?
+true = ja
+false = Nein
+]]
+Config.EnabledKatalog = false
+--[[
+    Wollt ihr das sich euche Spieler Ingame beim CopNet Bewerben kann?
+    wenn ja dann = true
+    wenn nein dann = false
+]]
+Config.EnabledBewerben = false
+--[[
+    Wollt Ihr Ingame Punkte wo man die Strafen öffentlich einsehen kann?
+    wenn ja dann = true
+    wenn nein dann = false
+]]
+Config.EnabledStrafen = false
+
+--[[
+    Wenn Ihr nur eine Public id habt, dann braucht ihr diese nicht bei dem Command ingame mit senden sondern könnt sie einfach hier hinterlegen.
+    z.B. Katalog = 'xyz',
+]]
+Config.PublicID = {
+    Katalog = nil,
+    Bewerbung = nil,
+    Strafen = nil,
 }
 
 --[[
@@ -87,7 +117,6 @@ Aktiviert das "Autoscaling" des Uis:
 Einfach gesagt: Tablet klein, PC groß.
 Ja = true
 Nein = false
-
 ! WICHTIG ! 
 Beim Tablet können manche Knöpfe und/oder Textfelder nicht erreichbar sein!
 Das passiert, da das Tablet nicht für die kleine Ansicht ausgelegt ist!
@@ -112,43 +141,13 @@ Config.Vehicles = {
     ['car'] = {
     }
 }
-
 --[[
-Liste an Orten in denen das Tablet geöffnet werden kann.
-Wenn die Tabelle leer ist, ist die Funktion deaktiviert.
+Aussehen der Makierung wo du die Computer benutzen kannst.
 
-System = 'cop' für CopNet
-System = 'medic' für MedicNet
-System = 'car' für CarNet
+type = Aussehen der Makierung --> https://docs.fivem.net/docs/game-references/markers/
+x, y, z = Coordinaten
+r,g,b = Farb Einstellungen
+a = Transparenz
+rotate = Soll der Marker Rotieren? true = ja, false = nein
 ]]
-Config.Zones = {
-    -- Misson Row PD
-    {
-        Coords = vector3(441.94, -978.87, 29.69),
-        Marker = { type = 1, x = 2.0, y = 2.0, z = 0.5, r = 102, g = 0, b = 102, a = 100, rotate = false },
-        Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
-        System = 'cop',
-        OpenType = 'pc'
-    },
-
-    -- Pillbox Hill KH
-    {
-        Coords = vector3(312.29, -597.218, 43.2821),
-        Marker = { type = 1, x = 2.0, y = 2.0, z = 0.5, r = 102, g = 0, b = 102, a = 100, rotate = false },
-        Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
-        System = 'medic',
-        OpenType = 'pc'
-    },
-
-    --[[
-    --Carnet Katalog BEISPIEL!!
-    {
-        Coords = vector3(441.94, -978.87, 29.69),
-        Marker = { type = 1, x = 2.0, y = 2.0, z = 0.5, r = 102, g = 0, b = 102, a = 100, rotate = false },
-        Prompt = 'Drücke ~INPUT_CONTEXT~ um den Katalog anzuschauen.',
-        System = 'car',
-        OpenType = 'katalog',
-        PublicID = '' --  <- PublicID HIER EINFÜGEN!!
-    }
-    ]]
-}
+Config.Marker = { type = 1, x = 2.0, y = 2.0, z = 0.5, r = 102, g = 0, b = 102, a = 100, rotate = false }
