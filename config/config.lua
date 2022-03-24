@@ -7,13 +7,22 @@ und Ihr möchtet das die items in Config.NeedetItem auf vorhandenheit überprüf
 Config.MySQL_Async = false
 
 --[[
-Wollt Ihr euren CarnNet Katalog ingame an einem Punkt anzeigen?
+Wollt Ihr die genannten Zonen Aktivieren?
 true = ja
 false = Nein
 ]]
-Config.EnabledKatalog = false
+Config.EnabledKatalog = true
+Config.EnabledStrafen = true
+Config.EnabledBewerben = true
 
-Config.PublicID = ''
+--[[
+ Ist "Config.EnabledGroupRules = false" dann müssen Indentifier eingetragen sein.
+ Ansonsten können alle nicht User den Befehl nutzen.
+]]
+Config.EnabledGroupRules = false
+Config.EnabledIdentifier = {
+    'steam:110000xxxxxxxxx' --Hex
+}
 
 --[[
 Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
@@ -51,7 +60,7 @@ Welche Items braucht man um das Tablet öffnen zu können..?
 Falls Feature nicht erwünscht:
 Nein = nil
 ]]
-Config.NeededItem = {'tablet'}
+Config.NeededItem = nil --{'tablet'}
 
 --[[
 Soll man das Tablet auch beim *Benutzen* des Items öffnen können? 
@@ -90,11 +99,11 @@ Ja = Taste Beispiel: 'F10'
 Nein = nil
 ]]
 -- Für CopNet:
-Config.Hotkey = 'F10' 
+Config.Hotkey = 'F9' 
 -- Für MedicNet:
 Config.MedicHotkey = 'F9'
 -- Für CarNet:
-Config.CarHotkey = 'F7'
+Config.CarHotkey = 'F9'
 
 --[[
 Entscheidet welche Form beim Nutzen des Hotkeys geöffnet wird:

@@ -9,6 +9,7 @@ client_scripts {
 	'config/config.lua',
     'config/config_zones.lua',
     'config/config_katalog.lua',
+    'config/config_sonstiges.lua',
 
 	'client/client.lua'
 }
@@ -19,6 +20,7 @@ server_scripts {
     'config/config.lua',
     'config/config_zones.lua',
     'config/config_katalog.lua',
+    'config/config_sonstiges.lua',
 
     'server/server.lua'
 }
