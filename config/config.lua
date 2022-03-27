@@ -26,7 +26,7 @@ Config.Commands = true
     Funktionierende Identifier sind steam: und license:
 ]]
 Config.EnabledIdentifier = {
-    --'steam:110000101e019f8'
+    --'steam:110000xxxxxxxxx' - Hex
 }
 
 --[[
