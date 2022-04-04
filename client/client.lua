@@ -494,7 +494,7 @@ RegisterCommand("vcadadd", function(source, args, rawCommand)
 			ShowNotification('~r~Nicht alle Daten angegeben.')
 		end
 	elseif args[1] == 'katalog' then
-		local pid = Config.PublicID.Katalog
+		local pid
 		if args[2] == nil then
 			ShowNotification("Bitte die Public ID angeben!!!.")
 			return
