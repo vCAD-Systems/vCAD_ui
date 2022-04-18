@@ -30,13 +30,13 @@ Config.EnabledIdentifier = {
 }
 
 --[[
-Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
+    Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
 ]]
 Config.EnabledZones = false
 --[[
-Wollt Ihr euren CarnNet Katalog ingame an einem Punkt anzeigen?
-true = ja
-false = Nein
+    Wollt Ihr euren CarnNet Katalog ingame an einem Punkt anzeigen?
+    true = ja
+    false = Nein
 ]]
 Config.EnabledKatalog = false
 --[[
