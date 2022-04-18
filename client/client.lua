@@ -138,7 +138,11 @@ end)
 function canOpenTablet(system, newSite, pos)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
-	local canOpenType = Config.OpenType
+	local canOpenType = newSite
+
+	if pos or newSite == 'katalog' or newSite == 'bewerben' or newSite == 'strafen' then
+		return true, canOpenType
+	end
 	
 	if Config.OnlyInVehicle == true and IsPedInAnyVehicle(PlayerPed, false) then
 		if Config.InEmergencyVehicle == true then
@@ -159,12 +163,8 @@ function canOpenTablet(system, newSite, pos)
 			end
 		end
 	end
-
-	if pos ~= false then
-		canOpen = true
-	end
 	
-	return canOpen
+	return canOpen, canOpenType
 end
 
 RegisterNetEvent('vCAD:openUI')
@@ -182,15 +182,17 @@ AddEventHandler('vCAD:openUI', function(system, newSite, pos)
 	end
 
 	if not isDead then
-		if canOpenTablet(system, newSite, pos) == true then
+		local canOpen, canOpenType = canOpenTablet(system, newSite, pos)
+
+		if canOpen == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				if site ~= system then
 					site = system
 					reloadTab = true
 				end
 
-				if subSite ~= newSite then
-					subSite = newSite
+				if subSite ~= canOpenType then
+					subSite = canOpenType
 					reloadTab = true
 				end
 
