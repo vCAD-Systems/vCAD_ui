@@ -138,11 +138,13 @@ end)
 function canOpenTablet(pos, newSite, system)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
+	local canOpenType = Config.OpenType
 	
 	if Config.OnlyInVehicle == true and IsPedInAnyVehicle(PlayerPed, false) then
 		if Config.InEmergencyVehicle == true then
 			if GetVehicleClass(GetVehiclePedIsIn(PlayerPed, false)) == 18 then
 				canOpen = true
+				canOpenType = Config.VehicleOpenType
 			end
 		end
 
@@ -151,6 +153,7 @@ function canOpenTablet(pos, newSite, system)
 			for k,v in pairs(Config.Vehicles[system]) do
 				if (tonumber(v) and v == vehHash) or (tostring(v) and GetHashKey(v) == vehHash) then
 					canOpen = true
+					canOpenType = Config.VehicleOpenType
 					break
 				end
 			end
@@ -222,33 +225,6 @@ Citizen.CreateThread(function()
 				isDead = false
 			end
 		end
-
-		if Config.Hotkey ~= nil and Config.Hotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.Hotkey]) and not isDead then
-			if Keys[Config.Hotkey] then
-				TriggerEvent('vCAD:openUI', 'cop', Config.HotkeyOpenType)
-			else
-				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
-				ShowNotification('~r~Der angegebene Config.Hotkey ist ungültig!')
-			end
-		end
-
-		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
-			if Keys[Config.MedicHotkey] then
-				TriggerEvent('vCAD:openUI', 'medic',  Config.HotkeyOpenType)
-			else
-				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
-				ShowNotification('~r~Der angegebene Config.MedicHotkey ist ungültig!')
-			end
-		end
-
-		if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.CarHotkey]) and not isDead then
-			if Keys[Config.CarHotkey] then
-				TriggerEvent('vCAD:openUI', 'car',  Config.HotkeyOpenType)
-			else
-				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
-				ShowNotification('~r~Der angegebene Config.CarHotkey ist ungültig!')
-			end
-		end
 	end
 end)
 
@@ -264,15 +240,19 @@ Citizen.CreateThread(function()
 			if distance < 50.0 then
 				DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 				letSleep = false
-			end
-		
-			if distance <= Config.Marker.x then
-				ShowHelpNotification(v.Prompt)
+				
+				if distance <= Config.Marker.x then
+					ShowHelpNotification(v.Prompt)
 
-				if IsControlJustReleased(0, Keys['E']) then
-					TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+					if IsControlJustReleased(0, Keys['E']) then
+						TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+					end
 				end
 			end
+		end
+
+		if letSleep then
+			Citizen.Wait(2500)
 		end
 	end
 end)
@@ -289,15 +269,19 @@ Citizen.CreateThread(function()
 			if distance < 50.0 then
 				DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 				letSleep = false
-			end
-		
-			if distance <= Config.Marker.x then
-				ShowHelpNotification(v.Prompt)
 
-				if IsControlJustReleased(0, Keys['E']) then
-					TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+				if distance <= Config.Marker.x then
+					ShowHelpNotification(v.Prompt)
+	
+					if IsControlJustReleased(0, Keys['E']) then
+						TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+					end
 				end
 			end
+		end
+
+		if letSleep then
+			Citizen.Wait(2500)
 		end
 	end
 end)
@@ -315,14 +299,13 @@ Citizen.CreateThread(function()
 				if distance < 50.0 then
 					DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 					letSleep = false
-				end
 			
-				if distance <= Config.Marker.x then
-					letSleep = false
-					ShowHelpNotification(v.Prompt)
-
-					if IsControlJustReleased(0, Keys['E']) then
-						TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+					if distance <= Config.Marker.x then
+						ShowHelpNotification(v.Prompt)
+	
+						if IsControlJustReleased(0, Keys['E']) then
+							TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+						end
 					end
 				end
 			end
@@ -334,17 +317,29 @@ Citizen.CreateThread(function()
 	end
 end)
 
-if Config.Commands == true then
+if Config.Commands == true or (Config.Hotkey ~= nil and Config.Hotkey ~= 'nil') or (Config.MedicHotkey ~= nil and Config.MedicHotkey ~= 'nil') or (Config.CarHotkey ~= nil and Config.CarHotkey ~= 'nil') then
+	if Config.Hotkey ~= nil and Config.Hotkey ~= 'nil' then
+		RegisterKeyMapping('copnet', 'Copnet Tablet', 'keyboard', string.upper(Config.Hotkey))
+	end
+
+	if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" then
+		RegisterKeyMapping('medicnet', 'Medicnet Tablet', 'keyboard', string.upper(Config.MedicHotkey))
+	end
+
+	if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" then
+		RegisterKeyMapping('carnet', 'Carnet Tablet', 'keyboard', string.upper(Config.CarHotkey))
+	end
+
 	RegisterCommand('copnet',function(source, args)
-		TriggerEvent('vCAD:openUI', 'cop', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'cop', Config.OpenType)
 	end, false)
 
 	RegisterCommand('medicnet',function(source, args)
-		TriggerEvent('vCAD:openUI', 'medic', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'medic', Config.OpenType)
 	end, false)
 
 	RegisterCommand('carnet',function(source, args)
-		TriggerEvent('vCAD:openUI', 'car', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'car', Config.OpenType)
 	end, false)
 end
 
