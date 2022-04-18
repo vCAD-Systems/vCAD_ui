@@ -132,31 +132,31 @@ RegisterNUICallback("tablet-bus", function(data)
 	if data.load then
 		tabLoaded = true
 	elseif data.hide then
-		tabEnabled = false
 		TOGGLE_NUI_FOCUS(false)
+		tabEnabled = false
 	elseif data.click then
 		lastOpend = GetGameTimer()
 	end
 end)
 
 function CloseTab()
-	if tabEnabled then
-		SendNUIMessage({hidetab = true})
-		SetNuiFocus(false, false)
+	SendNUIMessage({hidetab = true})
+	SetNuiFocus(false, false)
 
-		if Config.Animation == true or tab ~= nil then
-			ClearPedTasks(PlayerPedId())
-			DeleteObject(tab)
-			tab = nil
-		end
-
-		katalogID = nil
+	if Config.Animation == true or tab ~= nil then
+		ClearPedTasks(PlayerPedId())
+		DeleteObject(tab)
+		tab = nil
 	end
+
+	katalogID = nil
 end
 
 AddEventHandler('onResourceStop', function(resource)
 	if resource == GetCurrentResourceName() then
-		CloseTab()
+		if tabEnabled then
+			CloseTab()
+		end
 	end
 end)
 
