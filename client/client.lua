@@ -50,38 +50,39 @@ function ShowHelpNotification(msg)
 	EndTextCommandDisplayHelp(0, false, true, -1)
 end
 
-function REQUEST_NUI_FOCUS(bool, reload)
-	local PlayerPed = PlayerPedId()
-
+function TOGGLE_NUI_FOCUS(bool, reload)
 	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben') then
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs.')
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 		return
 	end
 
+	local PlayerPed = PlayerPedId()
+
 	if bool == true then
-		local openSite = getsite(site)
+		local openSite = GetURL(site)
 
-		print(site)
-		print(katalogID)
-		print(subSite)
-		if katalogID ~= nil and site == 'car' and subSite == 'katalog' then
-			openSite = 'https://mechnet.ch/shop.php?sp='..katalogID
-		end
+		--print(site) 		--??
+		--print(katalogID) 	--??
+		--print(subSite) 	--??
 
-		if katalogID ~= nil and site == 'cop' and subSite == 'strafen' then
-			openSite = 'https://copnet.ch/strafen?c='..katalogID
-		end
-
-		if katalogID ~= nil and subSite == 'bewerben' then
-			if site == 'cop' then
-				openSite = 'https://copnet.ch/bewerben?c='..katalogID
-			elseif site == 'car' then
-				openSite = 'https://mechnet.ch/bewerben?c='..katalogID
-			elseif site == 'medic' then
-				openSite = 'https://medicnet.ch/bewerben?c='..katalogID
+		if subSite == 'katalog' or subSite == 'bewerben' or subSite == 'strafen' then
+			if katalogID ~= nil then
+				if site == 'car' and subSite == 'katalog' then
+					openSite = openSite..'shop?sp='..katalogID
+				elseif site == 'cop' and subSite == 'strafen' then
+					openSite = openSite..'strafen?c='..katalogID
+				elseif subSite == 'bewerben' then
+					openSite = openSite..'bewerben?c='..katalogID
+				else
+					print('[vCAD_UI] Error: `site` oder `subSite` ist ungültig oder nicht angegeben.')
+				end
+			else
+				print('[vCAD_UI] Error: `katalogID` ist ungültig oder nicht angegeben.')
+				return
 			end
 		end
+
 		if reload then
 			SendNUIMessage({showtab = true, design = Config.Design, autoscale = Config.AutoScale and subSite == 'tab', site = openSite})
 		else
@@ -103,18 +104,11 @@ function REQUEST_NUI_FOCUS(bool, reload)
 			attachObject()
 		end
     else
-        SendNUIMessage({hidetab = true})
-	SetNuiFocus(false, false)
-		
-	if Config.Animation == true or tab ~= nil then
-		ClearPedTasks(PlayerPed)
-		DeleteObject(tab)
-		tab = nil
-	end
+        CloseTab()
     end
 end
 
-function getsite(system)
+function GetURL(system)
 	if system == "cop" then
 		return "https://copnet.ch/"
 	elseif system == "medic" then
@@ -128,9 +122,11 @@ function attachObject()
 	if tab ~= nil then
 		DeleteObject(tab)
 	end
+
+	local PlayerPed = PlayerPedId()
 		
 	tab = CreateObject(GetHashKey("prop_cs_tablet"), 0, 0, 0, true, true, true)
-	AttachEntityToEntity(tab, GetPlayerPed(-1), GetPedBoneIndex(GetPlayerPed(-1), 57005), 0.17, 0.10, -0.13, 20.0, 180.0, 180.0, true, true, false, true, 1, true)
+	AttachEntityToEntity(tab, PlayerPed, GetPedBoneIndex(PlayerPed, 57005), 0.17, 0.10, -0.13, 20.0, 180.0, 180.0, true, true, false, true, 1, true)
 end
 
 RegisterNUICallback("tablet-bus", function(data)
@@ -138,28 +134,34 @@ RegisterNUICallback("tablet-bus", function(data)
 		tabLoaded = true
 	elseif data.hide then
 		tabEnabled = false
-		REQUEST_NUI_FOCUS(false)
+		TOGGLE_NUI_FOCUS(false)
 	elseif data.click then
 		lastOpend = GetGameTimer()
 	end
 end)
 
+function CloseTab()
+	if tabEnabled then
+		SendNUIMessage({hidetab = true})
+		SetNuiFocus(false, false)
+
+		if Config.Animation == true or tab ~= nil then
+			ClearPedTasks(PlayerPedId())
+			DeleteObject(tab)
+			tab = nil
+		end
+
+		katalogID = nil
+	end
+end
+
 AddEventHandler('onResourceStop', function(resource)
 	if resource == GetCurrentResourceName() then
-		if tabEnabled then
-			SendNUIMessage({hidetab = true})
-			SetNuiFocus(false, false)
-			
-			if Config.Animation == true or tab ~= nil then
-				ClearPedTasks(PlayerPedId())
-				DeleteObject(tab)
-				tab = nil
-			end
-		end
+		CloseTab()
 	end
 end)
 
-function canOpenTablet(system, Ttype, pos)
+function canOpenTablet(system, newSite, pos)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	
@@ -182,11 +184,11 @@ function canOpenTablet(system, Ttype, pos)
 		end
 	end
 
-	if pos or Ttype == 'katalog' then
+	if pos or newSite == 'katalog' then
 		return true
 	end
 
-	if Ttype == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
+	if newSite == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
 		local found = false
 		PlayerData = ESX.GetPlayerData()
 
@@ -237,7 +239,7 @@ function canOpenTablet(system, Ttype, pos)
 		if found == false then
 			return false
 		end
-	elseif system == 'car' and Ttype ~= 'katalog' and Config.CarNetJob ~= nil and Config.CarNetJob ~= 'nil' and PlayerData.job ~= nil then
+	elseif system == 'car' and newSite ~= 'katalog' and Config.CarNetJob ~= nil and Config.CarNetJob ~= 'nil' and PlayerData.job ~= nil then
 		local found = false
 		
 		for k,v in pairs(Config.CarNetJob) do
@@ -289,7 +291,7 @@ AddEventHandler('vCAD:openUI', function(system, newSite, pos)
 
 				lastOpend = GetGameTimer()
 				tabEnabled = true
-				REQUEST_NUI_FOCUS(true, reloadTab)
+				TOGGLE_NUI_FOCUS(true, reloadTab)
 			end
 		end
 	end
@@ -307,7 +309,7 @@ Citizen.CreateThread(function()
 					
 				if tabEnabled then
 					tabEnabled = false
-					REQUEST_NUI_FOCUS(false)
+					TOGGLE_NUI_FOCUS(false)
 				end
 			elseif not IsPedFatallyInjured(PlayerPed) then
 				isDead = false
@@ -344,7 +346,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	while Config.EnabledZones do
+	while #Config.Zones > 0 and Config.EnabledZones do
 		Citizen.Wait(1)
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		local letSleep = true
@@ -356,14 +358,13 @@ Citizen.CreateThread(function()
 				if distance < 50.0 then
 					DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 					letSleep = false
-				end
 			
-				if distance <= Config.Marker.x then
-					letSleep = false
-					ShowHelpNotification(v.Prompt)
-
-					if IsControlJustReleased(0, Keys['E']) then
-						TriggerEvent('vCAD:openUI', v.System, v.OpenType, true)
+					if distance <= Config.Marker.x then
+						ShowHelpNotification(v.Prompt)
+	
+						if IsControlJustReleased(0, Keys['E']) then
+							TriggerEvent('vCAD:openUI', v.System, v.OpenType, true)
+						end
 					end
 				end
 			end
@@ -376,7 +377,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	while Config.EnabledKatalog do
+	while #Config.Katalog > 0 and Config.EnabledKatalog do
 		Citizen.Wait(1)
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		local letSleep = true
@@ -387,14 +388,13 @@ Citizen.CreateThread(function()
 			if distance < 50.0 then
 				DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 				letSleep = false
-			end
 		
-			if distance <= Config.Marker.x then
-				letSleep = false
-				ShowHelpNotification(v.Prompt)
-
-				if IsControlJustReleased(0, Keys['E']) then
-					TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+				if distance <= Config.Marker.x then
+					ShowHelpNotification(v.Prompt)
+	
+					if IsControlJustReleased(0, Keys['E']) then
+						TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+					end
 				end
 			end
 		end
@@ -406,42 +406,25 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	while true do
+	while #Config.SonderZonen > 0 and (Config.EnabledStrafen or Config.EnabledBewerben) do
 		Citizen.Wait(1)
 		local playerCoords = GetEntityCoords(PlayerPedId())
 		local letSleep = true
 
 		for k,v in ipairs(Config.SonderZonen) do
-			if v.OpenType == 'strafen' and Config.EnabledStrafen then
+			if (v.OpenType == 'strafen' and Config.EnabledStrafen) or (v.OpenType == 'bewerben' and Config.EnabledBewerben) then
 				local distance = #(playerCoords - v.Coords)
 			
 				if distance < 50.0 then
 					DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
 					letSleep = false
-				end
 			
-				if distance <= Config.Marker.x then
-					letSleep = false
-					ShowHelpNotification(v.Prompt)
-
-					if IsControlJustReleased(0, Keys['E']) then
-						TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
-					end
-				end
-			elseif v.OpenType == 'bewerben' and Config.EnabledBewerben then
-				local distance = #(playerCoords - v.Coords)
-			
-				if distance < 50.0 then
-					DrawMarker(Config.Marker.type, v.Coords, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Config.Marker.x, Config.Marker.y, Config.Marker.z, Config.Marker.r, Config.Marker.g, Config.Marker.b, Config.Marker.a, false, false, 2, Config.Marker.rotate, nil, nil, false)
-					letSleep = false
-				end
-			
-				if distance <= Config.Marker.x then
-					letSleep = false
-					ShowHelpNotification(v.Prompt)
-
-					if IsControlJustReleased(0, Keys['E']) then
-						TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+					if distance <= Config.Marker.x then
+						ShowHelpNotification(v.Prompt)
+	
+						if IsControlJustReleased(0, Keys['E']) then
+							TriggerEvent('vCAD:openUI', v.System, v.OpenType, v.PublicID or true)
+						end
 					end
 				end
 			end
