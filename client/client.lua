@@ -93,14 +93,13 @@ function TOGGLE_NUI_FOCUS(bool, reload)
 
 		if Config.Animation == true and subSite == 'tab' and not IsPedInAnyVehicle(PlayerPed, false) then
 			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
-
 			RequestAnimDict("amb@world_human_seat_wall_tablet@female@base")
 
 			while not HasAnimDictLoaded("amb@world_human_seat_wall_tablet@female@base") do
 				Citizen.Wait(1)
 			end
 
-			TaskPlayAnim(PlayerPed, "amb@world_human_seat_wall_tablet@female@base", "base" ,8.0, -8.0, -1, 50, 0, false, false, false)
+			TaskPlayAnim(PlayerPed, "amb@world_human_seat_wall_tablet@female@base", "base", 8.0, -8.0, -1, 50, 0, false, false, false)
 			attachObject()
 		end
     else
@@ -164,11 +163,17 @@ end)
 function canOpenTablet(system, newSite, pos)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
+	local canOpenType = newSite
+
+	if pos or newSite == 'katalog' or newSite == 'bewerben' or newSite == 'strafen' then
+		return true, canOpenType
+	end
 	
 	if Config.OnlyInVehicle == true and IsPedInAnyVehicle(PlayerPed, false) then
 		if Config.InEmergencyVehicle == true then
 			if GetVehicleClass(GetVehiclePedIsIn(PlayerPed, false)) == 18 then
 				canOpen = true
+				canOpenType = Config.VehicleOpenType
 			end
 		end
 
@@ -178,14 +183,11 @@ function canOpenTablet(system, newSite, pos)
 			for k,v in pairs(Config.Vehicles[system]) do
 				if (tonumber(v) and v == vehHash) or (tostring(v) and GetHashKey(v) == vehHash) then
 					canOpen = true
+					canOpenType = Config.VehicleOpenType
 					break
 				end
 			end
 		end
-	end
-
-	if pos or newSite == 'katalog' then
-		return true
 	end
 
 	if newSite == 'tab' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
@@ -254,7 +256,7 @@ function canOpenTablet(system, newSite, pos)
 		end
 	end
 	
-	return canOpen
+	return canOpen, canOpenType
 end
 
 RegisterNetEvent('vCAD:openUI')
@@ -272,15 +274,17 @@ AddEventHandler('vCAD:openUI', function(system, newSite, pos)
 	end
 
 	if not isDead then
-		if canOpenTablet(system, newSite, pos) == true then
+		local canOpen, canOpenType = canOpenTablet(system, newSite, pos)
+
+		if canOpen == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				if site ~= system then
 					site = system
 					reloadTab = true
 				end
 
-				if subSite ~= newSite then
-					subSite = newSite
+				if subSite ~= canOpenType then
+					subSite = canOpenType
 					reloadTab = true
 				end
 
@@ -313,33 +317,6 @@ Citizen.CreateThread(function()
 				end
 			elseif not IsPedFatallyInjured(PlayerPed) then
 				isDead = false
-			end
-		end
-		
-		if Config.Hotkey ~= nil and Config.Hotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.Hotkey]) and not isDead then
-			if Keys[Config.Hotkey] then
-				TriggerEvent('vCAD:openUI', 'cop', Config.HotkeyOpenType)
-			else
-				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
-				ShowNotification('~r~Der angegebene Config.Hotkey ist ungültig!')
-			end
-		end
-
-		if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.MedicHotkey]) and not isDead then
-			if Keys[Config.MedicHotkey] then
-				TriggerEvent('vCAD:openUI', 'medic',  Config.HotkeyOpenType)
-			else
-				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
-				ShowNotification('~r~Der angegebene Config.MedicHotkey ist ungültig!')
-			end
-		end
-
-		if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" and IsControlJustReleased(0, Keys[Config.CarHotkey]) and not isDead then
-			if Keys[Config.CarHotkey] then
-				TriggerEvent('vCAD:openUI', 'car',  Config.HotkeyOpenType)
-			else
-				ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
-				ShowNotification('~r~Der angegebene Config.CarHotkey ist ungültig!')
 			end
 		end
 	end
@@ -436,17 +413,29 @@ Citizen.CreateThread(function()
 	end
 end)
 
-if Config.Commands == true then
+if Config.Commands == true or (Config.Hotkey ~= nil and Config.Hotkey ~= 'nil') or (Config.MedicHotkey ~= nil and Config.MedicHotkey ~= 'nil') or (Config.CarHotkey ~= nil and Config.CarHotkey ~= 'nil') then
+	if Config.Hotkey ~= nil and Config.Hotkey ~= 'nil' then
+		RegisterKeyMapping('copnet', 'Copnet Tablet', 'keyboard', string.upper(Config.Hotkey))
+	end
+
+	if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" then
+		RegisterKeyMapping('medicnet', 'Medicnet Tablet', 'keyboard', string.upper(Config.MedicHotkey))
+	end
+
+	if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" then
+		RegisterKeyMapping('carnet', 'Carnet Tablet', 'keyboard', string.upper(Config.CarHotkey))
+	end
+
 	RegisterCommand('copnet',function(source, args)
-		TriggerEvent('vCAD:openUI', 'cop', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'cop', Config.OpenType)
 	end, false)
 
 	RegisterCommand('medicnet',function(source, args)
-		TriggerEvent('vCAD:openUI', 'medic', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'medic', Config.OpenType)
 	end, false)
 
 	RegisterCommand('carnet',function(source, args)
-		TriggerEvent('vCAD:openUI', 'car', Config.CommandOpenType)
+		TriggerEvent('vCAD:openUI', 'car', Config.OpenType)
 	end, false)
 end
 

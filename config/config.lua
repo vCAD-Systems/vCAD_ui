@@ -87,14 +87,7 @@ Nein = false
 Config.Commands = false
 
 --[[
-Entscheidet welche Form beim Nutzen des Befehls geöffnet wird:
-'tab' für das Tablet
-'pc' für den PC
-]]
-Config.CommandOpenType = 'tab'
-
---[[
-Hotkey fürs Tablet?
+Standard Hotkeys fürs Tablet?
 Ja = Taste Beispiel: 'F10'
 Nein = nil
 ]]
@@ -106,11 +99,11 @@ Config.MedicHotkey = 'F9'
 Config.CarHotkey = 'F9'
 
 --[[
-Entscheidet welche Form beim Nutzen des Hotkeys geöffnet wird:
+Entscheidet was beim Nutzen des Hotkeys oder Commands geöffnet wird:
 'tab' für das Tablet
 'pc' für den PC
 ]]
-Config.HotkeyOpenType = 'tab'
+Config.OpenType = 'tab'
 
 --[[
 Man soll das Tablet nur in eine Fahrzeug öffnen können?
