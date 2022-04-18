@@ -31,7 +31,7 @@ function ShowHelpNotification(msg)
 	EndTextCommandDisplayHelp(0, false, true, -1)
 end
 
-function REQUEST_NUI_FOCUS(bool, reload)
+function TOGGLE_NUI_FOCUS(bool, reload)
 	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben') then
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs.')
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
@@ -68,13 +68,13 @@ function REQUEST_NUI_FOCUS(bool, reload)
 			
 		if Config.Animation == true and subSite == 'tab' and not IsPedInAnyVehicle(PlayerPed, false) then
 			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
-			RequestAnimDict('anim_heist@arcade_combined@')
+			RequestAnimDict('amb@world_human_seat_wall_tablet@female@base')
 
-			while not HasAnimDictLoaded('anim_heist@arcade_combined@') do
+			while not HasAnimDictLoaded('amb@world_human_seat_wall_tablet@female@base') do
 				Citizen.Wait(1)
 			end
 
-			TaskPlayAnim(PlayerPed, "amb@world_human_seat_wall_tablet@female@base", "base" ,8.0, -8.0, -1, 50, 0, false, false, false)
+			TaskPlayAnim(PlayerPed, 'amb@world_human_seat_wall_tablet@female@base', 'base', 8.0, -8.0, -1, 50, 0, false, false, false)
 			attachObject()
 		end
 	else
@@ -108,7 +108,7 @@ RegisterNUICallback("tablet-bus", function(data)
 		tabLoaded = true
 	elseif data.hide then
 		tabEnabled = false
-		REQUEST_NUI_FOCUS(false)
+		TOGGLE_NUI_FOCUS(false)
 	elseif data.click then
 		lastOpend = GetGameTimer()
 	end
@@ -135,7 +135,7 @@ AddEventHandler('onResourceStop', function(resource)
 	end
 end)
 
-function canOpenTablet(pos, newSite, system)
+function canOpenTablet(system, newSite, pos)
 	local PlayerPed = PlayerPedId()
 	local canOpen = not Config.OnlyInVehicle
 	local canOpenType = Config.OpenType
@@ -182,7 +182,7 @@ AddEventHandler('vCAD:openUI', function(system, newSite, pos)
 	end
 
 	if not isDead then
-		if canOpenTablet(pos, newSite, system) == true then
+		if canOpenTablet(system, newSite, pos) == true then
 			if (GetGameTimer() - lastOpend) > 250 then
 				if site ~= system then
 					site = system
@@ -201,7 +201,7 @@ AddEventHandler('vCAD:openUI', function(system, newSite, pos)
 				
 				lastOpend = GetGameTimer()
 				tabEnabled = true
-				REQUEST_NUI_FOCUS(true, reloadTab)
+				TOGGLE_NUI_FOCUS(true, reloadTab)
 			end
 		end
 	end
@@ -219,7 +219,7 @@ Citizen.CreateThread(function()
 					
 				if tabEnabled then
 					tabEnabled = false
-					REQUEST_NUI_FOCUS(false)
+					TOGGLE_NUI_FOCUS(false)
 				end
 			elseif not IsPedFatallyInjured(PlayerPed) then
 				isDead = false
