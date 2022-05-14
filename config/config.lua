@@ -19,7 +19,6 @@ Config.EnabledBewerben = true
  Ist "Config.EnabledGroupRules = false" dann müssen Indentifier eingetragen sein.
  Ansonsten können alle nicht User den Befehl nutzen.
 ]]
-Config.EnabledGroupRules = false
 Config.EnabledIdentifier = {
     'steam:110000xxxxxxxxx' --Hex
 }
