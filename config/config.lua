@@ -16,8 +16,7 @@ Config.EnabledStrafen = true
 Config.EnabledBewerben = true
 
 --[[
- Ist "Config.EnabledGroupRules = false" dann müssen Indentifier eingetragen sein.
- Ansonsten können alle nicht User den Befehl nutzen.
+ hier müssen Indentifier eingetragen sein, die ein PC via Command hinzufügen dürfen.
 ]]
 Config.EnabledIdentifier = {
     'steam:110000xxxxxxxxx' --Hex
