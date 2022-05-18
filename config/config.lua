@@ -22,35 +22,42 @@ Nein = false
 Config.Commands = true
 
 --[[
+    Activiere diese Funktion wenn ihr NativeUI nutzt.
+    Hier Siehst du wie es mit NativeUI aussehen wird
+    https://prnt.sc/7nCnguq0Z_wl
+]]
+Config.NativeUIEnabled = false
+
+--[[
     Trage hier die Identifier ein die PC´s erstellen dürfen.
     Funktionierende Identifier sind steam: und license:
 ]]
 Config.EnabledIdentifier = {
-    --'steam:110000xxxxxxxxx' - Hex
+    'steam:110000101e019f7' -- Hex
 }
 
 --[[
     Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
 ]]
-Config.EnabledZones = false
+Config.EnabledZones = true
 --[[
     Wollt Ihr euren CarnNet Katalog ingame an einem Punkt anzeigen?
     true = ja
     false = Nein
 ]]
-Config.EnabledKatalog = false
+Config.EnabledKatalog = true
 --[[
     Wollt ihr das sich euche Spieler Ingame beim CopNet Bewerben kann?
     wenn ja dann = true
     wenn nein dann = false
 ]]
-Config.EnabledBewerben = false
+Config.EnabledBewerben = true
 --[[
     Wollt Ihr Ingame Punkte wo man die Strafen öffentlich einsehen kann?
     wenn ja dann = true
     wenn nein dann = false
 ]]
-Config.EnabledStrafen = false
+Config.EnabledStrafen = true
 
 --[[
     Wenn Ihr nur eine Public id habt, dann braucht ihr diese nicht bei dem Command ingame mit senden sondern könnt sie einfach hier hinterlegen.
