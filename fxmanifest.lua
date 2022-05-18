@@ -3,9 +3,10 @@ game 'gta5'
 
 name 'vCAD UI - ESX Version'
 author 'Ffrankys, Flixxx, Tallerik & Mîhó'
-version '1.5.0'
+version '2.0.0'
 
 client_scripts {
+    '@NativeUI/NativeUI.lua',
 	'config/config.lua',
     'config/config_zones.lua',
     'config/config_katalog.lua',

@@ -75,7 +75,6 @@ end
 RegisterServerEvent('vCAD:SaveZoneConfig')
 AddEventHandler('vCAD:SaveZoneConfig', function(coords, system, Type)
     local result = Checkusr(GetPlayerIdentifiers(source))
-    print(result)
 	if result then
 		local path = GetResourcePath(GetCurrentResourceName())
 		local lines_config = lines_from(path.."/config/config_zones.lua")

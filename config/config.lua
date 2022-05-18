@@ -7,10 +7,20 @@ und Ihr möchtet das die items in Config.NeedetItem auf vorhandenheit überprüf
 Config.MySQL_Async = false
 
 --[[
+    Activiere diese Funktion wenn ihr NativeUI nutzt.
+    Hier Siehst du wie es mit NativeUI aussehen wird
+    https://prnt.sc/7nCnguq0Z_wl
+
+    !!! Ohne NativeUI wird ESX Menu genutzt !!!
+]]
+Config.NativeUIEnabled = false
+
+--[[
 Wollt Ihr die genannten Zonen Aktivieren?
 true = ja
 false = Nein
 ]]
+Config.EnabledZones = true -- Computer Positionen
 Config.EnabledKatalog = true
 Config.EnabledStrafen = true
 Config.EnabledBewerben = true
@@ -19,13 +29,8 @@ Config.EnabledBewerben = true
  hier müssen Indentifier eingetragen sein, die ein PC via Command hinzufügen dürfen.
 ]]
 Config.EnabledIdentifier = {
-    'steam:110000xxxxxxxxx' --Hex
+    'steam:110000xxxxxxxxx', --Hex
 }
-
---[[
-Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
-]]
-Config.EnabledZones = true
 
 --[[
 Welches Design (das Tablet selbst, nicht COPNET ODER MEDICNET ODER CARNET) soll genutzt werden?
@@ -58,7 +63,8 @@ Welche Items braucht man um das Tablet öffnen zu können..?
 Falls Feature nicht erwünscht:
 Nein = nil
 ]]
-Config.NeededItem = nil --{'tablet'}
+--Config.NeededItem = {'tablet'} oder Config.NeededItem = {'tablet', 'tablet2'}
+Config.NeededItem = nil
 
 --[[
 Soll man das Tablet auch beim *Benutzen* des Items öffnen können? 
@@ -67,7 +73,7 @@ Alle Items aus Config.NeededItem nutzbar = 'all'
 bestimmtes Item nutzbar = 'itemname'
 Nein = nil
 ]]
-Config.CanUseItem = 'tablet'
+Config.CanUseItem = nil
 
 --[[
 Entscheidet welche Form beim *Benutzen* des Items geöffnet wird:

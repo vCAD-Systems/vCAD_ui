@@ -14,6 +14,9 @@ ESX = nil
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, nil, 'tab'
 local katalogID, tab = nil, nil
 local PlayerData = {}
+if Config.NativeUIEnabled then
+	_menuPool  = NativeUI.CreatePool()
+end
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -48,6 +51,19 @@ function ShowHelpNotification(msg)
 	BeginTextCommandDisplayHelp('STRING')
 	AddTextComponentSubstringPlayerName(msg)
 	EndTextCommandDisplayHelp(0, false, true, -1)
+end
+
+function CreateDialog(OnScreenDisplayTitle_shopmenu)
+	AddTextEntry(OnScreenDisplayTitle_shopmenu, OnScreenDisplayTitle_shopmenu)
+	DisplayOnscreenKeyboard(1, OnScreenDisplayTitle_shopmenu, "", "", "", "", "", 32)
+	while (UpdateOnscreenKeyboard() == 0) do
+		DisableAllControlActions(0);
+		Wait(0);
+	end
+	if (GetOnscreenKeyboardResult()) then
+		local displayResult = GetOnscreenKeyboardResult()
+		return displayResult
+	end
 end
 
 function TOGGLE_NUI_FOCUS(bool, reload)
@@ -151,6 +167,11 @@ function CloseTab()
 
 	katalogID = nil
 end
+
+RegisterNetEvent('vCAD:ShowNotification')
+AddEventHandler('vCAD:ShowNotification', function(msg)
+	ShowNotification(msg)
+end)
 
 AddEventHandler('onResourceStop', function(resource)
 	if resource == GetCurrentResourceName() then
@@ -304,7 +325,9 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-
+		if Config.NativeUIEnabled then
+		_menuPool:ProcessMenus()
+		end
 		if NetworkIsPlayerActive(PlayerId()) then
 			local PlayerPed = PlayerPedId()
 
@@ -454,70 +477,246 @@ AddEventHandler('vCAD:AddPunkt', function(data, value)
 	ShowNotification("/restart "..GetCurrentResourceName())
 end)
 
-RegisterCommand("vcadadd", function(source, args, rawCommand)
-    if args[1] == 'pc' then
-		if args[3] ~= nil then
-			local ped = PlayerPedId()
-			local coords = GetEntityCoords(ped)
-			local location = vector3(coords.x, coords.y, coords.z - 1.0)
+RegisterCommand("vcad", function(source, args, rawCommand)
+	if Config.NativeUIEnabled then
+		OpenMenu()
 
-			TriggerServerEvent('vCAD:SaveZoneConfig', location, args[2], args[3])
-		else
-			ShowNotification('~r~Nicht alle Daten angegeben.')
-		end
-	elseif args[1] == 'katalog' then
-		local pid
-		if args[2] == nil then
-			ShowNotification("Bitte die Public ID angeben!!!.")
-			return
-		else
-			pid = args[2]
-		end
-		local ped = PlayerPedId()
-		local coords = GetEntityCoords(ped)
-		local location = vector3(coords.x, coords.y, coords.z - 1.0)
-
-		TriggerServerEvent('vCAD:SaveKatalogConfig', location, pid)
-	elseif args[1] == 'strafen' then
-		local pid = nil
-		local ped = PlayerPedId()
-		local coords = GetEntityCoords(ped)
-		local Prompt = 'Drücke ~INPUT_CONTEXT~ um dir die Strafen anzuschauen.'
-
-		if args[2] == nil then
-			ShowNotification("Keine ID eingegeben!")
-			return
-		end
-
-		pid = args[2]
-		local location = vector3(coords.x, coords.y, coords.z - 1.0)
-
-		TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt, 'cop')
-	elseif args[1] == 'bewerben' then
-		local pid = nil
-		local ped = PlayerPedId()
-		local coords = GetEntityCoords(ped)
-		local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Bewerben.'
-
-		if args[2] == nil then
-			ShowNotification("Keine ID eingegeben!")
-			return
-		elseif args[3] == nil or not args[3] == 'cop' or not args[3] == 'medic' or not args[3] =='car'  then
-			ShowNotification("~r~ Du musst auch den dazugehörigen Job eintragen(cop, car oder medic).")
-			return
-		end
-
-		pid = args[2]
-
-		local location = vector3(coords.x, coords.y, coords.z - 1.0)
-
-		TriggerServerEvent('vCAD:SaveSonderZonenConfig', location, pid, args[1], Prompt, args[3])
+		Wait(100)
+		xOpenMenu:Visible(not xOpenMenu:Visible())
+	else
+		OpenMenu()
 	end
 end)
 
+if Config.NativeUIEnabled then
+	function OpenMenu()
+		_menuPool:Remove()
+	
+		local System = 'cop'
+		local pid = nil
+	
+		if xOpenMenu ~= nil and xOpenMenu:Visible() then
+			xOpenMenu:Visible(false)
+			return
+		end
+	
+		xOpenMenu = NativeUI.CreateMenu('vCAD', 'Hier kannst du Positionen Hinzufügen für das Tablet.', 5, 100)
+		_menuPool:Add(xOpenMenu)
+	
+		-- Menu Punkte
+	
+		--[[
+			local PcAdd = NativeUI.CreateItem('PC Hinzufügen', 'Fügt ein PC an deinem Aktuellen Standpunkt hinzu.')
+		PcAdd.Activated = function(sender, item)
+			OpenPcMenu()
+	
+			Wait(100)
+			xOpenMenu:Visible(false)
+			xOpenPcMenu:Visible(not xOpenPcMenu:Visible())
+		end
+		xOpenMenu:AddItem(PcAdd)
+		]]
+	
+		local auswahl = {"~b~CopNet", "~r~MedicNet", "~y~CarNet"}
+		local xSystem = NativeUI.CreateListItem("System:", auswahl, 1)
+		xOpenMenu:AddItem(xSystem)
+	
+		local xfrei = NativeUI.CreateItem('----------------------------------', '')
+		xOpenMenu:AddItem(xfrei)
+	
+		local xPcSetzen = NativeUI.CreateItem('🖥️ Pc setzen', 'Setzt den PC für das System (~r~siehe oben~s~)')
+		xPcSetzen.Activated = function(sender, item)
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+			TriggerServerEvent('vCAD:SaveZoneConfig', posi, System, 'pc')
+		end
+		xOpenMenu:AddItem(xPcSetzen)
+	
+		local BewerbungenAdd = NativeUI.CreateItem('📓 Bewerbungspunkt Hinzufügen', 'Fügt ein PC Hinzu wo sich die Personen Bewerben können für das System (~r~siehe oben~s~).')
+		BewerbungenAdd.Activated = function(sender, item)
+			pid = CreateDialog('[Bewerber] Gib die Public ID ein')
+	
+			if pid == nil or pid == '' then
+				ShowNotification('Du musst eine Public ID eingeben.')
+				return
+			end
+	
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+			local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Bewerben.'
+	
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'bewerben', Prompt, System)
+		end
+		xOpenMenu:AddItem(BewerbungenAdd)
+	
+		local xfrei = NativeUI.CreateItem('----------------------------------', '')
+		xOpenMenu:AddItem(xfrei)
+	
+		local StrafenKatalogAdd = NativeUI.CreateItem('🔎 Strafen Katalog Hinzufügen', 'An diesem Punkt können die Spieler dann die Strafen einsehen.')
+		StrafenKatalogAdd.Activated = function(sender, item)
+			pid = CreateDialog('[Strafen] Gib die Public ID ein')
+	
+			if pid == nil or pid == '' then
+				ShowNotification('Du musst eine Public ID eingeben.')
+				return
+			end
+	
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+			local Prompt = 'Drücke ~INPUT_CONTEXT~ um dir die Strafen anzuschauen.'
+	
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, 'strafen', Prompt, System)
+		end
+		xOpenMenu:AddItem(StrafenKatalogAdd)
+	
+		local CarNetKatalogAdd = NativeUI.CreateItem('🚘 CarNet Katalog Hinzufügen', 'Hier ist es möglich den ~y~CarNet~s~ Katalog einzusehen.')
+		CarNetKatalogAdd.Activated = function(sender, item)
+			pid = CreateDialog('[VehicleShop] Gib die Public ID ein')
+	
+			if pid == nil or pid == '' then
+				ShowNotification('Du musst eine Public ID eingeben.')
+				return
+			end
+	
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+	
+			TriggerServerEvent('vCAD:SaveKatalogConfig', posi, pid)
+		end
+		xOpenMenu:AddItem(CarNetKatalogAdd)
+	
+	
+	
+		xOpenMenu.OnListChange = function(sender, item, index)
+			if item == xSystem then
+				System = item:IndexToItem(index)
+	
+				if System == '~b~CopNet' then
+					System = 'cop'
+				elseif System == '~r~MedicNet' then
+					System = 'medic'
+				elseif System == '~y~CarNet' then
+					System = 'car'
+				end
 
-Citizen.CreateThread(function()
-	TriggerEvent("chat:addSuggestion", "/vcadadd", "Generiert ein punkt mit dem zugang für ein PC, Strafen, Bewerber oder den Katalog",{ 
-        {name = "möglichkeiten:", help = "pc, strafen, bewerben, katalog"},
-	})
-end)
+				print(System)
+			end
+		end
+	
+	
+		_menuPool:RefreshIndex()
+		_menuPool:MouseControlsEnabled (false);
+		_menuPool:MouseEdgeEnabled (false);
+		_menuPool:ControlDisablingEnabled(false);
+	end
+end
+
+if not Config.NativeUIEnabled then
+	function OpenMenu()
+		local elements = {
+			{label = 'Pc setzen', value = 'pcadd'},
+			{label = 'Bewerbungspunkt Hinzufügen', value = 'bewerberadd'},
+			{label = 'Strafen Katalog Hinzufügen', value = 'strafenadd'},
+			{label = 'CarNet Katalog Hinzufügen', value = 'katalogadd'},
+		}
+
+
+		ESX.UI.Menu.CloseAll()
+
+		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'ambulance_actions', {
+			title    = 'vCAD',
+			align    = 'top-left',
+			elements = elements
+		}, function(data, menu)
+			local Select = data.current.value
+			if Select == 'pcadd' then
+				OpenPcMenu(true)
+			elseif Select == 'bewerberadd' then
+				OpenPcMenu(false)
+			elseif Select == 'strafenadd' then
+				OpenStrafenMenu()
+			elseif Select == 'katalogadd' then
+				OpenKatalogMenu()
+			end
+		end, function(data, menu)
+			menu.close()
+		end)
+	end
+
+	function OpenPcMenu(pc)
+		local System = nil
+		local elements = {
+			{label = 'CopNet', value = 'cop'},
+			{label = 'MedicNet', value = 'medic'},
+			{label = 'CarNet', value = 'car'},
+		}
+
+
+		ESX.UI.Menu.CloseAll()
+
+		ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'ambulance_actions', {
+			title    = 'vCAD',
+			align    = 'top-left',
+			elements = elements
+		}, function(data, menu)
+			local System = data.current.value
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z -1.0)
+			local pid = nil
+
+			if pc == false then
+				pid = CreateDialog('Public ID:') 
+
+				if pid == nil or pid == '' then
+					ShowNotification('Keine Public ID angegeben!')
+					return
+				end
+				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Bewerben.'
+	
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'bewerben', Prompt, System)
+			end
+
+			if pc then
+				TriggerServerEvent('vCAD:SaveZoneConfig', posi, System, 'pc')
+			end
+		end, function(data, menu)
+			menu.close()
+		end)
+	end
+
+	function OpenStrafenMenu()
+		local pid = CreateDialog('Gib die Public ID ein.')
+
+		if pid == nil or pid == '' then
+			ShowNotification('Es wurde keine Public ID eingegeben.')
+			return
+		end
+
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+		local posi = vector3(coords.x, coords.y, coords.z -1.0)
+		local Prompt = 'Drücke ~INPUT_CONTEXT~ um dir die Strafen anzuschauen.'
+	
+		TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'strafen', Prompt, 'cop')
+	end
+
+	function OpenKatalogMenu()
+		pid = CreateDialog('[VehicleShop] Gib die Public ID ein')
+	
+		if pid == nil or pid == '' then
+			ShowNotification('Es wurde keine Public ID eingegeben.')
+			return
+		end
+
+		local ped = PlayerPedId()
+		local coords = GetEntityCoords(ped)
+		local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+
+		TriggerServerEvent('vCAD:SaveKatalogConfig', posi, pid)
+	end
+end

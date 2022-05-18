@@ -11,5 +11,4 @@ Wo soll der Katalog Platziert werden?
     },
 ]]
 Config.Katalog = {
-
 }
