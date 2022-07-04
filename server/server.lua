@@ -1,3 +1,52 @@
+local QBCore = exports['qb-core']:GetCoreObject()
+
+function makeItemUseable(name)
+    if name == nil or name == 'nil' then return end
+    
+    QBCore.Functions.CreateUseableItem(name, function(source)
+        if Config.ItemOpenType == 'tab' or Config.ItemOpenType == 'pc' then
+            local xPlayer = QBCore.Functions.GetPlayer(source)
+
+            for k,v in pairs(Config.CopNetJob) do
+                if xPlayer.job.name == v then
+                    TriggerClientEvent('vCAD:openUI', source, 'cop',  Config.ItemOpenType)
+                    return
+                end
+            end
+
+            for k,v in pairs(Config.MedicNetJob) do
+                if xPlayer.job.name == v then
+                    TriggerClientEvent('vCAD:openUI', source, 'medic',  Config.ItemOpenType)
+                    return
+                end
+            end
+            
+            for k,v in pairs(Config.CarNetJob) do
+                if xPlayer.job.name == v then
+                    TriggerClientEvent('vCAD:openUI', source, 'car',  Config.ItemOpenType)
+                    return
+                end
+            end
+        else
+            print('[vCAD_UI] Config.ItemOpenType ungültig!')
+        end
+    end)
+end
+
+if Config.CanUseItem and Config.CanUseItem ~= 'nil' and Config.CanUseItem ~= '' and Config.NeededItem ~= nil and Config.NeededItem ~= 'nil' then 
+    if Config.CanUseItem == 'all' then
+        if type(Config.NeededItem) == 'table' then
+            for k,v in pairs(Config.NeededItem) do
+                makeItemUseable(v)
+            end
+        else
+            makeItemUseable(Config.NeededItem)
+        end
+    else
+        makeItemUseable(Config.CanUseItem)
+    end
+end
+
 
 function Checkusr(Identifier)
     local steamid  = false
@@ -19,9 +68,6 @@ function Checkusr(Identifier)
   end
   return false
 end
-
-
-
 -- Config Bearbeiten
 -- Zones
 RegisterServerEvent('vCAD:SaveZoneConfig')
@@ -178,6 +224,52 @@ function lines_from(file)
   return lines
 end
 
+if Config.MySQL_Async and not Config.NeededItem == nil then
+    MySQL.ready(function ()
+        if type(Config.NeededItem) ~= 'table' then
+            Check_Item(Config.NeededItem)
+        elseif type(Config.NeededItem) == 'table' then
+            for k, v in pairs(Config.NeededItem) do
+                Check_Item(v)
+            end
+        end
+    end)
+end
+
 function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
+end
+
+function Check_Item(name)
+    MySQL.Async.fetchAll('SELECT * FROM items WHERE name = @name', {
+        ['@name'] = name
+    }, function(result)
+        if result[1] then
+            return
+        else
+            Item_Insert(name)
+        end
+    end)
+end
+
+local item_add = false
+function Item_Insert(name)
+    MySQL.Async.execute("INSERT INTO items(`name`, `label`, `can_remove`) VALUES (@name, @label, @remove)", {
+        ['@name'] = name,
+        ['@label'] = firstToUpper(name),
+        ['@remove'] = 1
+    }, function(rowsChange)
+        if rowsChange ~= nil and item_add == false then
+            item_add = true
+            Item_Add_Function()
+        end
+    end)
+end
+
+function Item_Add_Function()
+    while item_add do
+        Wait(1000)
+        print("Server neustarten, damit das Item in QBCore aufgenommen wird!!!")
+        TriggerClientEvent('QBCore:Notify', -1, 'Server neustarten, damit das Item in QBCore aufgenommen wird.')
+    end
 end

@@ -1,21 +1,23 @@
 fx_version 'bodacious'
 game 'gta5'
 
-name 'vCAD UI - ESX Version'
-author 'Ffrankys, Flixxx, Tallerik & Mîhó'
+name 'vCAD UI - QBCore Version'
+author 'Ffrankys, Flixxx, Tallerik, Mîhó & divide29'
 version '2.0.0'
 
 client_scripts {
-    '@NativeUI/NativeUI.lua',
+    '@menuv/menuv.lua',
 	'config/config.lua',
     'config/config_zones.lua',
     'config/config_katalog.lua',
     'config/config_sonstiges.lua',
-    
+
 	'client/client.lua'
 }
 
 server_scripts {
+    '@oxmysql/lib/MySQL.lua',
+
     'config/config.lua',
     'config/config_zones.lua',
     'config/config_katalog.lua',

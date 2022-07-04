@@ -1,6 +1,38 @@
 Config = {}
 
 --[[
+Aktiviere die Funktion wenn ihr fivem-mysql-async verwendet.
+und Ihr möchtet das die items in Config.NeedetItem auf vorhandenheit überprüft werden.
+]]
+Config.MySQL_Async = false
+
+--[[
+    Activiere diese Funktion wenn ihr NativeUI nutzt.
+    Hier Siehst du wie es mit NativeUI aussehen wird
+    https://prnt.sc/7nCnguq0Z_wl
+
+    !!! Ohne NativeUI wird qb-menu genutzt !!!
+]]
+Config.NativeUIEnabled = false
+
+--[[
+Wollt Ihr die genannten Zonen Aktivieren?
+true = ja
+false = Nein
+]]
+Config.EnabledZones = true -- Computer Positionen
+Config.EnabledKatalog = true
+Config.EnabledStrafen = true
+Config.EnabledBewerben = true
+
+--[[
+ hier müssen Indentifier eingetragen sein, die ein PC via Command hinzufügen dürfen.
+]]
+Config.EnabledIdentifier = {
+    'steam:110000xxxxxxxxx', --Hex
+}
+
+--[[
 Welches Design (das Tablet selbst, nicht COPNET ODER MEDICNET ODER CARNET) soll genutzt werden?
 Standard / HTML = false
 Neues, moderneres (von Flixxx) = true
@@ -8,66 +40,55 @@ Neues, moderneres (von Flixxx) = true
 Config.Design = false
 
 --[[
+Welchen job braucht man für..?
+Falls Feature nicht erwünscht:
+Nein = nil
+]]
+-- Für CopNet:
+Config.CopNetJob = {'police'}
+-- Für MedicNet:
+Config.MedicNetJob = {'ambulance'}
+-- Für CarNet:
+Config.CarNetJob = {'cardealer'}
+
+--[[
 Animation beim öffnen des Tablets?
 Ja = true
 Nein = false
 ]]
-Config.Animation = false
+Config.Animation = true
+
+--[[
+Welche Items braucht man um das Tablet öffnen zu können..?
+Falls Feature nicht erwünscht:
+Nein = nil
+]]
+--Config.NeededItem = {'tablet'} oder Config.NeededItem = {'tablet', 'tablet2'}
+Config.NeededItem = nil
+
+--[[
+Soll man das Tablet auch beim *Benutzen* des Items öffnen können? 
+Diese Funktion funktioniert nur, wenn Config.NeededItem NICHT "nil" ist.
+Alle Items aus Config.NeededItem nutzbar = 'all'
+bestimmtes Item nutzbar = 'itemname'
+Nein = nil
+]]
+Config.CanUseItem = nil
+
+--[[
+Entscheidet welche Form beim *Benutzen* des Items geöffnet wird:
+Diese Funktion funktioniert nur, wenn Config.CanUseItem "true" ist.
+'tab' für das Tablet
+'pc' für den PC
+]]
+Config.ItemOpenType = 'tab'
 
 --[[
 Befehl "/copnet"?
 Ja = true
 Nein = false
 ]]
-Config.Commands = true
-
---[[
-    Activiere diese Funktion wenn ihr NativeUI nutzt.
-    Hier Siehst du wie es mit NativeUI aussehen wird
-    https://prnt.sc/7nCnguq0Z_wl
-]]
-Config.NativeUIEnabled = false
-
---[[
-    Trage hier die Identifier ein die PC´s erstellen dürfen.
-    Funktionierende Identifier sind steam: und license:
-]]
-Config.EnabledIdentifier = {
-    'steam:110000101e019f7' -- Hex
-}
-
---[[
-    Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
-]]
-Config.EnabledZones = true
---[[
-    Wollt Ihr euren CarnNet Katalog ingame an einem Punkt anzeigen?
-    true = ja
-    false = Nein
-]]
-Config.EnabledKatalog = true
---[[
-    Wollt ihr das sich euche Spieler Ingame beim CopNet Bewerben kann?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledBewerben = true
---[[
-    Wollt Ihr Ingame Punkte wo man die Strafen öffentlich einsehen kann?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledStrafen = true
-
---[[
-    Wenn Ihr nur eine Public id habt, dann braucht ihr diese nicht bei dem Command ingame mit senden sondern könnt sie einfach hier hinterlegen.
-    z.B. Katalog = 'xyz',
-]]
-Config.PublicID = {
-    Katalog = nil,
-    Bewerbung = nil,
-    Strafen = nil,
-}
+Config.Commands = false
 
 --[[
 Standard Hotkeys fürs Tablet?
@@ -75,11 +96,11 @@ Ja = Taste Beispiel: 'F10'
 Nein = nil
 ]]
 -- Für CopNet:
-Config.Hotkey = 'F10' 
+Config.Hotkey = 'F9' 
 -- Für MedicNet:
 Config.MedicHotkey = 'F9'
 -- Für CarNet:
-Config.CarHotkey = 'F7'
+Config.CarHotkey = 'F9'
 
 --[[
 Entscheidet was beim Nutzen des Hotkeys oder Commands geöffnet wird:
@@ -104,7 +125,7 @@ Nein = false
 Config.InEmergencyVehicle = false
 
 --[[
-Entscheidet was beim Nutzen des Tablets im Auto geöffnet wird:
+Entscheidet welche Form beim Nutzen des Tablets im Auto geöffnet wird:
 Diese Funktion funktioniert nur, wenn Config.OnlyInVehicle "true" ist.
 'tab' für das Tablet
 'pc' für den PC
@@ -116,6 +137,7 @@ Aktiviert das "Autoscaling" des Uis:
 Einfach gesagt: Tablet klein, PC groß.
 Ja = true
 Nein = false
+
 ! WICHTIG ! 
 Beim Tablet können manche Knöpfe und/oder Textfelder nicht erreichbar sein!
 Das passiert, da das Tablet nicht für die kleine Ansicht ausgelegt ist!
@@ -140,6 +162,7 @@ Config.Vehicles = {
     ['car'] = {
     }
 }
+
 --[[
 Aussehen der Makierung wo du die Computer benutzen kannst.
 
