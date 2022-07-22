@@ -193,7 +193,7 @@ function canOpenTablet(system, newSite, pos)
 		local found = false
 		PlayerData = QBCore.Functions.GetPlayerData()
 
-		for k,v in pairs(PlayerData.inventory) do
+		for k,v in pairs(PlayerData.items) do
 			if found == true then
 				break
 			elseif type(Config.NeededItem) == 'table' then

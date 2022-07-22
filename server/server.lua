@@ -8,21 +8,21 @@ function makeItemUseable(name)
             local xPlayer = QBCore.Functions.GetPlayer(source)
 
             for k,v in pairs(Config.CopNetJob) do
-                if xPlayer.job.name == v then
+                if xPlayer.PlayerData.job.name == v then
                     TriggerClientEvent('vCAD:openUI', source, 'cop',  Config.ItemOpenType)
                     return
                 end
             end
 
             for k,v in pairs(Config.MedicNetJob) do
-                if xPlayer.job.name == v then
+                if xPlayer.PlayerData.job.name == v then
                     TriggerClientEvent('vCAD:openUI', source, 'medic',  Config.ItemOpenType)
                     return
                 end
             end
             
             for k,v in pairs(Config.CarNetJob) do
-                if xPlayer.job.name == v then
+                if xPlayer.PlayerData.job.name == v then
                     TriggerClientEvent('vCAD:openUI', source, 'car',  Config.ItemOpenType)
                     return
                 end
