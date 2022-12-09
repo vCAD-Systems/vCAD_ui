@@ -18,6 +18,10 @@ Config.Animation = false
 Befehle?
 Ja = true
 Nein = false
+
+Bei Gesetze:
+Kein Befehl = nil
+Befehl = PublicID
 ]]
 Config.Commands = {
     Tablet = true, -- "/copnet", "/medicnet" & "/carnet"
