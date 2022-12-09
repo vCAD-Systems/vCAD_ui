@@ -15,11 +15,14 @@ Nein = false
 Config.Animation = false
 
 --[[
-Befehl "/copnet"?
+Befehle?
 Ja = true
 Nein = false
 ]]
-Config.Commands = true
+Config.Commands = {
+    Tablet = true, -- "/copnet", "/medicnet" & "/carnet"
+    Gesetze = nil -- "/gesetze" statt nil die PublicID eintragen
+}
 
 --[[
     Activiere diese Funktion wenn ihr NativeUI nutzt.
