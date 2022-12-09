@@ -448,7 +448,7 @@ if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" then
 	RegisterKeyMapping('carnet', 'Carnet Tablet', 'keyboard', string.upper(Config.CarHotkey))
 end
 
-if Config.Commands == true then
+if Config.Commands.Tablet == true then
 	RegisterCommand('copnet',function(source, args)
 		TriggerEvent('vCAD:openUI', 'cop', Config.OpenType)
 	end, false)
