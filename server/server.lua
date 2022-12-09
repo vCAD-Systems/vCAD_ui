@@ -192,7 +192,7 @@ AddEventHandler('vCAD:SaveSonderZonenConfig', function(coords, PublicID, Type, P
 		TriggerClientEvent('vCAD:AddPunkt', -1, 'Sonstiges', {
             Coords = coords,
             Prompt = Prompt,
-            System = 'cop',
+            System = Job,
             OpenType = Type,
             PublicID = "'"..PublicID.."'"
         })
