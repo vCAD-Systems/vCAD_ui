@@ -436,19 +436,19 @@ Citizen.CreateThread(function()
 	end
 end)
 
-if Config.Commands == true or (Config.Hotkey ~= nil and Config.Hotkey ~= 'nil') or (Config.MedicHotkey ~= nil and Config.MedicHotkey ~= 'nil') or (Config.CarHotkey ~= nil and Config.CarHotkey ~= 'nil') then
-	if Config.Hotkey ~= nil and Config.Hotkey ~= 'nil' then
-		RegisterKeyMapping('copnet', 'Copnet Tablet', 'keyboard', string.upper(Config.Hotkey))
-	end
+if Config.Hotkey ~= nil and Config.Hotkey ~= 'nil' then
+	RegisterKeyMapping('copnet', 'Copnet Tablet', 'keyboard', string.upper(Config.Hotkey))
+end
 
-	if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" then
-		RegisterKeyMapping('medicnet', 'Medicnet Tablet', 'keyboard', string.upper(Config.MedicHotkey))
-	end
+if Config.MedicHotkey ~= nil and Config.MedicHotkey ~= "nil" then
+	RegisterKeyMapping('medicnet', 'Medicnet Tablet', 'keyboard', string.upper(Config.MedicHotkey))
+end
 
-	if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" then
-		RegisterKeyMapping('carnet', 'Carnet Tablet', 'keyboard', string.upper(Config.CarHotkey))
-	end
+if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" then
+	RegisterKeyMapping('carnet', 'Carnet Tablet', 'keyboard', string.upper(Config.CarHotkey))
+end
 
+if Config.Commands == true then
 	RegisterCommand('copnet',function(source, args)
 		TriggerEvent('vCAD:openUI', 'cop', Config.OpenType)
 	end, false)
@@ -461,6 +461,13 @@ if Config.Commands == true or (Config.Hotkey ~= nil and Config.Hotkey ~= 'nil') 
 		TriggerEvent('vCAD:openUI', 'car', Config.OpenType)
 	end, false)
 end
+
+if Config.Commands.Gesetze ~= nil and Config.Commands.Gesetze ~= 'nil' then
+	RegisterCommand("gesetze", function(source, args, rawCommand)
+		TriggerEvent('vCAD:openUI', 'cop', 'strafen', Config.Commands.Gesetze)
+	end)
+end
+
 
 
 RegisterNetEvent('vCAD:AddPunkt')
