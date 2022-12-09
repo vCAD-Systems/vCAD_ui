@@ -1,4 +1,4 @@
-# vCAD_ui
+# vCAD_ui_altv
 Alt:V Standalone Ingame UI for vCAD/Copnet/Medicnet/Carnet.
 
 # How to use:
