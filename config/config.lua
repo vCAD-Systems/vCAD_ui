@@ -84,11 +84,14 @@ Diese Funktion funktioniert nur, wenn Config.CanUseItem "true" ist.
 Config.ItemOpenType = 'tab'
 
 --[[
-Befehl "/copnet"?
+Befehle?
 Ja = true
 Nein = false
 ]]
-Config.Commands = false
+Config.Commands = {
+    Tablet = true, -- "/copnet", "/medicnet" & "/carnet"
+    Gesetze = nil -- "/gesetze" statt nil die PublicID eintragen
+}
 
 --[[
 Standard Hotkeys fürs Tablet?
