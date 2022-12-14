@@ -448,15 +448,19 @@ if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" then
 	RegisterKeyMapping('carnet', 'Carnet Tablet', 'keyboard', string.upper(Config.CarHotkey))
 end
 
-if Config.Commands.Tablet == true then
+if Config.Commands.Tablet == true or (Config.Hotkey ~= nil and Config.Hotkey ~= 'nil') then
 	RegisterCommand('copnet',function(source, args)
 		TriggerEvent('vCAD:openUI', 'cop', Config.OpenType)
 	end, false)
+end
 
+if Config.Commands.Tablet == true or (Config.MedicHotkey ~= nil and Config.MedicHotkey ~= 'nil') then
 	RegisterCommand('medicnet',function(source, args)
 		TriggerEvent('vCAD:openUI', 'medic', Config.OpenType)
 	end, false)
+end
 
+if Config.Commands.Tablet == true or (Config.CarHotkey ~= nil and Config.CarHotkey ~= 'nil') then
 	RegisterCommand('carnet',function(source, args)
 		TriggerEvent('vCAD:openUI', 'car', Config.OpenType)
 	end, false)
