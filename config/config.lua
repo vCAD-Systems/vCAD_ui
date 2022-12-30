@@ -87,6 +87,8 @@ Config.Hotkey = 'F10'
 Config.MedicHotkey = 'F9'
 -- Für CarNet:
 Config.CarHotkey = 'F7'
+-- Für FireNet:
+Config.FDHotkey = 'F11'
 
 --[[
 Entscheidet was beim Nutzen des Hotkeys oder Commands geöffnet wird:
