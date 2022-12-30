@@ -67,7 +67,7 @@ function CreateDialog(OnScreenDisplayTitle_shopmenu)
 end
 
 function TOGGLE_NUI_FOCUS(bool, reload)
-	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben') then
+	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car' and site ~= 'fd') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben') then
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs.')
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 		return
@@ -130,6 +130,8 @@ function GetURL(system)
 		return "https://medicnet.ch/"
 	elseif system == "car" then
 		return "https://mechnet.ch/"
+	elseif system == "fd" then
+		return "https://fdnet.ch/"
 	end
 end
 
@@ -266,6 +268,19 @@ function canOpenTablet(system, newSite, pos)
 		local found = false
 		
 		for k,v in pairs(Config.CarNetJob) do
+			if PlayerData.job.name == v then
+				found = true
+				break
+			end
+		end
+
+		if found == false then
+			return false
+		end
+	elseif system == 'fd' and newSite ~= 'katalog' and Config.FireNetJob ~= nil and Config.FireNetJob ~= 'nil' and PlayerData.job ~= nil then
+		local found = false
+		
+		for k,v in pairs(Config.FireNetJob) do
 			if PlayerData.job.name == v then
 				found = true
 				break
@@ -448,6 +463,10 @@ if Config.CarHotkey ~= nil and Config.CarHotkey ~= "nil" then
 	RegisterKeyMapping('carnet', 'Carnet Tablet', 'keyboard', string.upper(Config.CarHotkey))
 end
 
+if Config.FDHotkey ~= nil and Config.FDHotkey ~= "nil" then
+	RegisterKeyMapping('firenet', 'FireNet Tablet', 'keyboard', string.upper(Config.FDHotkey))
+end
+
 if Config.Commands.Tablet == true or (Config.Hotkey ~= nil and Config.Hotkey ~= 'nil') then
 	RegisterCommand('copnet',function(source, args)
 		TriggerEvent('vCAD:openUI', 'cop', Config.OpenType)
@@ -463,6 +482,12 @@ end
 if Config.Commands.Tablet == true or (Config.CarHotkey ~= nil and Config.CarHotkey ~= 'nil') then
 	RegisterCommand('carnet',function(source, args)
 		TriggerEvent('vCAD:openUI', 'car', Config.OpenType)
+	end, false)
+end
+
+if Config.Commands.Tablet == true or (Config.FDHotkey ~= nil and Config.FDHotkey ~= 'nil') then
+	RegisterCommand('firenet',function(source, args)
+		TriggerEvent('vCAD:openUI', 'fd', Config.OpenType)
 	end, false)
 end
 
@@ -528,7 +553,7 @@ if Config.NativeUIEnabled then
 		xOpenMenu:AddItem(PcAdd)
 		]]
 	
-		local auswahl = {"~b~CopNet", "~r~MedicNet", "~y~CarNet"}
+		local auswahl = {"~b~CopNet", "~r~MedicNet", "~y~CarNet", "~o~FireNet"}
 		local xSystem = NativeUI.CreateListItem("System:", auswahl, 1)
 		xOpenMenu:AddItem(xSystem)
 	
@@ -612,6 +637,8 @@ if Config.NativeUIEnabled then
 					System = 'medic'
 				elseif System == '~y~CarNet' then
 					System = 'car'
+				elseif System == '~o~FireNet' then
+					System = 'fd'
 				end
 
 				print(System)
@@ -664,6 +691,7 @@ if not Config.NativeUIEnabled then
 			{label = 'CopNet', value = 'cop'},
 			{label = 'MedicNet', value = 'medic'},
 			{label = 'CarNet', value = 'car'},
+			{label = 'FireNet', value = 'fd'},
 		}
 
 

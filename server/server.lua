@@ -29,6 +29,13 @@ function makeItemUseable(name)
                     return
                 end
             end
+
+            for k,v in pairs(Config.FireNetJob) do
+                if xPlayer.job.name == v then
+                    TriggerClientEvent('vCAD:openUI', source, 'fd',  Config.ItemOpenType)
+                    return
+                end
+            end
         else
             print('[vCAD_UI] Config.ItemOpenType ungültig!')
         end

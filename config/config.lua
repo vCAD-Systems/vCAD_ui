@@ -50,6 +50,8 @@ Config.CopNetJob = {'police'}
 Config.MedicNetJob = {'ambulance'}
 -- Für CarNet:
 Config.CarNetJob = {'cardealer'}
+-- Für FDNet:
+Config.FireNetJob = {'fire'}
 
 --[[
 Animation beim öffnen des Tablets?
@@ -104,6 +106,8 @@ Config.Hotkey = 'F9'
 Config.MedicHotkey = 'F9'
 -- Für CarNet:
 Config.CarHotkey = 'F9'
+-- Für FireNet:
+Config.FDHotkey = 'F11'
 
 --[[
 Entscheidet was beim Nutzen des Hotkeys oder Commands geöffnet wird:
