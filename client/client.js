@@ -81,7 +81,7 @@ alt.on('vCAD:Client:Tablet:close', () => {
 });
 
 function openTabletCEF(site, system, publicID) {
-	if (!site || site != 'cop' && site != 'medic' && site != 'car' || publicID != null && site != 'car') {
+	if (!site || site != 'cop' && site != 'medic' && site != 'car' && site != 'fire' || publicID != null && site != 'car') {
         alt.log('[vCAD_UI] Site wurde nicht oder falsch angegeben!');
         return;
     }
@@ -112,8 +112,10 @@ function getsite(system) {
         return "https://copnet.ch/"
     } else if (system == "medic") {
 		return "https://medicnet.ch/"
-	} else if (system == "car") {
+    } else if (system == "car") {
         return "https://mechnet.ch/"
+    } else if (system == "fire") {
+        return "https://fdnet.ch/"
     }
 }
 	
