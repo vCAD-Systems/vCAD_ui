@@ -66,6 +66,12 @@ function TOGGLE_NUI_FOCUS(bool, reload)
 					openSite = 'https://mechnet.ch/shop.php?sp='..katalogID
 				elseif site == 'cop' and (subSite == 'bewerben' or subSite == 'strafen') then
 					openSite = 'https://copnet.ch/'..subSite..'?c='..katalogID
+				elseif site == 'fd' and subSite == 'bewerben' then
+					openSite = 'https://fdnet.ch/bewerben?c='..katalogID
+				elseif site == 'car' and subSite == 'bewerben' then
+					openSite = 'https://mechnet.ch/bewerben?c='..katalogID
+				elseif site == 'medic' and subSite == 'bewerben' then
+					openSite = 'https://medicnet.ch/bewerben?c='..katalogID
 				else
 					print('[vCAD_UI] Error: `site` oder `subSite` ist ungültig oder nicht angegeben.')
 				end
@@ -448,7 +454,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 		end
 	
 		if args[1] == 'bewerben' or args[1] == 'Bewerben' or args[1] == 'BEWERBEN' or args[1] == 'bEWERBEN' then
-			local System = CreateDialog('Copnet, Medicnet oder Carnet?')
+			local System = CreateDialog('Copnet, Medicnet, Firenet oder Carnet?')
 
 			if System == 'Copnet' then
 				System = 'cop'
@@ -456,6 +462,8 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				System = 'medic'
 			elseif System == 'Carnet' then
 				System = 'car'
+			elseif System == 'Firenet' then
+				System = 'fd'
 			else
 				ShowNotification('Falsche angabe')
 				return
