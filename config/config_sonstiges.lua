@@ -6,6 +6,12 @@
         OpenType = 'katalog',
         PublicID = '' --  <- PublicID HIER EINFÜGEN!!
     },
+
+
+System = 'cop' für CopNet
+System = 'medic' für MedicNet
+System = 'car' für CarNet
+System = 'fd' für FireNet
 ]]
 Config.SonderZonen = {
 }
