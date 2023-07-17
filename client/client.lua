@@ -558,7 +558,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 			end
 		end
 
-		if args[1] == "kalender" or args[1] == "Kalender" or args[1] == "KALENDER" or args[1] == "kALENDER" then
+		if args[1] == "fahndung" or args[1] == "Fahndung" or args[1] == "FAHNDUNG" or args[1] == "fAHNDUNG" then
 			local pid = CreateDialog('Ich benötige die Public ID.')
 
 			if pid ~= nil or pid ~= '' then
@@ -566,7 +566,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				local coords = GetEntityCoords(ped)
 				local posi = vector3(coords.x, coords.y, coords.z -1.0)
 
-				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+				local Prompt = 'Drücke ~INPUT_CONTEXT~ um die Öffentliche Fahndungsliste einzusehen'
 	
 				TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'wanted', Prompt, System)
 			else
@@ -664,7 +664,7 @@ if Config.NativeUIEnabled then
 			local ped = PlayerPedId()
 			local coords = GetEntityCoords(ped)
 			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
-			local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+			local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschweren.'
 	
 			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'beschwerden', Prompt, System)
 		end
@@ -724,7 +724,7 @@ if Config.NativeUIEnabled then
 			local ped = PlayerPedId()
 			local coords = GetEntityCoords(ped)
 			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
-			local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+			local Prompt = 'Drücke ~INPUT_CONTEXT~ um die Öffentliche Fahndungsliste einzusehen.'
 	
 			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'wanted', Prompt, System)
 		end
