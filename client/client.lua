@@ -10,6 +10,8 @@ local Keys = {
 	["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
 }
 
+local SystemTitel = 'Copnet, Medicnet, Firenet oder Carnet?'
+
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'nil', 'tab'
 local katalogID, tab = nil, nil
 local hasAlreadyEnteredMarker = false
@@ -49,29 +51,35 @@ function CreateDialog(OnScreenDisplayTitle_shopmenu) --general OnScreenDisplay f
 end
 
 function TOGGLE_NUI_FOCUS(bool, reload)
-	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car' and site ~= 'fd') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben') then
+	if (site ~= 'cop' and site ~= 'medic' and site ~= 'car' and site ~= 'fd') or (subSite ~= 'tab' and subSite ~= 'pc' and subSite ~= 'katalog' and subSite ~= 'strafen' and subSite ~= 'bewerben' and subSite ~= 'beschwerden' and subSite ~= 'wanted' and subSite ~= 'calendar') then
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs.')
 		ShowNotification('~r~Fehler beim einrichten des vCAD UIs!')
 		return
 	end
-	
+
 	local PlayerPed = PlayerPedId()
-	
+
 	if bool == true then
 		local openSite = GetURL(site)
 
-		if subSite == 'katalog' or subSite == 'bewerben' or subSite == 'strafen' then
+		--print(site) 		--??
+		--print(katalogID) 	--??
+		--print(subSite) 	--??
+
+		if subSite == 'katalog' or subSite == 'bewerben' or subSite == 'strafen' or subSite == "calendar" or subSite == "wanted" or subSite == "beschwerden" then
 			if katalogID ~= nil then
 				if site == 'car' and subSite == 'katalog' then
-					openSite = 'https://mechnet.ch/shop.php?sp='..katalogID
-				elseif site == 'cop' and (subSite == 'bewerben' or subSite == 'strafen') then
-					openSite = 'https://copnet.ch/'..subSite..'?c='..katalogID
-				elseif site == 'fd' and subSite == 'bewerben' then
-					openSite = 'https://fdnet.ch/bewerben?c='..katalogID
-				elseif site == 'car' and subSite == 'bewerben' then
-					openSite = 'https://mechnet.ch/bewerben?c='..katalogID
-				elseif site == 'medic' and subSite == 'bewerben' then
-					openSite = 'https://medicnet.ch/bewerben?c='..katalogID
+					openSite = openSite..'shop?sp='..katalogID
+				elseif site == 'cop' and subSite == 'strafen' then
+					openSite = openSite..'strafen?c='..katalogID
+				elseif subSite == 'bewerben' then
+					openSite = openSite..'bewerben?c='..katalogID
+				elseif subSite == "beschwerden" then
+					openSite = openSite..'beschweren?c='..katalogID
+				elseif subSite == "wanted" then
+					openSite = openSite..'wanted?c='..katalogID
+				elseif subSite == "calendar" then
+					openSite = openSite..'calendar?c='..katalogID
 				else
 					print('[vCAD_UI] Error: `site` oder `subSite` ist ungültig oder nicht angegeben.')
 				end
@@ -80,29 +88,29 @@ function TOGGLE_NUI_FOCUS(bool, reload)
 				return
 			end
 		end
-		
+
 		if reload then
 			SendNUIMessage({showtab = true, design = Config.Design, autoscale = Config.AutoScale and subSite == 'tab', site = openSite})
 		else
 			SendNUIMessage({showtab = true, design = Config.Design, autoscale = Config.AutoScale and subSite == 'tab'})
 		end
-		
+
 		SetNuiFocus(bool, bool)
-			
+
 		if Config.Animation == true and subSite == 'tab' and not IsPedInAnyVehicle(PlayerPed, false) then
 			SetCurrentPedWeapon(PlayerPed, GetHashKey('WEAPON_UNARMED'), true)
-			RequestAnimDict('amb@world_human_seat_wall_tablet@female@base')
+			RequestAnimDict("amb@world_human_seat_wall_tablet@female@base")
 
-			while not HasAnimDictLoaded('amb@world_human_seat_wall_tablet@female@base') do
+			while not HasAnimDictLoaded("amb@world_human_seat_wall_tablet@female@base") do
 				Citizen.Wait(1)
 			end
 
-			TaskPlayAnim(PlayerPed, 'amb@world_human_seat_wall_tablet@female@base', 'base', 8.0, -8.0, -1, 50, 0, false, false, false)
+			TaskPlayAnim(PlayerPed, "amb@world_human_seat_wall_tablet@female@base", "base", 8.0, -8.0, -1, 50, 0, false, false, false)
 			attachObject()
 		end
-	else
-		CloseTab()
-	end
+    else
+        CloseTab()
+    end
 end
 
 function GetURL(system)
@@ -324,7 +332,7 @@ Citizen.CreateThread(function()
 		local letSleep = true
 
 		for k,v in ipairs(Config.SonderZonen) do
-			if (v.OpenType == 'strafen' and Config.EnabledStrafen) or (v.OpenType == 'bewerben' and Config.EnabledBewerben) then
+			if (v.OpenType == 'strafen' and Config.EnabledStrafen) or (v.OpenType == 'bewerben' and Config.EnabledBewerben) or (v.OpenType == 'beschwerden' and Config.EnabledBeschwerden) or (v.OpenType == 'wanted' and Config.EnabledFahndungen) or (v.OpenType == 'calendar' and Config.EnabledKalender) then
 				local distance = #(playerCoords - v.Coords)
 			
 				if distance < 50.0 then
@@ -414,7 +422,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 		xOpenMenu:Visible(not xOpenMenu:Visible())
 	else
 		if args[1] == 'pc' or args[1] == 'Pc' or args[1] == 'PC' or args[1] == 'pC' then
-			local System = CreateDialog('Copnet, Medicnet, Firenet oder Carnet?')
+			local System = CreateDialog(SystemTitel)
 
 			if System == 'Copnet' then
 				System = 'cop'
@@ -454,7 +462,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 		end
 	
 		if args[1] == 'bewerben' or args[1] == 'Bewerben' or args[1] == 'BEWERBEN' or args[1] == 'bEWERBEN' then
-			local System = CreateDialog('Copnet, Medicnet, Firenet oder Carnet?')
+			local System = CreateDialog(SystemTitel)
 
 			if System == 'Copnet' then
 				System = 'cop'
@@ -499,13 +507,80 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 
 			TriggerServerEvent('vCAD:SaveKatalogConfig', posi, pid)
 		end
+
+		if args[1] == "beschwerden" or args[1] == "Beschwerden" or args[1] == "BESCHWERDEN" or args[1] == "bESCHWERDEN" then
+			local System = CreateDialog(SystemTitel)
+
+			System = CheckSystem(System)
+
+			if System == false then
+				ShowNotification('Falsche angabe')
+			end
+
+			local pid = CreateDialog('Jetzt benötige ich die Public ID.')
+
+			if pid ~= nil or pid ~= '' then
+				local ped = PlayerPedId()
+				local coords = GetEntityCoords(ped)
+				local posi = vector3(coords.x, coords.y, coords.z -1.0)
+
+				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+	
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'beschwerden', Prompt, System)
+			else
+				ShowNotification('Keine Public ID angegeben!')
+				return
+			end
+		end
+
+		if args[1] == "kalender" or args[1] == "Kalender" or args[1] == "KALENDER" or args[1] == "kALENDER" then
+			local System = CreateDialog(SystemTitel)
+
+			System = CheckSystem(System)
+
+			if System == false then
+				ShowNotification('Falsche angabe')
+			end
+
+			local pid = CreateDialog('Jetzt benötige ich die Public ID.')
+
+			if pid ~= nil or pid ~= '' then
+				local ped = PlayerPedId()
+				local coords = GetEntityCoords(ped)
+				local posi = vector3(coords.x, coords.y, coords.z -1.0)
+
+				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+	
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'calendar', Prompt, System)
+			else
+				ShowNotification('Keine Public ID angegeben!')
+				return
+			end
+		end
+
+		if args[1] == "kalender" or args[1] == "Kalender" or args[1] == "KALENDER" or args[1] == "kALENDER" then
+			local pid = CreateDialog('Ich benötige die Public ID.')
+
+			if pid ~= nil or pid ~= '' then
+				local ped = PlayerPedId()
+				local coords = GetEntityCoords(ped)
+				local posi = vector3(coords.x, coords.y, coords.z -1.0)
+
+				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+	
+				TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'wanted', Prompt, System)
+			else
+				ShowNotification('Keine Public ID angegeben!')
+				return
+			end
+		end
 	end
 end)
 
 if not Config.NativeUIEnabled then
 	Citizen.CreateThread(function()
-		TriggerEvent("chat:addSuggestion", "/vcad", "Generiert ein punkt mit dem zugang für ein PC, Strafen, Bewerber oder den Katalog",{ 
-			{name = "möglichkeiten:", help = "pc, strafen, bewerben, katalog"},
+		TriggerEvent("chat:addSuggestion", "/vcad", "Generiert ein punkt mit dem zugang für ein PC, Strafen, Bewerber, Beschwerde, Kalender, Fahndung oder den Katalog",{ 
+			{name = "möglichkeiten:", help = "pc, strafen, bewerben, katalog, beschwerden, kalender, fahndung"},
 		})
 	end)
 end
@@ -576,6 +651,46 @@ if Config.NativeUIEnabled then
 		end
 		xOpenMenu:AddItem(BewerbungenAdd)
 	
+		-------------------------------------------------------------------------------------------------------------------------
+		local BeschwerdenAdd = NativeUI.CreateItem('🤬 Beschwerdepunkt Hinzufügen', 'Fügt ein PC Hinzu wo sich die Personen Beschwerden können für das System (~r~siehe oben~s~).')
+		BeschwerdenAdd.Activated = function(sender, item)
+			pid = CreateDialog('Gib die Public ID ein')
+	
+			if pid == nil or pid == '' then
+				ShowNotification('Du musst eine Public ID eingeben.')
+				return
+			end
+	
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+			local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+	
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'beschwerden', Prompt, System)
+		end
+		xOpenMenu:AddItem(BeschwerdenAdd)
+	
+		local CalendarAdd = NativeUI.CreateItem('🗓️ Kalenderpunkt Hinzufügen', 'Fügt ein Punkt Hinzu, wo Spieler den Öffentlichen Kalender einsehen können. Für das System (~r~siehe oben~s).')
+		CalendarAdd.Activated = function(sender, item)
+			pid = CreateDialog('Gib die Public ID ein')
+	
+			if pid == nil or pid == '' then
+				ShowNotification('Du musst eine Public ID eingeben.')
+				return
+			end
+	
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+			local Prompt = 'Drücke ~INPUT_CONTEXT~ um den Kalender einzusehen.'
+	
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'calendar', Prompt, System)
+		end
+		xOpenMenu:AddItem(CalendarAdd)
+		-------------------------------------------------------------------------------------------------------------------------
+	
+	
+	
 		local xfrei = NativeUI.CreateItem('----------------------------------', '')
 		xOpenMenu:AddItem(xfrei)
 	
@@ -596,6 +711,24 @@ if Config.NativeUIEnabled then
 			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, 'strafen', Prompt, System)
 		end
 		xOpenMenu:AddItem(StrafenKatalogAdd)
+	
+		local FahndungAdd = NativeUI.CreateItem('🚨 Fahndungspunkt Hinzufügen', 'An diesem Punkt können die Spieler die Öffentlichen Fahndungen einsehen.')
+		FahndungAdd.Activated = function(sender, item)
+			pid = CreateDialog('Gib die Public ID ein')
+	
+			if pid == nil or pid == '' then
+				ShowNotification('Du musst eine Public ID eingeben.')
+				return
+			end
+	
+			local ped = PlayerPedId()
+			local coords = GetEntityCoords(ped)
+			local posi = vector3(coords.x, coords.y, coords.z - 1.0)
+			local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+	
+			TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'wanted', Prompt, System)
+		end
+		xOpenMenu:AddItem(FahndungAdd)
 	
 		local CarNetKatalogAdd = NativeUI.CreateItem('🚘 CarNet Katalog Hinzufügen', 'Hier ist es möglich den ~y~CarNet~s~ Katalog einzusehen.')
 		CarNetKatalogAdd.Activated = function(sender, item)
@@ -629,7 +762,7 @@ if Config.NativeUIEnabled then
 				elseif System == '~o~FireNet' then
 					System = 'fd'
 				end
-
+	
 				print(System)
 			end
 		end

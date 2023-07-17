@@ -12,7 +12,7 @@ Animation beim öffnen des Tablets?
 Ja = true
 Nein = false
 ]]
-Config.Animation = false
+Config.Animation = true
 
 --[[
 Befehle?
@@ -36,11 +36,10 @@ Config.Commands = {
 Config.NativeUIEnabled = false
 
 --[[
-    Trage hier die Identifier ein die PC´s erstellen dürfen.
-    Funktionierende Identifier sind steam: und license:
+    hier müssen Indentifier eingetragen sein, die ein PC via Command hinzufügen dürfen.
 ]]
 Config.EnabledIdentifier = {
-    'steam:110000101e019f7' -- Hex
+    'license:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 }
 
 --[[
@@ -67,14 +66,25 @@ Config.EnabledBewerben = true
 Config.EnabledStrafen = true
 
 --[[
-    Wenn Ihr nur eine Public id habt, dann braucht ihr diese nicht bei dem Command ingame mit senden sondern könnt sie einfach hier hinterlegen.
-    z.B. Katalog = 'xyz',
+    Wollt Ihr Ingame Punkte wo man den Öffentlichen Kalender einsehen kann?
+    wenn ja dann = true
+    wenn nein dann = false
 ]]
-Config.PublicID = {
-    Katalog = nil,
-    Bewerbung = nil,
-    Strafen = nil,
-}
+Config.EnabledKalender = true
+
+--[[
+    Wollt Ihr Ingame Punkte wo man die Öffentliche Fahndungen einsehen kann?
+    wenn ja dann = true
+    wenn nein dann = false
+]]
+Config.EnabledFahndungen = true
+
+--[[
+    Wollte Ihr Punkte wo sich Personen Beschwerden können?
+    wenn ja dann = true
+    wenn nein dann = false
+]]
+Config.EnabledBeschwerden = true
 
 --[[
 Standard Hotkeys fürs Tablet?

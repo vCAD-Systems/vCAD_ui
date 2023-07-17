@@ -12,7 +12,8 @@ client_scripts {
     'config/config_katalog.lua',
     'config/config_sonstiges.lua',
     
-	'client/client.lua'
+	'client/client.lua',
+    'client/funktion.lua'
 }
 
 server_scripts {
