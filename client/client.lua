@@ -524,7 +524,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				local coords = GetEntityCoords(ped)
 				local posi = vector3(coords.x, coords.y, coords.z -1.0)
 
-				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschweren.'
 	
 				TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'beschwerden', Prompt, System)
 			else
@@ -549,7 +549,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				local coords = GetEntityCoords(ped)
 				local posi = vector3(coords.x, coords.y, coords.z -1.0)
 
-				local Prompt = 'Drücke ~INPUT_CONTEXT~ um dich zu Beschwerden.'
+				local Prompt = 'Drücke ~INPUT_CONTEXT~ um den Öffentlichen Kalender einzusehen.'
 	
 				TriggerServerEvent('vCAD:SaveSonderZonenConfig', posi, pid, 'calendar', Prompt, System)
 			else
