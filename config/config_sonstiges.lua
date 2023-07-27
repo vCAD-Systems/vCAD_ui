@@ -14,4 +14,5 @@ System = 'car' für CarNet
 System = 'fd' für FireNet
 ]]
 Config.SonderZonen = {
+
 }

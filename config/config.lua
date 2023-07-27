@@ -39,7 +39,7 @@ Config.NativeUIEnabled = false
     hier müssen Indentifier eingetragen sein, die ein PC via Command hinzufügen dürfen.
 ]]
 Config.EnabledIdentifier = {
-    'license:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    'license:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 }
 
 --[[
@@ -58,6 +58,13 @@ Config.EnabledKatalog = true
     wenn nein dann = false
 ]]
 Config.EnabledBewerben = true
+
+--[[
+    Wollt ihr Homepages Ingame anzeigen lassen?
+    wenn ja dann = true
+    wenn nein dann = false
+]]
+Config.EnabledHP = true
 --[[
     Wollt Ihr Ingame Punkte wo man die Strafen öffentlich einsehen kann?
     wenn ja dann = true

@@ -2,7 +2,7 @@
 function Checkusr(Identifier)
     local steamid  = false
     local license  = false
-    print(Identifier)
+    print("You Identifiers: "..json.encode(Identifier))
 
   for k,v in pairs(Identifier)do        
       if string.sub(v, 1, string.len("steam:")) == "steam:" then
