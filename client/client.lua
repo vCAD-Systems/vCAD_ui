@@ -11,7 +11,7 @@ local Keys = {
 }
 
 local SystemTitel = 'Copnet, Medicnet, Firenet oder Carnet?'
-local PublicIdText = 'Gib die Public ID ein'
+local PID_Titel = 'Public ID'
 
 local tabEnabled, tabLoaded, isDead, lastOpend, site, subSite = false, false, false, 0, 'nil', 'tab'
 local katalogID, tab = nil, nil
@@ -476,7 +476,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				return
 			end
 
-			local pid = CreateDialog('Jetzt benötige ich die Public ID.')
+			local pid = CreateDialog(PID_Titel)
 
 			if pid ~= nil or pid ~= '' then
 				local ped = PlayerPedId()
@@ -493,7 +493,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 		end
 	
 		if args[1] == 'katalog' or args[1] == 'Katalog' or args[1] == 'KATALOG' or args[1] == 'kATALOG' then
-			local pid = CreateDialog('[VehicleShop] Gib die Public ID ein')
+			local pid = CreateDialog(PID_Titel)
 			
 			if pid == nil or pid == '' then
 				ShowNotification('Es wurde keine Public ID eingegeben.')
@@ -516,7 +516,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				ShowNotification('Falsche angabe')
 			end
 
-			local pid = CreateDialog('Jetzt benötige ich die Public ID.')
+			local pid = CreateDialog(PID_Titel)
 
 			if pid ~= nil or pid ~= '' then
 				local ped = PlayerPedId()
@@ -541,7 +541,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				ShowNotification('Falsche angabe')
 			end
 
-			local pid = CreateDialog('Jetzt benötige ich die Public ID.')
+			local pid = CreateDialog(PID_Titel)
 
 			if pid ~= nil or pid ~= '' then
 				local ped = PlayerPedId()
@@ -558,7 +558,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 		end
 
 		if args[1] == "fahndung" or args[1] == "Fahndung" or args[1] == "FAHNDUNG" or args[1] == "fAHNDUNG" then
-			local pid = CreateDialog(SystemTitel)
+			local pid = CreateDialog(PID_Titel)
 
 			if pid ~= nil or pid ~= '' then
 				local ped = PlayerPedId()
@@ -590,7 +590,7 @@ RegisterCommand("vcad", function(source, args, rawCommand)
 				return
 			end
 
-			local pid = CreateDialog('Ich benötige die Public ID.')
+			local pid = CreateDialog(PID_Titel)
 
 			if pid ~= nil or pid ~= '' then
 				local ped = PlayerPedId()
