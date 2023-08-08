@@ -8,19 +8,17 @@ version '2.0.0'
 client_scripts {
     '@NativeUI/NativeUI.lua',
 	'config/config.lua',
-    'config/config_zones.lua',
-    'config/config_katalog.lua',
-    'config/config_sonstiges.lua',
+    'config/config_esx_qb.lua',
+    'config/zonen.lua',
     
 	'client/client.lua',
-    'client/funktion.lua'
 }
 
 server_scripts {
+    '@oxmysql/lib/MySQL.lua',
     'config/config.lua',
-    'config/config_zones.lua',
-    'config/config_katalog.lua',
-    'config/config_sonstiges.lua',
+    'config/config_esx_qb.lua',
+    'config/zonen.lua',
 
     'server/server.lua'
 }

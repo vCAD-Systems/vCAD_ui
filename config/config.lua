@@ -1,6 +1,30 @@
 Config = {}
 
 --[[
+    Welches Framework nutzt Ihr?
+    Config.Version = "qb" für QB-Core
+    Config.Version = "esx" für ESX (Neuer 1.9)
+    Config.Version = "esx-legacy" für ESX (älter oder 1.9)
+    Config.Version = false für Standalone
+]]
+Config.Version = false
+
+--[[
+    Ihr wurdet eingeladen an der Beta teilzunehmen?
+    diese Funktion bitte nur auf "True" setzen wenn Ihr Teil des Beta Programm sein.
+    Andernfalls könnt Ihr euch ggf nicht auf die Systeme anmelden.
+]]
+Config.Beta = false
+
+--[[            !!!! NOCH OHNE FUNKTION !!!!
+    Ich biete Aktuell auch Zonen an die man in der Datenbank Speichern kann und InGame dann auch komplett via AdminPanel Bearbeiten kann.
+    Stellt sicher das Ihr OxMysql auf eurem Server als Script habt um diese Funktion testen zu können :)
+
+                !!!! NOCH OHNE FUNKTION !!!!
+]]
+--Config.OxMySQL = true
+
+--[[
 Welches Design (das Tablet selbst, nicht COPNET ODER MEDICNET ODER CARNET) soll genutzt werden?
 Standard / HTML = false
 Neues, moderneres (von Flixxx) = true
@@ -33,65 +57,19 @@ Config.Commands = {
     Hier Siehst du wie es mit NativeUI aussehen wird
     https://prnt.sc/7nCnguq0Z_wl
 ]]
-Config.NativeUIEnabled = false
+Config.NativeUIEnabled = true
 
+--[[
+    true = Müssen unten selbst die Identifier eingetragen werden.
+    false = Muss die Permissions "command.vcad ace" zu der Gruppe Hinzugefügt werden.
+]]
+Config.CustomAdmin = false
 --[[
     hier müssen Indentifier eingetragen sein, die ein PC via Command hinzufügen dürfen.
 ]]
 Config.EnabledIdentifier = {
-    'license:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    'license:xxxxxxxxx',
 }
-
---[[
-    Wenn die funktion auf "false" steht, werden keine Computer gesetzt!
-]]
-Config.EnabledZones = true
---[[
-    Wollt Ihr euren CarnNet Katalog ingame an einem Punkt anzeigen?
-    true = ja
-    false = Nein
-]]
-Config.EnabledKatalog = true
---[[
-    Wollt ihr das sich euche Spieler Ingame beim CopNet Bewerben kann?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledBewerben = true
-
---[[
-    Wollt ihr Homepages Ingame anzeigen lassen?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledHP = true
---[[
-    Wollt Ihr Ingame Punkte wo man die Strafen öffentlich einsehen kann?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledStrafen = true
-
---[[
-    Wollt Ihr Ingame Punkte wo man den Öffentlichen Kalender einsehen kann?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledKalender = true
-
---[[
-    Wollt Ihr Ingame Punkte wo man die Öffentliche Fahndungen einsehen kann?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledFahndungen = true
-
---[[
-    Wollte Ihr Punkte wo sich Personen Beschwerden können?
-    wenn ja dann = true
-    wenn nein dann = false
-]]
-Config.EnabledBeschwerden = true
 
 --[[
 Standard Hotkeys fürs Tablet?

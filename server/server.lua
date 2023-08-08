@@ -1,8 +1,40 @@
+local Categories = {}
+local Zones = {}
+
+if Config.OxMySQL then
+	function CallDbData()
+		MySQL.query("SELECT * FROM vcad_categories", {}, function(rs)
+			for k, v in pairs(rs) do
+				table.insert(Categories, {name = v.name, label = v.label})
+			end
+		end)
+
+		MySQL.query("SELECT * FROM vcad_zonen", {}, function(rs)
+			for k, v in pairs(rs) do
+				table.insert(Zones, {Id = v.id, Coords = v.coords, Prompt = v.prompt, System = v.system, OpenType = v.opentype, PublicID = v.publicid, Label = v.label})
+			end
+		end)
+	end
+end
+
+if Config.CustomAdmin then
+	RegisterCommand("vcad", function(source, args, raw) 
+        if Checkusr(GetPlayerIdentifiers(source)) then
+			TriggerClientEvent('vCAD:CreateZone', source, args)
+		else
+			print("[vCAD-Tablet]Es Versucht jemand ein Befehl einzugeben der keine Rechte besitzt...")
+			print(json.encode(GetPlayerIdentifiers(source)))
+		end
+    end, false)
+else
+	RegisterCommand("vcad", function(source, args, raw) 
+		TriggerClientEvent('vCAD:CreateZone', source, args)
+    end, true)
+end
 
 function Checkusr(Identifier)
     local steamid  = false
     local license  = false
-    print("You Identifiers: "..json.encode(Identifier))
 
   for k,v in pairs(Identifier)do        
       if string.sub(v, 1, string.len("steam:")) == "steam:" then
@@ -24,135 +56,41 @@ end
 
 -- Config Bearbeiten
 -- Zones
-RegisterServerEvent('vCAD:SaveZoneConfig')
-AddEventHandler('vCAD:SaveZoneConfig', function(coords, system, Type)
-    local result = Checkusr(GetPlayerIdentifiers(source))
-	if result then
-		local path = GetResourcePath(GetCurrentResourceName())
-		local lines_config = lines_from(path.."/config/config_zones.lua")
+RegisterServerEvent('vCAD:SaveZonenConfig')
+AddEventHandler('vCAD:SaveZonenConfig', function(Coords, PublicID, Type, Prompt, System)
+	local path = GetResourcePath(GetCurrentResourceName())
+	local lines_config = lines_from(path.."/config/zonen.lua")
 
-		
-		for k,v in pairs(lines_config) do
-			if k == #lines_config then
-				DeleteString(path.."/config/config_zones.lua", "}")
-			end
+	
+	for k,v in pairs(lines_config) do
+		if k == #lines_config then
+			DeleteString(path.."/config/zonen.lua", "}")
 		end
-
-		local file = io.open(path.."/config/config_zones.lua", "a") 
-
-		file:write("\n	{")
-		file:write("\n		Coords = "..coords..",")
-		file:write("\n		Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',")
-		file:write("\n		System = '"..system.."',")
-		file:write("\n		OpenType = '"..Type.."',")
-        --file:write("\n      Job = '"..job.."'")
-		file:write("\n  },")
-		file:write("\n}")
-		file:close()
-
-		TriggerClientEvent('vCAD:AddPunkt', -1, 'Zones', {
-            Coords = coords,
-            Prompt = 'Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.',
-            System = system,
-            OpenType = type,
-            Job = job
-        })
-	else
-		TriggerClientEvent('vCAD:ShowNotification', source, '~r~Du hast nicht die Berechtigung um das zu machen.')
 	end
-end)
 
--- Katalog 
-RegisterServerEvent('vCAD:SaveKatalogConfig')
-AddEventHandler('vCAD:SaveKatalogConfig', function(coords, PublicID)
-	local result = Checkusr(GetPlayerIdentifiers(source))
+	local file = io.open(path.."/config/zonen.lua", "a") 
 
-	if result then
-
-		local path = GetResourcePath(GetCurrentResourceName())
-		local lines_config = lines_from(path.."/config/config_katalog.lua")
-
-		
-		for k,v in pairs(lines_config) do
-			if k == #lines_config then
-				DeleteString(path.."/config/config_katalog.lua", "}")
-			end
-		end
-
-		local file = io.open(path.."/config/config_katalog.lua", "a") 
-
-		file:write("\n	{")
-		file:write("\n		Coords = "..coords..",")
-		file:write("\n		Prompt = 'Drücke ~INPUT_CONTEXT~ um den Katalog anzuschauen.',")
-		file:write("\n		System = 'car',")
-		file:write("\n		OpenType = 'katalog',")
-        file:write("\n      PublicID = '"..PublicID.."',")
-		file:write("\n  },")
-		file:write("\n}")
-		file:close()
-
-		TriggerClientEvent('vCAD:AddPunkt', -1, 'Katalog', {
-			Coords = coords,
-			Prompt = 'Drücke ~INPUT_CONTEXT~ um den Katalog anzuschauen.',
-			System = 'car',
-			OpenType = 'katalog',
-			PublicID = "'"..PublicID.."'"
-		})
+	file:write("\n	{")
+	file:write("\n		Coords = "..Coords..",")
+	file:write("\n		Prompt = '"..Prompt.."',")
+	file:write("\n		System = '"..System.."',")
+	file:write("\n		OpenType = '"..Type.."',")
+	if PublicID == nil then
+		file:write("\n		PublicID = '',")
 	else
-		TriggerClientEvent('vCAD:ShowNotification', source, '~r~Du hast nicht die Berechtigung um das zu machen.')
+		file:write("\n		PublicID = '"..PublicID.."',")
 	end
-end)
+	file:write("\n  },")
+	file:write("\n}")
+	file:close()
 
--- SonderZonen
-RegisterServerEvent('vCAD:SaveSonderZonenConfig')
-AddEventHandler('vCAD:SaveSonderZonenConfig', function(coords, PublicID, Type, Prompt, Job)
-	local result = Checkusr(GetPlayerIdentifiers(source))
-
-	if result then
-
-		local path = GetResourcePath(GetCurrentResourceName())
-		local lines_config = lines_from(path.."/config/config_sonstiges.lua")
-
-		
-        if coords == nil or PublicID == nil or Type == nil or Prompt == nil or Job == nil then
-            print("gibt ein nil wert")
-            print("coords:"..coords)
-            print("pid."..PublicID)
-            print("Type:"..Type)
-            print("Prompt:"..Prompt)
-            print("Job:"..Job)
-            return
-        end
-
-
-		for k,v in pairs(lines_config) do
-			if k == #lines_config then
-				DeleteString(path.."/config/config_sonstiges.lua", "}")
-			end
-		end
-
-		local file = io.open(path.."/config/config_sonstiges.lua", "a") 
-
-		file:write("\n	{")
-		file:write("\n		Coords = "..coords..",")
-		file:write("\n		Prompt = '"..Prompt.."',")
-		file:write("\n		System = '"..Job.."',")
-		file:write("\n		OpenType = '"..Type.."',")
-        file:write("\n      PublicID = '"..PublicID.."',")
-		file:write("\n  },")
-		file:write("\n}")
-		file:close()
-
-		TriggerClientEvent('vCAD:AddPunkt', -1, 'Sonstiges', {
-            Coords = coords,
-            Prompt = Prompt,
-            System = Job,
-            OpenType = Type,
-            PublicID = "'"..PublicID.."'"
-        })
-	else
-		TriggerClientEvent('vCAD:ShowNotification', source, '~r~Du hast nicht die Berechtigung um das zu machen.')
-	end
+	TriggerClientEvent('vCAD:AddPunkt', -1, {
+		Coords = Coords,
+		Prompt = Prompt,
+		System = System,
+		OpenType = Type,
+		PublicID = PublicID
+	})
 end)
 
 function DeleteString(path, before)
