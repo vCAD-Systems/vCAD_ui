@@ -62,7 +62,7 @@ if (Config.Version == 'esx' or Config.Version == 'esx-legacy') then
 end
 
 if Config.Version == 'qb' then
-	local QBCore = exports['qb-core']:GetCoreObject()
+	QBCore = exports['qb-core']:GetCoreObject()
 	PlayerData = QBCore.Functions.GetPlayerData()
 
 	RegisterNetEvent("QBCore:Client:OnPlayerLoaded")
