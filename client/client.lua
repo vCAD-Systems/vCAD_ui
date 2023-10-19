@@ -623,7 +623,7 @@ function CheckPrompt(Prompt)
 		["pc"] = "Drücke ~INPUT_CONTEXT~ um den Pc zu Benutzen.",
 		["hp"] = "Drücke ~INPUT_CONTEXT~ um die Öffentliche Homepage einzusehen.",
 		["bewerben"] = "Drücke ~INPUT_CONTEXT~ um dich zu Bewerben.",
-		["pc"] = "Drücke ~INPUT_CONTEXT~ um den PC zu nutzen.",
+		["katalog"] = "Drücke ~INPUT_CONTEXT~ um den Katalog zu öffnen.",
 		["calendar"] = "Drücke ~INPUT_CONTEXT~ um den Öffentlichen Kalender einzusehen.",
 		["wanted"] = "Drücke ~INPUT_CONTEXT~ um die Öffentlichen Fahndung zu sehen.",
 		["beschweren"] = "Drücke ~INPUT_CONTEXT~ um dich zu Beschweren.",
