@@ -139,25 +139,29 @@ if Config.CanUseItem ~= nil and Config.Version == "esx-legacy" or Config.Version
 				local job = xPlayer.job.name
 				for _, x in pairs(Config.CopNetJob) do
 					if job == x then
-						TriggerEvent('vCAD:openUI', 'cop', Config.OpenType)
+						TriggerClientEvent('vCAD:openUI', source, 'cop', Config.OpenType)
+						return
 					end
 				end
 		
 				for _, x in pairs(Config.MedicNetJob) do
 					if job == x then
-						TriggerEvent('vCAD:openUI', 'medic', Config.OpenType)
+						TriggerClientEvent('vCAD:openUI', source, 'medic', Config.OpenType)
+						return
 					end
 				end
 		
 				for _, x in pairs(Config.CarNetJob) do
 					if job == x then
-						TriggerEvent('vCAD:openUI', 'car', Config.OpenType)
+						TriggerClientEvent('vCAD:openUI', source, 'car', Config.OpenType)
+						return
 					end
 				end
 		
 				for _, x in pairs(Config.FireNetJob) do
 					if job == x then
-						TriggerEvent('vCAD:openUI', 'fd', Config.OpenType)
+						TriggerClientEvent('vCAD:openUI', source, 'fd', Config.OpenType)
+						return
 					end
 				end
 			end)
