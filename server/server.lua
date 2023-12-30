@@ -131,7 +131,7 @@ function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
 
-if Config.CanUseItem ~= nil and Config.Version == "esx-legacy" then
+if Config.CanUseItem ~= nil and Config.Version == "esx-legacy" or Config.Version == "esx" then
 	if type(Config.NeededItem) == 'table'then
 		for k, v in pairs(Config.NeededItem) do
 			ESX.RegisterUsableItem(v, function(source)
