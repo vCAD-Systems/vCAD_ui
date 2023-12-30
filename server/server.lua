@@ -3,7 +3,13 @@ local Zones = {}
 local ESX = nil
 
 if Config.Version == "esx" or Config.Version == "esx-legacy" then
-	TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+	if Config.Version == "esx" then
+		ESX = exports["es_extended"]:getSharedObject()
+	end
+
+	if Config.Version == "esx-legacy" then
+		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+	end
 end
 
 if Config.OxMySQL then
@@ -125,7 +131,7 @@ function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
 
-if Config.CanUseItem ~= nil and Config.Version == "esx" or Config.Version == "esx-legacy" then
+if Config.CanUseItem ~= nil and Config.Version == "esx-legacy" then
 	if type(Config.NeededItem) == 'table'then
 		for k, v in pairs(Config.NeededItem) do
 			ESX.RegisterUsableItem(v, function(source)
